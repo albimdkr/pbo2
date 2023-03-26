@@ -82,6 +82,7 @@ public class FDaftar extends javax.swing.JFrame {
         pfPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle(" 21552011235_Albi Mudakar Nasyabi");
 
         jLabel1.setText("Semua Data Harus Di Isi !!!");
 

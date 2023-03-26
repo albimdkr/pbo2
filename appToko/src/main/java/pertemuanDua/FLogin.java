@@ -38,6 +38,7 @@ public class FLogin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle(" 21552011235_Albi Mudakar Nasyabi");
 
         jLabel1.setText("Username");
 
