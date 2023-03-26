@@ -177,7 +177,10 @@ public class CLatihan extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldHasilActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
+        jTextFieldBil1.setText(null);
+                  jTextFieldBil2.setText(null);
+                  jTextFieldHasil.setText(null);
+                  
     }//GEN-LAST:event_btnResetActionPerformed
 
     /**
