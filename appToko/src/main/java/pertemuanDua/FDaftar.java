@@ -44,15 +44,23 @@ public class FDaftar extends javax.swing.JFrame {
                         kodeUser = rs.getString("kode_user").substring(1);
                         kode = "" + (Integer.parseInt(kodeUser) + 1);
                         kosong = "";
-                        switch (kode.length()) {
-                        case 1 :  kosong = "00";
-                        case 2 :  kosong = "0";
-                        case 3 :  kosong = "";
-                        default : {
-                         }
-                     }
+//                        switch (kode.length()) {
+//                        case 1 :  kosong = "00";
+//                        case 2 :  kosong = "0";
+//                        case 3 :  kosong = "";
+//                        default : {
+//                         }
+//                     }
+                      if (kode.length() == 1){
+                          kosong = "00";    
+                      } else if (kode.length() == 2){
+                          kosong = "0";
+                      } else {
+                          kosong = "";
+                      }
+                      
                       tfKodeUser.setText("U" + kosong + kode);
-                      }  else {
+                      } else {
                    tfKodeUser.setText("U001");
                   }
                   rs.close();
@@ -192,13 +200,15 @@ public class FDaftar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan Password!");
              }else {
                   try {
-                        sql = "INSERT INTO tb_user VALUES (?, ?, ?)";
+                        sql = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
                         ps = conn.prepareStatement(sql);
                         ps.setString(1, tfKodeUser.getText());
                         ps.setString(2, tfUsername.getText());
                         ps.setString(3, pfPassword.getText());
+                         ps.setString(4, "Operator");
                         ps.executeUpdate();
                         JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+                        
                         FLogin fl = new FLogin();
                         fl.setVisible(true);
                         ps.close();
