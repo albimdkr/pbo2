@@ -5,6 +5,7 @@
 package pertemuanDua;
 import java.awt.HeadlessException;
 import java.sql.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
  *
@@ -142,9 +143,22 @@ public class FLogin extends javax.swing.JFrame {
                                         +"' AND password = '"+ txtPassword.getText()+"'";
                                 ResultSet rs = st.executeQuery(sql);
                                     if (rs.next()) {
+                                    String level = rs.getString ("level");
+                                        if (level.equals("Admin")){
+                                              JOptionPane.showMessageDialog(null, "Login Berhasil Sebagai");
+                                              FMenu fm  = new FMenu();
+                                              fm.setVisible(true);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Login Berhasil Sebagai");
+                                             FMenu fm  = new FMenu();
+                                              fm.setVisible(true);
+                                        }
+                                        rs.close();
+                                        st.close();
+                                        this.dispose();
                                         JOptionPane.showMessageDialog(null, "Login Berhasil");
                                     }else  {
-                                        JOptionPane.showMessageDialog(null, "Login Gagal");
+                                       JOptionPane.showMessageDialog(null, "Login Gagal");
                                      }
                               } catch (HeadlessException | SQLException e) {
                              System.out.println("Error: " +e);
