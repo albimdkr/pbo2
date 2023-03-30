@@ -5,13 +5,17 @@
 package pertemuanDua;
 import java.awt.HeadlessException;
 import java.sql.*;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static pertemuanDua.FMenu.btnDataPegawaiMenu;
+import static pertemuanDua.FMenu.btnDataUserMenu;
+import static pertemuanDua.FMenu.lblUsername;
 /**
  *
  * @author albin
  */
 public class FLogin extends javax.swing.JFrame {
+    String level;
+    String nama;
 
     /**
      * Creates new form Flogin
@@ -139,26 +143,32 @@ public class FLogin extends javax.swing.JFrame {
                         try{
                                 Connection con = CKoneksi.getKoneksi();
                                 Statement st = con.createStatement();
-                                String sql = "SELECT * FROM tb_user WHERE username = '"+txtUsername.getText()
-                                        +"' AND password = '"+ txtPassword.getText()+"'";
-                                ResultSet rs = st.executeQuery(sql);
+                               // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
+                                String sql = "SELECT * FROM tb_user JOIN tb_pegawai ON " + "tb_user.kode_user = tb_pegawai.kode_user WHERE tb_user.username = '"+txtUsername.getText()+"' AND tb_user.password = '"+txtPassword.getText()+"'";
+                                ResultSet rs = st.executeQuery (sql);
                                     if (rs.next()) {
-                                    String level = rs.getString ("level");
+                                    level = rs.getString("level");
+                                    nama = rs.getString("nama");
                                         if (level.equals("Admin")){
-                                              JOptionPane.showMessageDialog(null, "Login Berhasil Sebagai");
-                                              FMenu fm  = new FMenu();
-                                              fm.setVisible(true);
-                                        } else {
-                                            JOptionPane.showMessageDialog(null, "Login Berhasil Sebagai");
+                                             JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
                                              FMenu fm  = new FMenu();
-                                              fm.setVisible(true);
+                                             btnDataUserMenu.setEnabled(true);
+                                             btnDataPegawaiMenu.setEnabled(true);
+                                             lblUsername.setText(nama);
+                                             fm.setVisible(true);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
+                                             FMenu fm  = new FMenu();
+                                             btnDataUserMenu.setEnabled(false);
+                                             btnDataPegawaiMenu.setEnabled(true);
+                                             lblUsername.setText(nama);
+                                             fm.setVisible(true);
                                         }
                                         rs.close();
                                         st.close();
                                         this.dispose();
-                                        JOptionPane.showMessageDialog(null, "Login Berhasil");
                                     }else  {
-                                       JOptionPane.showMessageDialog(null, "Login Gagal");
+                                       JOptionPane.showMessageDialog(null, "Username atau password salah !!!");
                                      }
                               } catch (HeadlessException | SQLException e) {
                              System.out.println("Error: " +e);
@@ -172,6 +182,7 @@ public class FLogin extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_btnLogin1ActionPerformed
 
+     
     private void btnLogin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogin2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLogin2ActionPerformed
