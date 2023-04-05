@@ -19,6 +19,7 @@ public class FPegawai extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
+    String sql;
     /**
      * Creates new form FPegawai
      */
@@ -33,11 +34,11 @@ public class FPegawai extends javax.swing.JFrame {
         model.addColumn("Jenis Kelamin");
         model.addColumn("Alamat");
          try {
-             String sql = "SELECT * FROM tb_pegawai ORDER BY kode_pegawai ASC";
+             sql = "SELECT * FROM tb_pegawai ORDER BY kode_pegawai ASC";
              st = conn.createStatement();
              rs = st.executeQuery(sql);
              while (rs.next()){
-                 Object[] row = new Object[3];
+                 Object[] row = new Object[4];
                  row[0] = rs.getString("kode_pegawai");
                  row[1] = rs.getString("nama");
                  row[2] = rs.getString("jenis_kelamin");
@@ -63,7 +64,7 @@ public class FPegawai extends javax.swing.JFrame {
         buttonGroupJenisKelamin = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         txtFieldKodePegawai = new javax.swing.JTextField();
-        txtFieldKodePegawai1 = new javax.swing.JTextField();
+        txtFieldKodeNama = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jRadioButtonPria = new javax.swing.JRadioButton();
@@ -117,6 +118,11 @@ public class FPegawai extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTablePegawai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePegawaiMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTablePegawai);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -130,7 +136,7 @@ public class FPegawai extends javax.swing.JFrame {
                     .addComponent(txtFieldKodePegawai)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(txtFieldKodePegawai1)
+                    .addComponent(txtFieldKodeNama)
                     .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jRadioButtonPria)
@@ -150,7 +156,7 @@ public class FPegawai extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldKodePegawai1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldKodeNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -176,6 +182,18 @@ public class FPegawai extends javax.swing.JFrame {
     private void jRadioButtonWanitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonWanitaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButtonWanitaActionPerformed
+
+    private void jTablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePegawaiMouseClicked
+       int baris = jTablePegawai.getSelectedRow();
+            txtFieldKodePegawai.setText(jTablePegawai.getValueAt(baris, 0).toString());
+             txtFieldKodeNama.setText(jTablePegawai.getValueAt(baris, 1).toString());
+             if (jTablePegawai.getValueAt(baris,2).toString().equals("pria")){
+                 jRadioButtonPria.setSelected(true);
+             } else {
+                 jRadioButtonWanita.setSelected(true);
+             }
+             jTextPaneAlamat.setText(jTablePegawai.getValueAt(baris, 3).toString());
+    }//GEN-LAST:event_jTablePegawaiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -211,6 +229,7 @@ public class FPegawai extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupJenisKelamin;
@@ -224,7 +243,7 @@ public class FPegawai extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTablePegawai;
     private javax.swing.JTextPane jTextPaneAlamat;
+    private javax.swing.JTextField txtFieldKodeNama;
     private javax.swing.JTextField txtFieldKodePegawai;
-    private javax.swing.JTextField txtFieldKodePegawai1;
     // End of variables declaration//GEN-END:variables
 }
