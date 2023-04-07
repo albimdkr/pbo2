@@ -47,7 +47,7 @@
                       <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtUsername" min="-2" pref="227" max="-2" attributes="0"/>
+                          <Component id="txtUsernameEmail" min="-2" pref="227" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -63,7 +63,7 @@
               <EmptySpace pref="36" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtUsernameEmail" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -93,9 +93,9 @@
         <Property name="text" type="java.lang.String" value="Password"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtUsername">
+    <Component class="javax.swing.JTextField" name="txtUsernameEmail">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUsernameActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUsernameEmailActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnLogin">

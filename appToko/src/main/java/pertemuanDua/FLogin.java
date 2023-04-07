@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pertemuanDua;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import static pertemuanDua.FMenu.btnDataPegawaiMenu;
 import static pertemuanDua.FMenu.btnDataUserMenu;
@@ -35,7 +38,7 @@ public class FLogin extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtUsername = new javax.swing.JTextField();
+        txtUsernameEmail = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         btnLogin1 = new javax.swing.JButton();
@@ -49,9 +52,9 @@ public class FLogin extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
-        txtUsername.addActionListener(new java.awt.event.ActionListener() {
+        txtUsernameEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameActionPerformed(evt);
+                txtUsernameEmailActionPerformed(evt);
             }
         });
 
@@ -103,7 +106,7 @@ public class FLogin extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtUsernameEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -114,7 +117,7 @@ public class FLogin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsernameEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -132,19 +135,35 @@ public class FLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+//    public static boolean validationEmail (String input){
+//            String emailRegEx = "^[A-ZO-9._%+-]+@[A-ZO-9._]+\\.[A-Z]{2,6}$";
+//            Pattern emailPat = Pattern.compile(emailRegEx, Pattern.CASE_INSENSITIVE);
+//            Matcher mathcer = emailPat.matcher(input);
+//            return mathcer.find(); 
+//}
+    
+    public  void validateEmail(){
+            if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
+                // JOptionPane.showMessageDialog(null, "Masukan Format Email Dengan Benar!");
+                 txtUsernameEmail.setBackground(Color.red);
+           } else {
+                txtUsernameEmail.setBackground(Color.green);
+           }
+    }
+    
+    private void txtUsernameEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameActionPerformed
+    }//GEN-LAST:event_txtUsernameEmailActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-       if (txtUsername.getText().isEmpty() || txtPassword.getText().isEmpty())
+        if (txtUsernameEmail.getText().isEmpty() || txtPassword.getText().isEmpty())
                 JOptionPane.showMessageDialog(null, "Username atau Password belum terisi");
-       else {
+        else {
                         try{
                                 Connection con = CKoneksi.getKoneksi();
                                 Statement st = con.createStatement();
                                // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
-                                String sql = "SELECT * FROM tb_user JOIN tb_pegawai ON " + "tb_user.kode_user = tb_pegawai.kode_user WHERE tb_user.username = '"+txtUsername.getText()+"' AND tb_user.password = '"+txtPassword.getText()+"'";
+                                String sql = "SELECT * FROM tb_user JOIN tb_pegawai ON " + "tb_user.kode_user = tb_pegawai.kode_user WHERE tb_user.username = '"+txtUsernameEmail.getText()+"' AND tb_user.password = '"+txtPassword.getText()+"'";
                                 ResultSet rs = st.executeQuery (sql);
                                     if (rs.next()) {
                                     level = rs.getString("level");
@@ -174,6 +193,7 @@ public class FLogin extends javax.swing.JFrame {
                              System.out.println("Error: " +e);
                          }
                }
+         
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogin1ActionPerformed
@@ -234,6 +254,6 @@ public class FLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUsername;
+    private javax.swing.JTextField txtUsernameEmail;
     // End of variables declaration//GEN-END:variables
 }

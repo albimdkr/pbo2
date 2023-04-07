@@ -34,9 +34,9 @@
                       </Group>
                       <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="tfKodeUser" min="-2" pref="193" max="-2" attributes="0"/>
+                          <Component id="txtKodeUser" min="-2" pref="193" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="tfUsername" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
+                          <Component id="txtUsernameEmail" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -48,10 +48,10 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnDaftar" min="-2" pref="96" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="pfConfirm" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtPasswordConfirm" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                  <Component id="pfPassword" min="-2" pref="195" max="-2" attributes="0"/>
+                                  <Component id="txtPassword" min="-2" pref="195" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -68,22 +68,22 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="tfKodeUser" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtKodeUser" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtUsernameEmail" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pfPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPassword" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="pfConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPasswordConfirm" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -119,17 +119,17 @@
         <Property name="text" type="java.lang.String" value="Confirm Password"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="tfUsername">
+    <Component class="javax.swing.JTextField" name="txtUsernameEmail">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfUsernameActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUsernameEmailActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="tfKodeUser">
+    <Component class="javax.swing.JTextField" name="txtKodeUser">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfKodeUserActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtKodeUserActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="pfConfirm">
+    <Component class="javax.swing.JPasswordField" name="txtPasswordConfirm">
       <Properties>
         <Property name="text" type="java.lang.String" value="jPasswordField1"/>
       </Properties>
@@ -142,7 +142,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDaftarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="pfPassword">
+    <Component class="javax.swing.JPasswordField" name="txtPassword">
       <Properties>
         <Property name="text" type="java.lang.String" value="jPasswordField1"/>
       </Properties>
