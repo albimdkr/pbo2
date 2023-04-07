@@ -28,39 +28,22 @@ public class FDaftar extends javax.swing.JFrame {
     String sql, kodeUser, kode, kosong;
     
     
-    public FDaftar() {
-        try {
-            initComponents();
-            kodeUserOtomatis();
-        } catch (SQLException ex) {
-            Logger.getLogger(FDaftar.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}
-    
     private void kodeUserOtomatis() throws SQLException{
             try {
                     st = conn.createStatement();
                     sql = "SELECT * FROM tb_user order by kode_user DESC";
                     rs = st.executeQuery(sql);
-                         if (rs.next()) {
-                        kodeUser = rs.getString("kode_user").substring(1);
-                        kode = "" + (Integer.parseInt(kodeUser) + 1);
-                        kosong = "";
-//                        switch (kode.length()) {
-//                        case 1 :  kosong = "00";
-//                        case 2 :  kosong = "0";
-//                        case 3 :  kosong = "";
-//                        default : {
-//                         }
-//                     }
+                      if (rs.next()) {
+                           kodeUser = rs.getString("kode_user").substring(1);
+                           kode = "" + (Integer.parseInt(kodeUser) + 1);
+                           kosong = "";
                       if (kode.length() == 1){
-                          kosong = "00";    
+                           kosong = "00";    
                       } else if (kode.length() == 2){
-                          kosong = "0";
+                           kosong = "0";
                       } else {
                           kosong = "";
                       }
-                      
                       txtKodeUser.setText("U" + kosong + kode);
                       } else {
                    txtKodeUser.setText("U001");
@@ -195,45 +178,100 @@ public class FDaftar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKodeUserActionPerformed
 
-     public  void validateEmail(){
-            if (!(Pattern.matches("^ [a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txtUsernameEmail.getText()))){
-                // JOptionPane.showMessageDialog(null, "Masukan Format Email Dengan Benar!");
-                 txtUsernameEmail.setBackground(Color.red);
-           } else {
-                txtUsernameEmail.setBackground(Color.green);
-           }
-    }
-    private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDaftarActionPerformed
-        if (txtUsernameEmail.getText().isEmpty()|| txtPassword.getText().isEmpty() || txtPasswordConfirm.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-            } else if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
-                txtUsernameEmail.setBackground(Color.red);
-                JOptionPane.showMessageDialog(null, "Masukan Format Emai Dengan Benar!");
-            } else if (!(Pattern.matches( "^(?=.*[0-8])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$", txtPassword.getText()))){
-                  txtUsernameEmail.setBackground(Color.red);
-                  JOptionPane.showMessageDialog(null, "Masukan Password minimal 8 karakter serta gunakan gabungan huruf, kapital, angka, dan simbol!");
-            } else if (!txtPasswordConfirm.getText().equals(txtPassword.getText())) {
-                txtUsernameEmail.setBackground(Color.red);
-               JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan Password!");
-            }else {
+    public void addUser() {
+//      try {
+//                  Statement stmt = conn.createStatement();
+//                  String usernameEmail = txtUsernameEmail.getText();
+//                  String query = "SELECT * FROM tb_user WHERE username = '" + usernameEmail + "'";
+//                  rs = stmt.executeQuery(query);
+//                  if (rs.next()) {
+//                        txtUsernameEmail.setBackground(Color.red);
+//                       JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
+//                    }
+//             ps.close();
+//            } catch (SQLException e) {
+//             System.err.println("Exception: " + e.getMessage());
+//        } finally {
+//          clearField();
+//      }
                   try {
                         sql = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
                         ps = conn.prepareStatement(sql);
                         ps.setString(1, txtKodeUser.getText());
                         ps.setString(2, txtUsernameEmail.getText());
                         ps.setString(3, txtPassword.getText());
-                         ps.setString(4, "Operator");
+                        ps.setString(4, "Operator");
                         ps.executeUpdate();
                         JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-                        
                         FLogin fl = new FLogin();
                         fl.setVisible(true);
                         ps.close();
                         this.dispose();
                  } catch (SQLException e) {
                    System.out.println(e);
-                 }
-          } 
+           } 
+   }
+    
+//    if(rs.next()){
+//    String userType = rs.getString("usertype");
+//    if(userType.equals("admin")){
+//        // your admin code here
+//    }else{
+//        // your user code here
+//    }
+//}
+    
+//                     try {
+//                          String query = "SELECT * FROM tb_user WHERE username = ?";
+//                          ps = conn.prepareStatement(query);
+//                          ps.setString(2, txtUsernameEmail.getText());
+//                          ps.executeQuery();
+//                                if (rs.next()) {
+//                                    JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
+//                                  } 
+//                    } catch (Exception e) {
+//                        System.err.println("Exception: " + e.getMessage());
+//                    }
+   
+  private void clearField(){
+        txtUsernameEmail.setText(null);
+        txtPassword.setText(null);
+        txtUsernameEmail.setText(null);
+    }
+    
+    
+    private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDaftarActionPerformed
+        if (txtUsernameEmail.getText().isEmpty()|| txtPassword.getText().isEmpty() || txtPasswordConfirm.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
+         } else if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
+            txtUsernameEmail.setBackground(Color.red);
+            JOptionPane.showMessageDialog(null, "Masukan Format Emai Dengan Benar!");
+         } else if (!(Pattern.matches( "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", txtPassword.getText()))){
+            txtPassword.setBackground(Color.red);
+            JOptionPane.showMessageDialog(null, "Masukan Password minimal 8 karakter serta gunakan gabungan huruf, kapital, angka, dan simbol!");
+         } else if (!txtPasswordConfirm.getText().equals(txtPassword.getText())) {
+            txtPasswordConfirm.setBackground(Color.red);
+            JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan Password!");
+         }else{
+            try {
+                  Statement stmt = conn.createStatement();
+                  String usernameEmail = txtUsernameEmail.getText();
+                  String query = "SELECT * FROM tb_user WHERE username = '" + usernameEmail + "'";
+                  rs = stmt.executeQuery(query);
+                  if (rs.next()) {
+                        txtUsernameEmail.setBackground(Color.red);
+                       JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
+                   }
+               FDaftar fl = new FDaftar();
+               fl.setVisible(true);
+               this.dispose(); 
+               ps.close();
+               } catch (SQLException e) {
+                System.err.println("Exception: " + e.getMessage());
+               } finally {
+             addUser();
+         }
+       }
     }//GEN-LAST:event_btnDaftarActionPerformed
 
     /**
