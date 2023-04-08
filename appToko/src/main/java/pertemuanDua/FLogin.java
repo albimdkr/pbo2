@@ -142,14 +142,14 @@ public class FLogin extends javax.swing.JFrame {
 //            return mathcer.find(); 
 //}
     
-    public  void validateEmail(){
-            if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
-                // JOptionPane.showMessageDialog(null, "Masukan Format Email Dengan Benar!");
-                 txtUsernameEmail.setBackground(Color.red);
-           } else {
-                txtUsernameEmail.setBackground(Color.green);
-           }
-    }
+//    public  void validateEmail(){
+//            if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
+//                // JOptionPane.showMessageDialog(null, "Masukan Format Email Dengan Benar!");
+//                 txtUsernameEmail.setBackground(Color.red);
+//           } else {
+//                txtUsernameEmail.setBackground(Color.green);
+//           }
+//    }
     
     private void txtUsernameEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameEmailActionPerformed
         // TODO add your handling code here:

@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -26,9 +27,15 @@ public class FDaftar extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     String sql, kodeUser, kode, kosong;
-    
-    
-    private void kodeUserOtomatis() throws SQLException{
+    /**
+     * Creates new form FDaftar
+     */
+ public FDaftar() {
+        initComponents();
+        kodeUserOtomatis();
+    }
+
+ private void kodeUserOtomatis(){
             try {
                     st = conn.createStatement();
                     sql = "SELECT * FROM tb_user order by kode_user DESC";
@@ -53,7 +60,44 @@ public class FDaftar extends javax.swing.JFrame {
             } catch (NumberFormatException | SQLException e) {
         }
 }
-
+ 
+   public static boolean checkEmailIsReady(String email) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_toko", "root", "");
+            String query = "SELECT * FROM tb_user WHERE username=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+            
+            // Tutup koneksi dan statement
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+  }
+  
+   public static boolean checkValidateEmaill(String email) {
+        String regex = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";// Regular Expresion Email
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+   }
+   
+ public boolean checkValidatePassword(String password) {
+    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
+    Pattern pattern = Pattern.compile(passwordRegex);
+    Matcher matcher = pattern.matcher(password);
+    return matcher.matches();
+}
+ 
+ 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,41 +109,26 @@ public class FDaftar extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtUsernameEmail = new javax.swing.JTextField();
+        Username = new javax.swing.JLabel();
+        Username1 = new javax.swing.JLabel();
+        Username2 = new javax.swing.JLabel();
         txtKodeUser = new javax.swing.JTextField();
-        txtPasswordConfirm = new javax.swing.JPasswordField();
-        btnDaftar = new javax.swing.JButton();
+        txtUsernameEmail = new javax.swing.JTextField();
+        btnDaftar = new javax.swing.JToggleButton();
         txtPassword = new javax.swing.JPasswordField();
+        txtPasswordConfirm = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle(" 21552011235_Albi Mudakar Nasyabi");
 
         jLabel1.setText("Semua Data Harus Di Isi !!!");
 
         jLabel2.setText("Kode User");
 
-        jLabel3.setText("User Name");
+        Username.setText("Username");
 
-        jLabel4.setText("Password");
+        Username1.setText("Password");
 
-        jLabel5.setText("Confirm Password");
-
-        txtUsernameEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameEmailActionPerformed(evt);
-            }
-        });
-
-        txtKodeUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtKodeUserActionPerformed(evt);
-            }
-        });
-
-        txtPasswordConfirm.setText("jPasswordField1");
+        Username2.setText("Confirm Password");
 
         btnDaftar.setText("Daftar");
         btnDaftar.addActionListener(new java.awt.event.ActionListener() {
@@ -110,168 +139,106 @@ public class FDaftar extends javax.swing.JFrame {
 
         txtPassword.setText("jPasswordField1");
 
+        txtPasswordConfirm.setText("jPasswordField1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtKodeUser, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtUsernameEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDaftar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGap(2, 2, 2)
-                                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(72, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Username, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Username2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Username1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtKodeUser)
+                        .addComponent(txtUsernameEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                        .addComponent(txtPassword)
+                        .addComponent(txtPasswordConfirm)
+                        .addComponent(btnDaftar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(22, 22, 22)
                 .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtKodeUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUsernameEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Username))
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtKodeUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtUsernameEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(Username1)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(Username2)
+                    .addComponent(txtPasswordConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnDaftar)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameEmailActionPerformed
-
-    private void txtKodeUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtKodeUserActionPerformed
-
-    public void addUser() {
-//      try {
-//                  Statement stmt = conn.createStatement();
-//                  String usernameEmail = txtUsernameEmail.getText();
-//                  String query = "SELECT * FROM tb_user WHERE username = '" + usernameEmail + "'";
-//                  rs = stmt.executeQuery(query);
-//                  if (rs.next()) {
-//                        txtUsernameEmail.setBackground(Color.red);
-//                       JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
-//                    }
-//             ps.close();
-//            } catch (SQLException e) {
-//             System.err.println("Exception: " + e.getMessage());
-//        } finally {
-//          clearField();
-//      }
-                  try {
-                        sql = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
-                        ps = conn.prepareStatement(sql);
-                        ps.setString(1, txtKodeUser.getText());
-                        ps.setString(2, txtUsernameEmail.getText());
-                        ps.setString(3, txtPassword.getText());
-                        ps.setString(4, "Operator");
-                        ps.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-                        FLogin fl = new FLogin();
-                        fl.setVisible(true);
-                        ps.close();
-                        this.dispose();
-                 } catch (SQLException e) {
-                   System.out.println(e);
-           } 
-   }
-    
-//    if(rs.next()){
-//    String userType = rs.getString("usertype");
-//    if(userType.equals("admin")){
-//        // your admin code here
-//    }else{
-//        // your user code here
-//    }
-//}
-    
-//                     try {
-//                          String query = "SELECT * FROM tb_user WHERE username = ?";
-//                          ps = conn.prepareStatement(query);
-//                          ps.setString(2, txtUsernameEmail.getText());
-//                          ps.executeQuery();
-//                                if (rs.next()) {
-//                                    JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
-//                                  } 
-//                    } catch (Exception e) {
-//                        System.err.println("Exception: " + e.getMessage());
-//                    }
-   
-  private void clearField(){
-        txtUsernameEmail.setText(null);
-        txtPassword.setText(null);
-        txtUsernameEmail.setText(null);
-    }
-    
-    
     private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDaftarActionPerformed
-        if (txtUsernameEmail.getText().isEmpty()|| txtPassword.getText().isEmpty() || txtPasswordConfirm.getText().isEmpty()) {
+        if (txtUsernameEmail.getText().isEmpty() || txtPassword.getText().isEmpty() || txtPasswordConfirm.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-         } else if (!(Pattern.matches("^(.+)@(.+)$", txtUsernameEmail.getText()))){
-            txtUsernameEmail.setBackground(Color.red);
-            JOptionPane.showMessageDialog(null, "Masukan Format Emai Dengan Benar!");
-         } else if (!(Pattern.matches( "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", txtPassword.getText()))){
-            txtPassword.setBackground(Color.red);
-            JOptionPane.showMessageDialog(null, "Masukan Password minimal 8 karakter serta gunakan gabungan huruf, kapital, angka, dan simbol!");
-         } else if (!txtPasswordConfirm.getText().equals(txtPassword.getText())) {
-            txtPasswordConfirm.setBackground(Color.red);
-            JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan Password!");
-         }else{
+        } else if (!txtPasswordConfirm.getText().equals(txtPassword.getText())) {
+            JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan password!");
+        }else{
             try {
-                  Statement stmt = conn.createStatement();
-                  String usernameEmail = txtUsernameEmail.getText();
-                  String query = "SELECT * FROM tb_user WHERE username = '" + usernameEmail + "'";
-                  rs = stmt.executeQuery(query);
-                  if (rs.next()) {
-                        txtUsernameEmail.setBackground(Color.red);
-                       JOptionPane.showMessageDialog(null, "Mohon maaf email telah terdaftar");
-                   }
-               FDaftar fl = new FDaftar();
-               fl.setVisible(true);
-               this.dispose(); 
-               ps.close();
-               } catch (SQLException e) {
-                System.err.println("Exception: " + e.getMessage());
-               } finally {
-             addUser();
-         }
-       }
+             // cek email
+            if (checkEmailIsReady(txtUsernameEmail.getText())) { 
+               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
+
+            } 
+            else {
+                  if (checkValidateEmaill(txtUsernameEmail.getText())) {
+                      JOptionPane.showMessageDialog(null, "Email belum terdaftar!");
+                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
+                
+                     
+                     String password = txtPassword.getText().toString();
+                      if (checkValidatePassword(password)) { // password kuat
+                      JOptionPane.showMessageDialog(null, "User berhasil ditambahkan!");
+                      sql = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
+                      ps = conn.prepareStatement(sql);
+                      ps.setString(1, txtKodeUser.getText());
+                      ps.setString(2, txtUsernameEmail.getText());
+                      ps.setString(3, txtPassword.getText());
+                      ps.setString(4, "Operator");
+                      ps.executeUpdate();
+                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+                      FLogin fl = new FLogin();
+                      this.dispose();
+                      fl.setVisible(true);
+                      ps.close();
+                      } else { 
+                          JOptionPane.showMessageDialog(null, "Password harus  menggunakan huruf besar ,angka dan simbol, ulangi kembali!");
+                      }                                
+        } else {
+            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
+        }
+        }
+                
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
     }//GEN-LAST:event_btnDaftarActionPerformed
 
     /**
@@ -300,7 +267,6 @@ public class FDaftar extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FDaftar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -311,12 +277,12 @@ public class FDaftar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDaftar;
+    private javax.swing.JLabel Username;
+    private javax.swing.JLabel Username1;
+    private javax.swing.JLabel Username2;
+    private javax.swing.JToggleButton btnDaftar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField txtKodeUser;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JPasswordField txtPasswordConfirm;
