@@ -119,6 +119,7 @@ public class FDaftar extends javax.swing.JFrame {
         txtPasswordConfirm = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle(" 21552011235_Albi Mudakar Nasyabi");
 
         jLabel1.setText("Semua Data Harus Di Isi !!!");
 
@@ -199,22 +200,30 @@ public class FDaftar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
         } else if (!txtPasswordConfirm.getText().equals(txtPassword.getText())) {
             JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan password!");
+            txtPasswordConfirm.setBackground(Color.red);
         }else{
             try {
              // cek email
             if (checkEmailIsReady(txtUsernameEmail.getText())) { 
                JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
+               txtUsernameEmail.setBackground(Color.red);
 
             } 
             else {
                   if (checkValidateEmaill(txtUsernameEmail.getText())) {
-                      JOptionPane.showMessageDialog(null, "Email belum terdaftar!");
+                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
+                      txtUsernameEmail.setBackground(Color.green);
                       JOptionPane.showMessageDialog(null, "Format email sudah benar!");
+                      txtUsernameEmail.setBackground(Color.green);
                 
                      
                      String password = txtPassword.getText().toString();
-                      if (checkValidatePassword(password)) { // password kuat
-                      JOptionPane.showMessageDialog(null, "User berhasil ditambahkan!");
+                      if (checkValidatePassword(password)) { 
+                      JOptionPane.showMessageDialog(null, "Password telah benar!");
+//                    txtKodeUser.setBackground(Color.green);
+//                    txtUsernameEmail.setBackground(Color.green);
+                     txtPassword.setBackground(Color.green);
+                     txtPasswordConfirm.setBackground(Color.green);
                       sql = "INSERT INTO tb_user VALUES (?, ?, ?, ?)";
                       ps = conn.prepareStatement(sql);
                       ps.setString(1, txtKodeUser.getText());
@@ -223,15 +232,18 @@ public class FDaftar extends javax.swing.JFrame {
                       ps.setString(4, "Operator");
                       ps.executeUpdate();
                       JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+
                       FLogin fl = new FLogin();
                       this.dispose();
                       fl.setVisible(true);
                       ps.close();
                       } else { 
-                          JOptionPane.showMessageDialog(null, "Password harus  menggunakan huruf besar ,angka dan simbol, ulangi kembali!");
+                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
+                          txtPassword.setBackground(Color.red);
                       }                                
         } else {
             JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
+            txtUsernameEmail.setBackground(Color.red);
         }
         }
                 

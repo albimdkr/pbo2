@@ -25,6 +25,7 @@ public class FPegawai extends javax.swing.JFrame {
      */
     public FPegawai() {
         initComponents();
+       tampilDataPegawai ();
     }
     
     private void tampilDataPegawai (){
