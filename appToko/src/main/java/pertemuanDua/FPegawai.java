@@ -23,12 +23,12 @@ public class FPegawai extends javax.swing.JFrame {
     /**
      * Creates new form FPegawai
      */
-    public FPegawai() {
+ public FPegawai() {
         initComponents();
        tampilDataPegawai ();
     }
     
-    private void tampilDataPegawai (){
+ private void tampilDataPegawai (){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Kode Pegawai");
         model.addColumn("Nama Pegawai");

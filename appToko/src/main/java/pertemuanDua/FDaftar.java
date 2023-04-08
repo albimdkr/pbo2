@@ -207,9 +207,7 @@ public class FDaftar extends javax.swing.JFrame {
             if (checkEmailIsReady(txtUsernameEmail.getText())) { 
                JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
                txtUsernameEmail.setBackground(Color.red);
-
-            } 
-            else {
+            }  else {
                   if (checkValidateEmaill(txtUsernameEmail.getText())) {
                       JOptionPane.showMessageDialog(null, "Email siap digunakan!");
                       txtUsernameEmail.setBackground(Color.green);
