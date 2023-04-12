@@ -7,6 +7,7 @@ package pertemuanDua;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,13 +20,27 @@ public class FPegawai extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql;
+    String sql,jk,kodePeg,kode,nol;
+    Boolean simpan;
     /**
      * Creates new form FPegawai
      */
  public FPegawai() {
         initComponents();
-       tampilDataPegawai ();
+        isiKodeUser();
+        tampilDataPegawai();
+    }
+ 
+     private void isiKodeUser(){
+        try {
+            sql = "select kode_user from tb_user";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                cbKodeUser.addItem(rs.getString("kode_user"));
+            }
+        } catch (Exception e) {
+        }
     }
     
  private void tampilDataPegawai (){
@@ -65,7 +80,7 @@ public class FPegawai extends javax.swing.JFrame {
         buttonGroupJenisKelamin = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         txtFieldKodePegawai = new javax.swing.JTextField();
-        txtFieldKodeNama = new javax.swing.JTextField();
+        txtFieldNamaPegawai = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jRadioButtonPria = new javax.swing.JRadioButton();
@@ -75,6 +90,12 @@ public class FPegawai extends javax.swing.JFrame {
         jTextPaneAlamat = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTablePegawai = new javax.swing.JTable();
+        txtFieldSearch = new javax.swing.JTextField();
+        btnTambah = new javax.swing.JToggleButton();
+        jLabel5 = new javax.swing.JLabel();
+        cbKodeUser = new javax.swing.JComboBox<>();
+        btnSimpan = new javax.swing.JToggleButton();
+        btnHapus = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(" 21552011235_Albi Mudakar Nasyabi");
@@ -126,50 +147,106 @@ public class FPegawai extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTablePegawai);
 
+        txtFieldSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFieldSearchKeyReleased(evt);
+            }
+        });
+
+        btnTambah.setText("Tambah Data");
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Kode User");
+
+        btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtFieldKodePegawai)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(txtFieldKodeNama)
-                    .addComponent(jLabel3)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButtonPria)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonWanita))
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 23, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtFieldKodePegawai)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(txtFieldNamaPegawai)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jRadioButtonPria)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonWanita))
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(jLabel5)
+                            .addComponent(btnTambah)
+                            .addComponent(cbKodeUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldKodePegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFieldKodeNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonPria)
-                    .addComponent(jRadioButtonWanita))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                    .addComponent(txtFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTambah))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldKodePegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldNamaPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButtonWanita)
+                            .addComponent(jRadioButtonPria))
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbKodeUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSimpan)
+                            .addComponent(btnHapus))
+                        .addContainerGap(25, Short.MAX_VALUE))))
         );
 
         pack();
@@ -183,11 +260,37 @@ public class FPegawai extends javax.swing.JFrame {
     private void jRadioButtonWanitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonWanitaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButtonWanitaActionPerformed
-
+    
+    private void kodePegawaiOtomatis(){
+        try {
+            st = conn.createStatement();
+            sql = "SELECT * FROM tb_pegawai order by kode_pegawai DESC";
+            rs = st.executeQuery(sql);
+                if (rs.next()) {
+                kodePeg = rs.getString("kode_pegawai").substring(1);
+                kode = "" + (Integer.parseInt(kodePeg) + 1);
+                nol = "";
+                if (kode.length() == 1) {
+                    nol = "00";    
+                }else if (kode.length() == 2){
+                    nol = "0";
+                }else{
+                    nol = "";
+                }
+                txtFieldKodePegawai.setText("P" + nol + kode);
+            } else {
+            txtFieldKodePegawai.setText("P001");
+            }
+            rs.close();
+            st.close();
+        } catch (NumberFormatException | SQLException e) {
+        }
+    }
+    
     private void jTablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePegawaiMouseClicked
        int baris = jTablePegawai.getSelectedRow();
             txtFieldKodePegawai.setText(jTablePegawai.getValueAt(baris, 0).toString());
-             txtFieldKodeNama.setText(jTablePegawai.getValueAt(baris, 1).toString());
+             txtFieldNamaPegawai.setText(jTablePegawai.getValueAt(baris, 1).toString());
              if (jTablePegawai.getValueAt(baris,2).toString().equals("pria")){
                  jRadioButtonPria.setSelected(true);
              } else {
@@ -195,6 +298,61 @@ public class FPegawai extends javax.swing.JFrame {
              }
              jTextPaneAlamat.setText(jTablePegawai.getValueAt(baris, 3).toString());
     }//GEN-LAST:event_jTablePegawaiMouseClicked
+
+    private void txtFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldSearchKeyReleased
+        tampilDataPegawai();
+    }//GEN-LAST:event_txtFieldSearchKeyReleased
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        btnSimpan.setText("simpan");
+        simpan = true;
+        kodePegawaiOtomatis();
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+
+        try {
+            if (simpan = true){
+                sql = "INSERT INTO tb_pegawai VALUES (?,?,?,?,?)";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, txtFieldKodePegawai.getText());
+                ps.setString(2, txtFieldNamaPegawai.getText());
+                ps.setString(3, jTextPaneAlamat.getText());
+                ps.setString(4, cbKodeUser.getSelectedItem().toString());
+                if (jRadioButtonPria.isSelected()) {
+                    jk = "Pria";
+                }else{
+                    jk = "Wanita";
+                }
+                ps.setString(5, jk);
+            } else {
+                sql = "UPADATE tb_pegawai SET nama=?, alamat=?, kode_user=?, jenis_kelamin=? WHERE kode_pegawai=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, txtFieldNamaPegawai.getText());
+                ps.setString(2, jTextPaneAlamat.getText());
+                ps.setString(3, cbKodeUser.getSelectedItem().toString());
+                if (jRadioButtonPria.isSelected()) {
+                    jk = "Pria";
+                }else{
+                    jk = "Wanita";
+                }
+                ps.setString(4, jk);
+                ps.setString(5, txtFieldKodePegawai.getText());
+            }
+        } catch (Exception e){
+            
+        }
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        try {
+            sql = "DELETE FROM tb_pegawai WHERE kode_pegawai='"+txtFieldKodePegawai.getText()+"'";
+            ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+            tampilDataPegawai();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,18 +391,24 @@ public class FPegawai extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnHapus;
+    private javax.swing.JToggleButton btnSimpan;
+    private javax.swing.JToggleButton btnTambah;
     private javax.swing.ButtonGroup buttonGroupJenisKelamin;
+    private javax.swing.JComboBox<String> cbKodeUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JRadioButton jRadioButtonPria;
     private javax.swing.JRadioButton jRadioButtonWanita;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTablePegawai;
     private javax.swing.JTextPane jTextPaneAlamat;
-    private javax.swing.JTextField txtFieldKodeNama;
     private javax.swing.JTextField txtFieldKodePegawai;
+    private javax.swing.JTextField txtFieldNamaPegawai;
+    private javax.swing.JTextField txtFieldSearch;
     // End of variables declaration//GEN-END:variables
 }
