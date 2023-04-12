@@ -1,11 +1,11 @@
 Step 1 Download and install 
-jre : https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqazA2YUNYVkdNQkotaEVQV2VPbUt5eVBrc0FId3xBQ3Jtc0tsdnU1WHlua0xWQzZJYTdmRUNmclN5VTJTYUFIb2FRVFBoVkYxYzFnWTNMSFpOZDNSTDNyb01QM25hUFhQSnhPdFpjWUlURTNVWWxPY0pwLXBqeENvU2p3V1FrNGZlNkgwR3FCRThTUTZUSDdiU3B6Zw&q=https%3A%2F%2Fwww.oracle.com%2Fjava%2Ftechnologies%2Fjavase-jre8-downloads.html&v=AITO_euomqo
+JRE8 windows : https://www.oracle.com/java/technologies/downloads/#java8-windows
 
 Step 2 Download and install 
-jdk : https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbnBDYVl5dXpJa0pnRDhoNFc4MUY1em14SzF3Z3xBQ3Jtc0ttMk9GejUyamxBWk41RDgwREh6SDktVFRqaTlkMWdscGhwUUpCT1dMcS1pcjdJVjBjOGhZbEJKczlveDg0akV6Tk5ROTFSaVFPekZBYlV0T2ZMMUJWUDVMQlVoTDFsY2E0YlRNamR3RlFpMGVjc1dHWQ&q=https%3A%2F%2Fwww.oracle.com%2Fjava%2Ftechnologies%2Fjavase-jdk8-downloads.html&v=AITO_euomqo
+JDK8 windows : https://www.oracle.com/java/technologies/downloads/#java8-windows
 
 Step 3 Download and install :
-netbeans v8.2: https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbXk1dFBoMXlwNURSTldGMDdkTWk4M0lkRHBWd3xBQ3Jtc0tuOWpQLUY5ZWdCa3FjeHBfaGktM0tsck1TSTN6S2NHUFdEZ1dyRk9QVERfZEJWeUFPRGltS2hFV0J2TUNMZXFUYlNrTGdIcnpkTFp0VFlyUmhuc3FFT0pHOURLNTBYN0k2RUp0M28xSXEtZEhONnlpMA&q=http%3A%2F%2Fwww.mediafire.com%2Ffile%2Frlf98dwk98vp3mm%2Fnetbeans-8.2-javase-windows.exe%2Ffile&v=AITO_euomqo
+Netbeans App v8.2: http://www.mediafire.com/file/rlf98dwk98vp3mm/netbeans-8.2-javase-windows.exe/file
 
 IF (Error downgrade)
 	Error Message : Java with maven wouldn't build: Cannot run program "cmd" "Malformed argument has embedded quote"
