@@ -50,18 +50,18 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                                     nama = rs.getString("nama");
                                         if (level.equals("Admin")){
                                              JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-//                                             FMenu fm  = new FMenu();
+                                             FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
 //                                             btnDataUserMenu.setEnabled(true);
 //                                             btnDataPegawaiMenu.setEnabled(true);
 //                                             lblUsername.setText(nama);
-//                                             fm.setVisible(true);
+                                             fm.setVisible(true);
                                         } else {
                                             JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-//                                             FMenu fm  = new FMenu();
+                                             FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
 //                                             btnDataUserMenu.setEnabled(false);
 //                                             btnDataPegawaiMenu.setEnabled(true);
 //                                             lblUsername.setText(nama);
-//                                             fm.setVisible(true);
+                                             fm.setVisible(true);
                                         }
                                         rs.close();
                                         st.close();
@@ -156,7 +156,7 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                 btnDaftarMouseExited(evt);
             }
         });
-        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 280, 120, 40));
+        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 120, 40));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/cover-login.png"))); // NOI18N
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 350));

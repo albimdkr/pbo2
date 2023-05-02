@@ -5,11 +5,16 @@
  */
 package uts_pbo2_21552011235;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,11 +22,15 @@ import javax.swing.JOptionPane;
  * @author albin
  */
 public class FDaftar21552011235 extends javax.swing.JFrame {
-    String level;
-    String nama;
+    Connection conn = CKoneksi21552011235.getKoneksi();
+    PreparedStatement ps;
+    Statement st;
+    ResultSet rs;
+    String sql, idUser, level, id, kosong;
     
     public FDaftar21552011235() {
         initComponents();
+        idUserOtomatis();
     }
 
     /**
@@ -31,25 +40,91 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
+    private void idUserOtomatis(){
+            try {
+                    st = conn.createStatement();
+                    sql = "SELECT * FROM tbluser order by idUser DESC";
+                    rs = st.executeQuery(sql);
+                      if (rs.next()) {
+                           idUser = rs.getString("idUser").substring(4);
+                           id = "" + (Integer.parseInt(idUser) + 1);
+                           kosong = "";
+                      if (id.length() == 1){
+                           kosong = "00";    
+                      } else if (id.length() == 2){
+                           kosong = "0";
+                      } else {
+                          kosong = "";
+                      }
+                      txtFieldIDUser.setText("USER" + kosong + id);
+                      } else {
+                   txtFieldIDUser.setText("USER001");
+                  }
+                  rs.close();
+                  st.close();
+            } catch (NumberFormatException | SQLException e) {
+        }
+}
     
+  public static boolean checkEmailIsReady(String email) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
+            String query = "SELECT * FROM tbluser WHERE email=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+            
+            // Tutup koneksi dan statement
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+  }
+  
+  public static boolean checkValidateEmaill(String email) {
+        String regex = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";// Regular Expresion Email
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+  }
+  
+ public boolean checkValidatePassword(String password) {
+    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
+    Pattern pattern = Pattern.compile(passwordRegex);
+    Matcher matcher = pattern.matcher(password);
+    return matcher.matches();
+}
+  
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel7 = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtFieldEmail = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JPasswordField();
+        txtFieldPassword = new javax.swing.JPasswordField();
         jLabel8 = new javax.swing.JLabel();
         btnKembali = new javax.swing.JLabel();
-        txtPassword1 = new javax.swing.JPasswordField();
+        txtFieldConfirmPassword = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         btnDaftar = new javax.swing.JLabel();
+        RBProduksi = new javax.swing.JRadioButton();
+        RBMarketing = new javax.swing.JRadioButton();
+        jLabel12 = new javax.swing.JLabel();
+        txtFieldIDUser = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -67,12 +142,12 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
         jLabel5.setText("Password");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setForeground(new java.awt.Color(153, 153, 153));
         jLabel9.setText("________________________________________________");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 370, 30));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 370, 30));
 
         txtFieldEmail.setBorder(null);
         txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -80,19 +155,19 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
                 txtFieldEmailActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 330, 40));
+        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 330, 40));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
         jLabel10.setText("________________________________________________");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 370, 30));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 370, 30));
 
-        txtPassword.setText("jPasswordField1");
-        txtPassword.setBorder(null);
-        jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 330, 40));
+        txtFieldPassword.setText("jPasswordField1");
+        txtFieldPassword.setBorder(null);
+        jPanel1.add(txtFieldPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 330, 40));
 
         jLabel8.setText("Email");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png"))); // NOI18N
         btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -106,27 +181,30 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
                 btnKembaliMouseExited(evt);
             }
         });
-        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, -1, 40));
+        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, -1, 40));
 
-        txtPassword1.setText("jPasswordField1");
-        txtPassword1.setBorder(null);
-        txtPassword1.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldConfirmPassword.setText("jPasswordField1");
+        txtFieldConfirmPassword.setBorder(null);
+        txtFieldConfirmPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPassword1ActionPerformed(evt);
+                txtFieldConfirmPasswordActionPerformed(evt);
             }
         });
-        jPanel1.add(txtPassword1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 330, 40));
+        jPanel1.add(txtFieldConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 330, 40));
 
         jLabel6.setText("Konfiramsi Password");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
         jLabel11.setForeground(new java.awt.Color(153, 153, 153));
         jLabel11.setText("________________________________________________");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 370, 30));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 370, 30));
 
         btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png"))); // NOI18N
         btnDaftar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDaftarMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnDaftarMouseEntered(evt);
             }
@@ -134,7 +212,41 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
                 btnDaftarMouseExited(evt);
             }
         });
-        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 120, 40));
+        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, 120, 40));
+
+        buttonGroup1.add(RBProduksi);
+        RBProduksi.setText("Produksi");
+        RBProduksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RBProduksiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RBProduksi, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, -1, -1));
+
+        buttonGroup1.add(RBMarketing);
+        RBMarketing.setText("Marketing");
+        RBMarketing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RBMarketingActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RBMarketing, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, -1, -1));
+
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel12.setText("________________________________________________");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 370, 30));
+
+        txtFieldIDUser.setBorder(null);
+        txtFieldIDUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldIDUserActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFieldIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 330, 40));
+
+        jLabel13.setText("ID User");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -144,7 +256,7 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -163,9 +275,9 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
     }//GEN-LAST:event_btnKembaliMouseExited
 
-    private void txtPassword1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassword1ActionPerformed
+    private void txtFieldConfirmPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldConfirmPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPassword1ActionPerformed
+    }//GEN-LAST:event_txtFieldConfirmPasswordActionPerformed
 
     private void btnDaftarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseEntered
         btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
@@ -180,6 +292,78 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         fL.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnKembaliMouseClicked
+
+    private void RBProduksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RBProduksiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RBProduksiActionPerformed
+
+    private void RBMarketingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RBMarketingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RBMarketingActionPerformed
+
+    private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
+        if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty() || txtFieldConfirmPassword.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
+        } else if (!txtFieldConfirmPassword.getText().equals(txtFieldPassword.getText())) {
+            JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan password!");
+            txtFieldConfirmPassword.setBackground(Color.red);
+        }else{
+            try {
+             // cek email
+            if (checkEmailIsReady(txtFieldEmail.getText())) { 
+               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
+               txtFieldEmail.setBackground(Color.red);
+            }  else {
+                  if (checkValidateEmaill(txtFieldEmail.getText())) {
+                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
+                      txtFieldEmail.setBackground(Color.green);
+                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
+                      txtFieldEmail.setBackground(Color.green); 
+                      
+                      String password = txtFieldPassword.getText().toString();
+                      if (checkValidatePassword(password)) { 
+                      JOptionPane.showMessageDialog(null, "Password telah benar!");
+//                    txtKodeUser.setBackground(Color.green);
+//                    txtUsernameEmail.setBackground(Color.green);
+                     txtFieldPassword.setBackground(Color.green);
+                     txtFieldConfirmPassword.setBackground(Color.green);
+                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
+                      ps = conn.prepareStatement(sql);
+                      ps.setString(1, txtFieldIDUser.getText());
+                      ps.setString(2, txtFieldEmail.getText());
+                      ps.setString(3, txtFieldPassword.getText());
+                      if (RBProduksi.isSelected()) {
+                            level = "Produksi";
+                      }else{
+                            level = "Marketing";
+                      }
+                      ps.setString(4, level);
+                      ps.executeUpdate();
+                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+
+                      Flogin21552011235 fl = new Flogin21552011235();
+                      this.dispose();
+                      fl.setVisible(true);
+                      ps.close();
+                      } else { 
+                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
+                          txtFieldPassword.setBackground(Color.red);
+                      }                                
+        } else {
+            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
+            txtFieldEmail.setBackground(Color.red);
+        }
+        }
+                
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+    }//GEN-LAST:event_btnDaftarMouseClicked
+
+    private void txtFieldIDUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldIDUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldIDUserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,10 +404,15 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton RBMarketing;
+    private javax.swing.JRadioButton RBProduksi;
     private javax.swing.JLabel btnDaftar;
     private javax.swing.JLabel btnKembali;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -231,8 +420,9 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField txtFieldConfirmPassword;
     private javax.swing.JTextField txtFieldEmail;
-    private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JPasswordField txtPassword1;
+    private javax.swing.JTextField txtFieldIDUser;
+    private javax.swing.JPasswordField txtFieldPassword;
     // End of variables declaration//GEN-END:variables
 }
