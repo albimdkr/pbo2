@@ -40,12 +40,12 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
+        btnAdmin = new javax.swing.JMenu();
+        btnProduksi = new javax.swing.JMenu();
+        btnMarketing = new javax.swing.JMenu();
+        btnUbahPassword = new javax.swing.JMenu();
+        btnProfil = new javax.swing.JMenu();
+        btnLogout = new javax.swing.JMenu();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -58,29 +58,83 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jMenu1.setText("Admin");
-        jMenu1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu1);
+        btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-user-24.png"))); // NOI18N
+        btnAdmin.setText("Admin");
+        btnAdmin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAdminMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAdminMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnAdmin);
 
-        jMenu2.setText("Produksi");
-        jMenu2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu2);
+        btnProduksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-product-24.png"))); // NOI18N
+        btnProduksi.setText("Produksi");
+        btnProduksi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnProduksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnProduksiMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnProduksiMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnProduksi);
 
-        jMenu3.setText("Marketing");
-        jMenu3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu3);
+        btnMarketing.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-stocks-growth-24.png"))); // NOI18N
+        btnMarketing.setText("Marketing");
+        btnMarketing.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnMarketing.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnMarketingMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnMarketingMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnMarketing);
 
-        jMenu4.setText("Ubah Password");
-        jMenu4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu4);
+        btnUbahPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-password-24.png"))); // NOI18N
+        btnUbahPassword.setText("Ubah Password");
+        btnUbahPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUbahPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnUbahPasswordMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnUbahPasswordMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnUbahPassword);
 
-        jMenu5.setText("Profil");
-        jMenu5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu5);
+        btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24.png"))); // NOI18N
+        btnProfil.setText("Profil");
+        btnProfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnProfil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnProfilMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnProfilMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnProfil);
 
-        jMenu6.setText("Logout");
-        jMenu6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jMenuBar1.add(jMenu6);
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-logout-rounded-24.png"))); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnLogoutMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnLogoutMouseExited(evt);
+            }
+        });
+        jMenuBar1.add(btnLogout);
 
         setJMenuBar(jMenuBar1);
 
@@ -92,12 +146,60 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseEntered
+       btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-user-24-hover.png")));
+    }//GEN-LAST:event_btnAdminMouseEntered
+
+    private void btnAdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseExited
+       btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-user-24.png")));
+    }//GEN-LAST:event_btnAdminMouseExited
+
+    private void btnProduksiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProduksiMouseEntered
+       btnProduksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-product-24-hover.png")));
+    }//GEN-LAST:event_btnProduksiMouseEntered
+
+    private void btnProduksiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProduksiMouseExited
+       btnProduksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-product-24.png")));
+    }//GEN-LAST:event_btnProduksiMouseExited
+
+    private void btnMarketingMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMarketingMouseEntered
+       btnMarketing.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-stocks-growth-24-hover.png")));
+    }//GEN-LAST:event_btnMarketingMouseEntered
+
+    private void btnMarketingMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMarketingMouseExited
+       btnMarketing.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-stocks-growth-24.png")));
+    }//GEN-LAST:event_btnMarketingMouseExited
+
+    private void btnUbahPasswordMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahPasswordMouseEntered
+       btnUbahPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-password-24-hover.png")));
+    }//GEN-LAST:event_btnUbahPasswordMouseEntered
+
+    private void btnUbahPasswordMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahPasswordMouseExited
+       btnUbahPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-password-24.png")));
+    }//GEN-LAST:event_btnUbahPasswordMouseExited
+
+    private void btnProfilMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProfilMouseEntered
+       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24-hover.png")));
+    }//GEN-LAST:event_btnProfilMouseEntered
+
+    private void btnProfilMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProfilMouseExited
+       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24.png")));
+    }//GEN-LAST:event_btnProfilMouseExited
+
+    private void btnLogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseEntered
+       btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-logout-rounded-24-hover.png")));
+    }//GEN-LAST:event_btnLogoutMouseEntered
+
+    private void btnLogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseExited
+       btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-logout-rounded-24.png")));
+    }//GEN-LAST:event_btnLogoutMouseExited
 
     /**
      * @param args the command line arguments
@@ -198,14 +300,14 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu btnAdmin;
+    private javax.swing.JMenu btnLogout;
+    private javax.swing.JMenu btnMarketing;
+    private javax.swing.JMenu btnProduksi;
+    private javax.swing.JMenu btnProfil;
+    private javax.swing.JMenu btnUbahPassword;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
