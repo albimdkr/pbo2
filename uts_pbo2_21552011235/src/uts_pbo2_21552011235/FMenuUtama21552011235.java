@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class FMenuUtama21552011235 extends javax.swing.JFrame {
     String level;
-    String nama;
+    String email;
     
     public FMenuUtama21552011235() {
         initComponents();
@@ -32,6 +32,27 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {                                  
+//        lNama.setText("Selamat Datang, "+nama);
+//        if(level.equals("Admin")){
+//            btnAdmin.setEnabled(true);
+//            btnUbahPassword.setEnabled(true);
+//            btnProfil.setEnabled(true);
+//            btnLogout.setEnabled(true);
+//            btnProduksi.setEnabled(false);
+//            btnMarketing.setEnabled(false);
+//        }else if(level.equals("Produksi")){
+//            btnProduksi.setEnabled(true);
+//            btnProfil.setEnabled(true);
+//            btnLogout.setEnabled(true);
+//        } else if (level.equals("Marketing")){
+//            btnMarketing.setEnabled(true);
+//            btnProfil.setEnabled(true);
+//            btnLogout.setEnabled(true);
+//        }
+    }
+    
+    
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -40,12 +61,6 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        btnAdmin = new javax.swing.JMenu();
-        btnProduksi = new javax.swing.JMenu();
-        btnMarketing = new javax.swing.JMenu();
-        btnUbahPassword = new javax.swing.JMenu();
-        btnProfil = new javax.swing.JMenu();
-        btnLogout = new javax.swing.JMenu();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -127,6 +142,9 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         btnLogout.setText("Logout");
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLogoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnLogoutMouseEntered(evt);
             }
@@ -200,6 +218,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     private void btnLogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseExited
        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-logout-rounded-24.png")));
     }//GEN-LAST:event_btnLogoutMouseExited
+
+    private void btnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseClicked
+        new uts_pbo2_21552011235.Flogin21552011235().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnLogoutMouseClicked
 
     /**
      * @param args the command line arguments
@@ -300,12 +323,12 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu btnAdmin;
-    private javax.swing.JMenu btnLogout;
-    private javax.swing.JMenu btnMarketing;
-    private javax.swing.JMenu btnProduksi;
-    private javax.swing.JMenu btnProfil;
-    private javax.swing.JMenu btnUbahPassword;
+    public static final javax.swing.JMenu btnAdmin = new javax.swing.JMenu();
+    public static final javax.swing.JMenu btnLogout = new javax.swing.JMenu();
+    public static final javax.swing.JMenu btnMarketing = new javax.swing.JMenu();
+    public static final javax.swing.JMenu btnProduksi = new javax.swing.JMenu();
+    public static final javax.swing.JMenu btnProfil = new javax.swing.JMenu();
+    public static final javax.swing.JMenu btnUbahPassword = new javax.swing.JMenu();
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;

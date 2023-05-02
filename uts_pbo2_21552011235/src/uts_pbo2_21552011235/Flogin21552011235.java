@@ -11,6 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnAdmin;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnLogout;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnMarketing;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnProduksi;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnProfil;
+import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
 
 /**
  *
@@ -39,40 +45,57 @@ public class Flogin21552011235 extends javax.swing.JFrame {
         if (txtFieldEmail.getText().isEmpty() || txtPassword.getText().isEmpty())
                 JOptionPane.showMessageDialog(null, "Username atau Password belum terisi");
         else {
-                        try{
-                                Connection con = CKoneksi21552011235.getKoneksi();
-                                Statement st = con.createStatement();
-                               // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
-                                String sql = "SELECT * FROM tbluser JOIN tblpegawai ON " + "tbluser.idUser = tblpegawai.idUser WHERE tbluser.email = '"+txtFieldEmail.getText()+"' AND tbluser.password = '"+txtPassword.getText()+"'";
-                                ResultSet rs = st.executeQuery (sql);
-                                    if (rs.next()) {
-                                    level = rs.getString("level");
-                                    email = rs.getString("email");
-                                        if (level.equals("Admin")){
-                                             JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                             FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
-//                                             btnDataUserMenu.setEnabled(true);
-//                                             btnDataPegawaiMenu.setEnabled(true);
-//                                             lblUsername.setText(nama);
-                                             fm.setVisible(true);
-                                        } else {
-                                            JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                             FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
-//                                             btnDataUserMenu.setEnabled(false);
-//                                             btnDataPegawaiMenu.setEnabled(true);
-//                                             lblUsername.setText(nama);
-                                             fm.setVisible(true);
-                                        }
-                                        rs.close();
-                                        st.close();
-                                        this.dispose();
-                                    }else  {
-                                       JOptionPane.showMessageDialog(null, "Username atau password salah !!!");
-                                     }
-                              } catch (HeadlessException | SQLException e) {
-                             System.out.println("Error: " +e);
-                         }
-               }
+                try{
+                    Connection con = CKoneksi21552011235.getKoneksi();
+                    Statement st = con.createStatement();
+                    // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
+                    String sql = "SELECT * FROM tbluser JOIN tblpegawai ON " + "tbluser.idUser = tblpegawai.idUser WHERE tbluser.email = '"+txtFieldEmail.getText()+"' AND tbluser.password = '"+txtPassword.getText()+"'";
+                    ResultSet rs = st.executeQuery (sql);
+                        if (rs.next()) {
+                        level = rs.getString("level");
+                        email = rs.getString("email");
+                            if (level.equals("Admin")){
+                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
+                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
+                                    btnAdmin.setEnabled(true);
+                                    btnUbahPassword.setEnabled(true);
+                                    btnProfil.setEnabled(true);
+                                    btnLogout.setEnabled(true);
+                                    btnProduksi.setEnabled(false);
+                                    btnMarketing.setEnabled(false);
+//                                  lblUsername.setText(nama);
+                                    fm.setVisible(true);
+                                    } else if (level.equals("Produksi")){
+                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
+                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
+                                    btnAdmin.setEnabled(false);
+                                    btnUbahPassword.setEnabled(true);
+                                    btnProfil.setEnabled(true);
+                                    btnLogout.setEnabled(true);
+                                    btnProduksi.setEnabled(true);
+                                    btnMarketing.setEnabled(false);
+                                    fm.setVisible(true);
+                                    } else if (level.equals("Marketing")){
+                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
+                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
+                                    btnAdmin.setEnabled(false);
+                                    btnUbahPassword.setEnabled(true);
+                                    btnProfil.setEnabled(true);
+                                    btnLogout.setEnabled(true);
+                                    btnProduksi.setEnabled(false);
+                                    btnMarketing.setEnabled(true);
+                                    fm.setVisible(true);
+                                    }
+                                    rs.close();
+                                    st.close();
+                                    this.dispose();
+                            }else  {
+                                JOptionPane.showMessageDialog(null, "Username atau password salah !!!");
+                                }
+                        } catch (HeadlessException | SQLException e) {
+                            System.out.println("Error: " +e);
+                    }
+            }
    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
