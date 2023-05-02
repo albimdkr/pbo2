@@ -192,7 +192,7 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         });
         jPanel1.add(txtFieldConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 330, 40));
 
-        jLabel6.setText("Konfiramsi Password");
+        jLabel6.setText("Konfirmasi Password");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
@@ -238,12 +238,13 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 370, 30));
 
         txtFieldIDUser.setBorder(null);
+        txtFieldIDUser.setEnabled(false);
         txtFieldIDUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFieldIDUserActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 330, 40));
+        jPanel1.add(txtFieldIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 340, 40));
 
         jLabel13.setText("ID User");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));

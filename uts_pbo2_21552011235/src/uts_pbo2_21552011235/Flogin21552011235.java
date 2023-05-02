@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Flogin21552011235 extends javax.swing.JFrame {
     String level;
-    String nama;
+    String email;
     /**
      * Creates new form Flogin21552011235
      */
@@ -47,7 +47,7 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                                 ResultSet rs = st.executeQuery (sql);
                                     if (rs.next()) {
                                     level = rs.getString("level");
-                                    nama = rs.getString("nama");
+                                    email = rs.getString("email");
                                         if (level.equals("Admin")){
                                              JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
                                              FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
