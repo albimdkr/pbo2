@@ -14,6 +14,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -30,12 +35,12 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, idUser, level, id, kosong;
+    String sql, kodePegawai, jk, tglMasuk, kode, kosong ;
     
     public FPegawai215520112351() {
         initComponents();
-        idUserOtomatis();
-        tampilDataUser ();
+        kodePegawaiOtomatis();
+        tampilDataPegawai ();
     }
 
     /**
@@ -46,23 +51,23 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     
-    private void idUserOtomatis(){
+    private void kodePegawaiOtomatis(){
             try {
                     st = conn.createStatement();
-                    sql = "SELECT * FROM tbluser order by idUser DESC";
+                    sql = "SELECT * FROM tblpegawai order by kodePegawai DESC";
                     rs = st.executeQuery(sql);
                       if (rs.next()) {
-                           idUser = rs.getString("idUser").substring(4);
-                           id = "" + (Integer.parseInt(idUser) + 1);
+                           kodePegawai = rs.getString("kodePegawai").substring(2);
+                           kode = "" + (Integer.parseInt(kodePegawai) + 1);
                            kosong = "";
-                      if (id.length() == 1){
+                      if (kode.length() == 1){
                            kosong = "00";    
-                      } else if (id.length() == 2){
+                      } else if (kode.length() == 2){
                            kosong = "0";
                       } else {
                           kosong = "";
                       }
-                      txtFieldKodePegawai.setText("USER" + kosong + id);
+                      txtFieldKodePegawai.setText("USER" + kosong + kode);
                       } else {
                    txtFieldKodePegawai.setText("USER001");
                   }
@@ -71,51 +76,22 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
             } catch (NumberFormatException | SQLException e) {
         }
 }
- public static boolean checkEmailIsReady(String email) {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
-            String query = "SELECT * FROM tbluser WHERE email=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-            
-            // Tutup koneksi dan statement
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return false;
-  }
   
- public static boolean checkValidateEmaill(String email) {
-        String regex = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";// Regular Expresion Email
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-  }
   
- public boolean checkValidatePassword(String password) {
-    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
-    Pattern pattern = Pattern.compile(passwordRegex);
-    Matcher matcher = pattern.matcher(password);
-    return matcher.matches();
-}
  
-  private void tampilDataUser (){
+  private void tampilDataPegawai (){
         try {
-            if (txtFieldIDUser.getText().isEmpty()) {
-                sql = "select * from tbluser";
+            if (txtFieldCari.getText().isEmpty())  {
+                sql = "select * from tblpegawai";
             }else{
-                sql = "SELECT * FROM tbluser WHERE "
-                + "`idUser` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`email`  LIKE '%"+txtFieldIDUser.getText()+"%' OR "
-                + "`password` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`level` LIKE '%"+txtFieldIDUser.getText()+"%'";
+                sql = "SELECT * FROM tblpegawai WHERE "
+                + "`kodePegawai` LIKE '%"+txtFieldCari.getText()+"%' OR"
+                + "`nama`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`jk`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`tglMasuk`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`alamat`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`idUser`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`idDivisi` LIKE '%"+txtFieldCari.getText()+"%'";
             }
             st = conn.createStatement();
             rs = st.executeQuery(sql);
@@ -150,7 +126,6 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         btnBatal = new javax.swing.JLabel();
         btnSimpan = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        txtFieldTglMasukKerja = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtFieldAlamat = new javax.swing.JTextField();
@@ -174,6 +149,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         btnTambahDataPegawai = new javax.swing.JLabel();
         btnBack = new javax.swing.JLabel();
+        dateTglMasukKerja = new com.toedter.calendar.JDateChooser();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -204,7 +180,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 240, 30));
 
         jLabel8.setText("Jenis Kelamin");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, 70, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, 180, -1));
 
         btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal.png"))); // NOI18N
         btnBatal.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -218,7 +194,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                 btnBatalMouseExited(evt);
             }
         });
-        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, -1, 50));
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 310, -1, 50));
 
         btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
         btnSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,27 +208,19 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                 btnSimpanMouseExited(evt);
             }
         });
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, -1, 50));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 310, -1, 50));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
         jLabel12.setText("_______________________________");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 240, 30));
 
-        txtFieldTglMasukKerja.setBorder(null);
-        txtFieldTglMasukKerja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldTglMasukKerjaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFieldTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 180, 40));
-
         jLabel13.setText("Tanggal Masuk Kerja");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel14.setBackground(new java.awt.Color(255, 255, 255));
         jLabel14.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel14.setText("__________________________________________________________________________________");
+        jLabel14.setText("____________________________________________________________________________");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 580, 30));
 
         txtFieldAlamat.setBorder(null);
@@ -284,7 +252,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablePegawai);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 770, 210));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 890, 210));
 
         buttonGroup1.add(RBWanita);
         RBWanita.setText("Wanita");
@@ -310,15 +278,15 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jLabel16.setBackground(new java.awt.Color(255, 255, 255));
         jLabel16.setForeground(new java.awt.Color(153, 153, 153));
         jLabel16.setText("_______________________________");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 210, 30));
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 250, 30));
 
         jLabel17.setText("ID User");
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, -1, 10));
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
         jLabel11.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel11.setText("____________________________________________");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 280, 30));
+        jLabel11.setText("________________________________________");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 350, 30));
 
         txtFieldNamaPegawai.setBorder(null);
         txtFieldNamaPegawai.addActionListener(new java.awt.event.ActionListener() {
@@ -334,7 +302,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jLabel19.setBackground(new java.awt.Color(255, 255, 255));
         jLabel19.setForeground(new java.awt.Color(153, 153, 153));
         jLabel19.setText("________________________________________");
-        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 270, 260, 30));
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 270, 320, 30));
 
         txtFieldCari.setBorder(null);
         txtFieldCari.addActionListener(new java.awt.event.ActionListener() {
@@ -352,21 +320,30 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jLabel20.setText("Masukan Kata Kunci");
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, -1, 10));
 
-        comboBoxIDUser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(comboBoxIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 190, -1));
 
         Divisi.setText("Nama Divisi");
         jPanel1.add(Divisi, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 230, -1, 10));
 
-        comboBoxNamaDivisi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(comboBoxNamaDivisi, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 260, 190, -1));
 
         jLabel22.setBackground(new java.awt.Color(255, 255, 255));
         jLabel22.setForeground(new java.awt.Color(153, 153, 153));
         jLabel22.setText("_______________________________");
-        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, 210, 30));
+        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, 240, 30));
 
         btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPegawai.png"))); // NOI18N
+        btnTambahDataPegawai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahDataPegawaiMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnTambahDataPegawaiMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnTambahDataPegawaiMouseExited(evt);
+            }
+        });
         jPanel1.add(btnTambahDataPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 230, 50));
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
@@ -379,6 +356,9 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 30, 50));
+
+        dateTglMasukKerja.setDateFormatString("yyyy-MM-dd");
+        jPanel1.add(dateTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 170, 190, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -400,19 +380,19 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldKodePegawaiActionPerformed
 
     private void btnBatalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseEntered
-        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal.png")));
     }//GEN-LAST:event_btnBatalMouseEntered
 
     private void btnBatalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseExited
-        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal-hover.png")));
     }//GEN-LAST:event_btnBatalMouseExited
 
     private void btnSimpanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseEntered
-        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png")));
     }//GEN-LAST:event_btnSimpanMouseEntered
 
     private void btnSimpanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseExited
-        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan-hover.png")));
     }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
@@ -420,10 +400,6 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         fL.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBatalMouseClicked
-
-    private void txtFieldTglMasukKerjaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldTglMasukKerjaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldTglMasukKerjaActionPerformed
 
     private void txtFieldAlamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldAlamatActionPerformed
         // TODO add your handling code here:
@@ -438,71 +414,44 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     }//GEN-LAST:event_RBWanitaActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
-        if (txtFieldTglMasukKerja.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-        }else{
-            try {
-             // cek email
-            if (checkEmailIsReady(txtFieldTglMasukKerja.getText())) { 
-               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
-               txtFieldTglMasukKerja.setBackground(Color.red);
-            }  else {
-                  if (checkValidateEmaill(txtFieldTglMasukKerja.getText())) {
-                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      txtFieldTglMasukKerja.setBackground(Color.green);
-                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      txtFieldTglMasukKerja.setBackground(Color.green); 
-                      
-                      String password = txtFieldAlamat.getText().toString();
-                      if (checkValidatePassword(password)) { 
-                      JOptionPane.showMessageDialog(null, "Password telah benar!");
-//                    txtKodeUser.setBackground(Color.green);
-//                    txtUsernameEmail.setBackground(Color.green);
-                     txtFieldAlamat.setBackground(Color.green);
-                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
-                      ps = conn.prepareStatement(sql);
-                      ps.setString(1, txtFieldKodePegawai.getText());
-                      ps.setString(2, txtFieldTglMasukKerja.getText());
-                      ps.setString(3, txtFieldAlamat.getText());
-                      if (RBPria.isSelected()) {
-                            level = "Produksi";
-                      }else{
-                            level = "Marketing";
-                      }
-                      ps.setString(4, level);
-                      ps.executeUpdate();
-                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
 
-                      FPegawai215520112351 fu = new FPegawai215520112351();
-                      this.dispose();
-                      fu.setVisible(true);
-                      ps.close();
-                      } else { 
-                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
-                          txtFieldAlamat.setBackground(Color.red);
-                      }                                
-        } else {
-            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
-            txtFieldTglMasukKerja.setBackground(Color.red);
-        }
-        }
-                
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
-        }
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePegawaiMouseClicked
        int baris = tablePegawai.getSelectedRow();
             txtFieldKodePegawai.setText(tablePegawai.getValueAt(baris, 0).toString());
-            txtFieldTglMasukKerja.setText(tablePegawai.getValueAt(baris, 1).toString());
-            txtFieldAlamat.setText(tablePegawai.getValueAt(baris, 2).toString());
-             if (tablePegawai.getValueAt(baris,3).toString().equals("Produksi")){
+            txtFieldNamaPegawai.setText(tablePegawai.getValueAt(baris, 1).toString());
+             if (tablePegawai.getValueAt(baris,2).toString().equals("Pria")){
                  RBPria.setSelected(true);
              } else {
                  RBWanita.setSelected(true);
              }
+//          dateTglMasukKerja = dibawah (baris, 3)
+            txtFieldAlamat.setText(tablePegawai.getValueAt(baris, 4).toString());
+            String idus = tablePegawai.getValueAt(baris,5).toString();
+            for (int i = 0; i <comboBoxIDUser.getItemCount(); i++ ){
+                if (comboBoxIDUser.getItemAt(i).equalsIgnoreCase(idus)){
+                    comboBoxIDUser.setSelectedIndex(i);
+                }
+            }
+            
+            String nd = tablePegawai.getValueAt(baris,6).toString();
+            for (int i = 0; i <comboBoxNamaDivisi.getItemCount(); i++ ){
+                if (comboBoxNamaDivisi.getItemAt(i).equalsIgnoreCase(nd)){
+                    comboBoxNamaDivisi.setSelectedIndex(i);
+                }
+            }
+            
+            Date tglMsk = null;
+            Object ex = null;
+            try{
+                tglMsk = new SimpleDateFormat("yyyy-MM-dd").parse((String)tablePegawai.getValueAt(baris,3).toString());
+            }catch(ParseException e){  
+                System.out.println(e);
+                Logger.getLogger(FPegawai215520112351.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dateTglMasukKerja.setDate(tglMsk);
+
              
     }//GEN-LAST:event_tablePegawaiMouseClicked
 
@@ -525,6 +474,42 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     private void btnBackMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseExited
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
     }//GEN-LAST:event_btnBackMouseExited
+
+    private void btnTambahDataPegawaiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseEntered
+       btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPegawai.png")));
+    }//GEN-LAST:event_btnTambahDataPegawaiMouseEntered
+
+    private void btnTambahDataPegawaiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseExited
+       btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPegawai-hover.png")));
+    }//GEN-LAST:event_btnTambahDataPegawaiMouseExited
+
+    private void btnTambahDataPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseClicked
+               if (txtFieldKodePegawai.getText().isEmpty() || txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
+        }else{
+            try {
+                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
+                  ps = conn.prepareStatement(sql);
+                  ps.setString(1, txtFieldKodePegawai.getText());
+                  ps.setString(2, txtFieldNamaPegawai.getText());
+                  if (RBPria.isSelected()) {
+                      jk = "Pria";
+                  }else{
+                      jk = "Wanita";
+                  }
+                  ps.setString(3, jk);
+                  SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
+                  String tglMasuk = tglMsk.format(dateTglMasukKerja.getDate());
+                  ps.setString(4, tglMasuk);
+                  ps.setString(5, txtFieldAlamat.getText());
+
+                  ps.executeUpdate();
+                  JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+                  } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+    }//GEN-LAST:event_btnTambahDataPegawaiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -603,6 +588,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> comboBoxIDUser;
     private javax.swing.JComboBox<String> comboBoxNamaDivisi;
+    private com.toedter.calendar.JDateChooser dateTglMasukKerja;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -626,6 +612,5 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     private javax.swing.JTextField txtFieldCari;
     private javax.swing.JTextField txtFieldKodePegawai;
     private javax.swing.JTextField txtFieldNamaPegawai;
-    private javax.swing.JTextField txtFieldTglMasukKerja;
     // End of variables declaration//GEN-END:variables
 }
