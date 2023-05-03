@@ -22,13 +22,13 @@ import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
  *
  * @author albin
  */
-public class Flogin21552011235 extends javax.swing.JFrame {
+public class FUbahPsasword215520112351 extends javax.swing.JFrame {
     String level;
     String email;
     /**
      * Creates new form Flogin21552011235
      */
-    public Flogin21552011235() {
+    public FUbahPsasword215520112351() {
         initComponents();
     }
 
@@ -42,14 +42,14 @@ public class Flogin21552011235 extends javax.swing.JFrame {
     
     
    private void login (){
-        if (txtFieldEmail.getText().isEmpty() || txtPassword.getText().isEmpty())
-            JOptionPane.showMessageDialog(rootPane, "Pastikan username atau password telah terisi. Ulangi kembali!", "ADA YANG KURANG !", JOptionPane.WARNING_MESSAGE);
+        if (txtFieldEmail.getText().isEmpty() || txtFieldPasswordLama.getText().isEmpty())
+                JOptionPane.showMessageDialog(null, "Username atau Password belum terisi");
         else {
                 try{
                     Connection con = CKoneksi21552011235.getKoneksi();
                     Statement st = con.createStatement();
                     // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
-                    String sql = "SELECT * FROM tbluser JOIN tblpegawai ON " + "tbluser.idUser = tblpegawai.idUser WHERE tbluser.email = '"+txtFieldEmail.getText()+"' AND tbluser.password = '"+txtPassword.getText()+"'";
+                    String sql = "SELECT * FROM tbluser JOIN tblpegawai ON " + "tbluser.idUser = tblpegawai.idUser WHERE tbluser.email = '"+txtFieldEmail.getText()+"' AND tbluser.password = '"+txtFieldPasswordLama.getText()+"'";
                     ResultSet rs = st.executeQuery (sql);
                         if (rs.next()) {
                         level = rs.getString("level");
@@ -90,7 +90,7 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                                     st.close();
                                     this.dispose();
                             }else  {
-                                JOptionPane.showMessageDialog(rootPane, "Username atau password anda salah !!!. Ulangi kembali!", "ADA YANG SALAH !", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username atau password salah !!!");
                                 }
                         } catch (HeadlessException | SQLException e) {
                             System.out.println("Error: " +e);
@@ -105,13 +105,13 @@ public class Flogin21552011235 extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtFieldEmail = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JPasswordField();
-        btnLogin = new javax.swing.JLabel();
-        btnDaftar = new javax.swing.JLabel();
+        txtFieldPasswordLama = new javax.swing.JPasswordField();
+        btnUbah = new javax.swing.JLabel();
+        btnKembali = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        txtFieldPasswordBaru = new javax.swing.JPasswordField();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -125,10 +125,10 @@ public class Flogin21552011235 extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setText("LOGIN FORM");
+        jLabel4.setText("Form Ubah Password");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, -1, -1));
 
-        jLabel5.setText("Password");
+        jLabel5.setText("Password Baru");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, -1, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
@@ -136,56 +136,52 @@ public class Flogin21552011235 extends javax.swing.JFrame {
         jLabel9.setText("________________________________________________");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 370, 30));
 
-        txtFieldEmail.setBorder(null);
-        txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldEmailActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 330, 40));
-
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
         jLabel10.setText("________________________________________________");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, 370, 30));
 
-        txtPassword.setText("jPasswordField1");
-        txtPassword.setBorder(null);
-        jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 330, 40));
+        txtFieldPasswordLama.setText("jPasswordField1");
+        txtFieldPasswordLama.setBorder(null);
+        jPanel1.add(txtFieldPasswordLama, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 330, 40));
 
-        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin.png"))); // NOI18N
-        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbah.png"))); // NOI18N
+        btnUbah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnLoginMouseClicked(evt);
+                btnUbahMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnLoginMouseEntered(evt);
+                btnUbahMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnLoginMouseExited(evt);
+                btnUbahMouseExited(evt);
             }
         });
-        jPanel1.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 110, 40));
+        jPanel1.add(btnUbah, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 110, 40));
 
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png"))); // NOI18N
-        btnDaftar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png"))); // NOI18N
+        btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseClicked(evt);
+                btnKembaliMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseEntered(evt);
+                btnKembaliMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseExited(evt);
+                btnKembaliMouseExited(evt);
             }
         });
-        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 120, 40));
+        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, -1, 40));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/cover-login.png"))); // NOI18N
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 350));
 
-        jLabel12.setText("Email");
+        jLabel12.setText("Password Lama");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, -1, -1));
+
+        txtFieldPasswordBaru.setText("jPasswordField1");
+        txtFieldPasswordBaru.setBorder(null);
+        jPanel1.add(txtFieldPasswordBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 330, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,35 +200,31 @@ public class Flogin21552011235 extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldEmailActionPerformed
+    private void btnUbahMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseEntered
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin.png")));
+    }//GEN-LAST:event_btnUbahMouseEntered
 
-    private void btnLoginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseEntered
-        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin.png")));
-    }//GEN-LAST:event_btnLoginMouseEntered
+    private void btnUbahMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseExited
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin-hover.png")));
+    }//GEN-LAST:event_btnUbahMouseExited
 
-    private void btnLoginMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseExited
-        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin-hover.png")));
-    }//GEN-LAST:event_btnLoginMouseExited
+    private void btnKembaliMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseEntered
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
+    }//GEN-LAST:event_btnKembaliMouseEntered
 
-    private void btnDaftarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseEntered
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
-    }//GEN-LAST:event_btnDaftarMouseEntered
+    private void btnKembaliMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseExited
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
+    }//GEN-LAST:event_btnKembaliMouseExited
 
-    private void btnDaftarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseExited
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
-    }//GEN-LAST:event_btnDaftarMouseExited
-
-    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
+    private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
         login();
-    }//GEN-LAST:event_btnLoginMouseClicked
+    }//GEN-LAST:event_btnUbahMouseClicked
 
-    private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
+    private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
         FDaftar21552011235 fd = new FDaftar21552011235();
         fd.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnDaftarMouseClicked
+    }//GEN-LAST:event_btnKembaliMouseClicked
 
     /**
      * @param args the command line arguments
@@ -251,27 +243,28 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Flogin21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FUbahPsasword215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Flogin21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FUbahPsasword215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Flogin21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FUbahPsasword215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Flogin21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FUbahPsasword215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Flogin21552011235().setVisible(true);
+                new FUbahPsasword215520112351().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel btnDaftar;
-    private javax.swing.JLabel btnLogin;
+    private javax.swing.JLabel btnKembali;
+    private javax.swing.JLabel btnUbah;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -280,7 +273,7 @@ public class Flogin21552011235 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtFieldEmail;
-    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JPasswordField txtFieldPasswordBaru;
+    private javax.swing.JPasswordField txtFieldPasswordLama;
     // End of variables declaration//GEN-END:variables
 }

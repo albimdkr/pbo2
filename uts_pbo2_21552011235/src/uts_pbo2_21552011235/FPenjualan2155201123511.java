@@ -25,14 +25,14 @@ import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
  *
  * @author albin
  */
-public class FUser21552011235 extends javax.swing.JFrame {
+public class FPenjualan2155201123511 extends javax.swing.JFrame {
     Connection conn = CKoneksi21552011235.getKoneksi();
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
     String sql, idUser, level, id, kosong;
     
-    public FUser21552011235() {
+    public FPenjualan2155201123511() {
         initComponents();
         idUserOtomatis();
         tampilDataUser ();
@@ -62,9 +62,9 @@ public class FUser21552011235 extends javax.swing.JFrame {
                       } else {
                           kosong = "";
                       }
-                      txtFieldIDUser.setText("USER" + kosong + id);
+                      txtFieldKodePegawai.setText("USER" + kosong + id);
                       } else {
-                   txtFieldIDUser.setText("USER001");
+                   txtFieldKodePegawai.setText("USER001");
                   }
                   rs.close();
                   st.close();
@@ -108,14 +108,14 @@ public class FUser21552011235 extends javax.swing.JFrame {
  
   private void tampilDataUser (){
         try {
-            if (txtFieldCari.getText().isEmpty()) {
+            if (txtFieldIDUser.getText().isEmpty()) {
                 sql = "select * from tbluser";
             }else{
                 sql = "SELECT * FROM tbluser WHERE "
-                + "`idUser` LIKE '%"+txtFieldCari.getText()+"%' OR"
-                + "`email`  LIKE '%"+txtFieldCari.getText()+"%' OR "
-                + "`password` LIKE '%"+txtFieldCari.getText()+"%' OR"
-                + "`level` LIKE '%"+txtFieldCari.getText()+"%'";
+                + "`idUser` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
+                + "`email`  LIKE '%"+txtFieldIDUser.getText()+"%' OR "
+                + "`password` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
+                + "`level` LIKE '%"+txtFieldIDUser.getText()+"%'";
             }
             st = conn.createStatement();
             rs = st.executeQuery(sql);
@@ -132,7 +132,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
                }
                model.addRow(row);
             }
-            tableUser.setModel(model);
+            tablePenjualan.setModel(model);
         } catch (Exception e) {
         }
     }
@@ -144,25 +144,29 @@ public class FUser21552011235 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtFieldIDUser = new javax.swing.JTextField();
+        txtFieldKodePegawai = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        btnKembali = new javax.swing.JLabel();
-        btnDaftar = new javax.swing.JLabel();
+        btnBatal = new javax.swing.JLabel();
+        btnSimpan = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        txtFieldEmail = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        txtFieldPassword = new javax.swing.JTextField();
+        txtFieldHargaJual = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableUser = new javax.swing.JTable();
-        RBMarketing = new javax.swing.JRadioButton();
-        RBProduksi = new javax.swing.JRadioButton();
+        tablePenjualan = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtFieldNamaPegawai = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
         txtFieldCari = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        btnTambahDataPegawai = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        comboBoxNamaAlat = new javax.swing.JComboBox<>();
+        jLabel23 = new javax.swing.JLabel();
+        txtFieldTglMasukKerja1 = new javax.swing.JTextField();
         btnBack = new javax.swing.JLabel();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -177,86 +181,75 @@ public class FUser21552011235 extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setText("Form User");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, -1, -1));
+        jLabel4.setText("Form Penjualan");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, 30));
 
-        txtFieldIDUser.setBorder(null);
-        txtFieldIDUser.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldKodePegawai.setBorder(null);
+        txtFieldKodePegawai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldIDUserActionPerformed(evt);
+                txtFieldKodePegawaiActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 180, 40));
+        jPanel1.add(txtFieldKodePegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 180, 40));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
         jLabel10.setText("_______________________________");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 240, 30));
 
-        jLabel8.setText("Level");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 60, 60, -1));
-
-        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png"))); // NOI18N
-        btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal.png"))); // NOI18N
+        btnBatal.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnKembaliMouseClicked(evt);
+                btnBatalMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnKembaliMouseEntered(evt);
+                btnBatalMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnKembaliMouseExited(evt);
+                btnBatalMouseExited(evt);
             }
         });
-        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, -1, 40));
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 230, -1, 50));
 
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
-        btnDaftar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
+        btnSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseClicked(evt);
+                btnSimpanMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseEntered(evt);
+                btnSimpanMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseExited(evt);
+                btnSimpanMouseExited(evt);
             }
         });
-        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, -1, 40));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, -1, 50));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
         jLabel12.setText("_______________________________");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 240, 30));
 
-        txtFieldEmail.setBorder(null);
-        txtFieldEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldEmailActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 180, 40));
-
-        jLabel13.setText("Email");
+        jLabel13.setText("Tanggal Penjualan");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel14.setBackground(new java.awt.Color(255, 255, 255));
         jLabel14.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel14.setText("_______________________________");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 240, 30));
+        jLabel14.setText("__________________________________________________________________________________");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 580, 30));
 
-        txtFieldPassword.setBorder(null);
-        txtFieldPassword.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldHargaJual.setBorder(null);
+        txtFieldHargaJual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldPasswordActionPerformed(evt);
+                txtFieldHargaJualActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 180, 40));
+        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 490, 40));
 
-        jLabel15.setText("Password");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, -1, -1));
+        jLabel15.setText("Harga Jual");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 140, -1, -1));
 
-        tableUser.setModel(new javax.swing.table.DefaultTableModel(
+        tablePenjualan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -267,40 +260,38 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablePenjualan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableUserMouseClicked(evt);
+                tablePenjualanMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableUser);
+        jScrollPane1.setViewportView(tablePenjualan);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 480, 140));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 740, 240));
 
-        buttonGroup1.add(RBMarketing);
-        RBMarketing.setText("Marketing");
-        RBMarketing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RBMarketingActionPerformed(evt);
-            }
-        });
-        jPanel1.add(RBMarketing, new org.netbeans.lib.awtextra.AbsoluteConstraints(393, 100, 90, -1));
-
-        buttonGroup1.add(RBProduksi);
-        RBProduksi.setText("Produksi");
-        RBProduksi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RBProduksiActionPerformed(evt);
-            }
-        });
-        jPanel1.add(RBProduksi, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 100, 80, -1));
-
-        jLabel9.setText("ID User");
+        jLabel9.setText("Kode Penjualan");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
 
-        jLabel16.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel16.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel16.setText("____________________________________________________________________");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 500, 30));
+        jLabel11.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel11.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel11.setText("__________________________________________");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, 280, 30));
+
+        txtFieldNamaPegawai.setBorder(null);
+        txtFieldNamaPegawai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldNamaPegawaiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFieldNamaPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 280, 40));
+
+        jLabel18.setText("Nama Pegawai");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, -1, -1));
+
+        jLabel19.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel19.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel19.setText("________________________________________");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 310, 260, 30));
 
         txtFieldCari.setBorder(null);
         txtFieldCari.addActionListener(new java.awt.event.ActionListener() {
@@ -313,10 +304,32 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 txtFieldCariKeyReleased(evt);
             }
         });
-        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 450, 40));
+        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 240, 40));
 
-        jLabel17.setText("Masukan Kata Kunci");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, -1, 10));
+        jLabel20.setText("Masukan Kata Kunci");
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 320, -1, 10));
+
+        btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan.png"))); // NOI18N
+        jPanel1.add(btnTambahDataPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 230, 50));
+
+        jLabel21.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel21.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel21.setText("_______________________________");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 210, 30));
+
+        comboBoxNamaAlat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(comboBoxNamaAlat, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 190, -1));
+
+        jLabel23.setText("Nama Alat");
+        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, 10));
+
+        txtFieldTglMasukKerja1.setBorder(null);
+        txtFieldTglMasukKerja1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldTglMasukKerja1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFieldTglMasukKerja1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 180, 40));
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -334,94 +347,76 @@ public class FUser21552011235 extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 844, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFieldIDUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldIDUserActionPerformed
+    private void txtFieldKodePegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldKodePegawaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldIDUserActionPerformed
+    }//GEN-LAST:event_txtFieldKodePegawaiActionPerformed
 
-    private void btnKembaliMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseEntered
-        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
-    }//GEN-LAST:event_btnKembaliMouseEntered
+    private void btnBatalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseEntered
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
+    }//GEN-LAST:event_btnBatalMouseEntered
 
-    private void btnKembaliMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseExited
-        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
-    }//GEN-LAST:event_btnKembaliMouseExited
+    private void btnBatalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseExited
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
+    }//GEN-LAST:event_btnBatalMouseExited
 
-    private void btnDaftarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseEntered
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
-    }//GEN-LAST:event_btnDaftarMouseEntered
+    private void btnSimpanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseEntered
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
+    }//GEN-LAST:event_btnSimpanMouseEntered
 
-    private void btnDaftarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseExited
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
-    }//GEN-LAST:event_btnDaftarMouseExited
+    private void btnSimpanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseExited
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
+    }//GEN-LAST:event_btnSimpanMouseExited
 
-    private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
+    private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
         Flogin21552011235 fL = new Flogin21552011235();
         fL.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnKembaliMouseClicked
+    }//GEN-LAST:event_btnBatalMouseClicked
 
-    private void txtFieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldEmailActionPerformed
+    private void txtFieldHargaJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldHargaJualActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldEmailActionPerformed
+    }//GEN-LAST:event_txtFieldHargaJualActionPerformed
 
-    private void txtFieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldPasswordActionPerformed
-
-    private void RBProduksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RBProduksiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RBProduksiActionPerformed
-
-    private void RBMarketingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RBMarketingActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RBMarketingActionPerformed
-
-    private void txtFieldCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldCariActionPerformed
-
-    private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
-        if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty()) {
+    private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
+        if (txtFieldTglMasukKerja.getText().isEmpty() || txtFieldHargaJual.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
         }else{
             try {
              // cek email
-            if (checkEmailIsReady(txtFieldEmail.getText())) { 
+            if (checkEmailIsReady(txtFieldTglMasukKerja.getText())) { 
                JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
-               txtFieldEmail.setBackground(Color.red);
+               txtFieldTglMasukKerja.setBackground(Color.red);
             }  else {
-                  if (checkValidateEmaill(txtFieldEmail.getText())) {
+                  if (checkValidateEmaill(txtFieldTglMasukKerja.getText())) {
                       JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      txtFieldEmail.setBackground(Color.green);
+                      txtFieldTglMasukKerja.setBackground(Color.green);
                       JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      txtFieldEmail.setBackground(Color.green); 
+                      txtFieldTglMasukKerja.setBackground(Color.green); 
                       
-                      String password = txtFieldPassword.getText().toString();
+                      String password = txtFieldHargaJual.getText().toString();
                       if (checkValidatePassword(password)) { 
                       JOptionPane.showMessageDialog(null, "Password telah benar!");
 //                    txtKodeUser.setBackground(Color.green);
 //                    txtUsernameEmail.setBackground(Color.green);
-                     txtFieldPassword.setBackground(Color.green);
+                     txtFieldHargaJual.setBackground(Color.green);
                       sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
                       ps = conn.prepareStatement(sql);
-                      ps.setString(1, txtFieldIDUser.getText());
-                      ps.setString(2, txtFieldEmail.getText());
-                      ps.setString(3, txtFieldPassword.getText());
-                      if (RBProduksi.isSelected()) {
+                      ps.setString(1, txtFieldKodePegawai.getText());
+                      ps.setString(2, txtFieldTglMasukKerja.getText());
+                      ps.setString(3, txtFieldHargaJual.getText());
+                      if (RBPria.isSelected()) {
                             level = "Produksi";
                       }else{
                             level = "Marketing";
@@ -430,17 +425,17 @@ public class FUser21552011235 extends javax.swing.JFrame {
                       ps.executeUpdate();
                       JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
 
-                      FUser21552011235 fu = new FUser21552011235();
+                      FPenjualan2155201123511 fu = new FPenjualan2155201123511();
                       this.dispose();
                       fu.setVisible(true);
                       ps.close();
                       } else { 
                           JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
-                          txtFieldPassword.setBackground(Color.red);
+                          txtFieldHargaJual.setBackground(Color.red);
                       }                                
         } else {
             JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
-            txtFieldEmail.setBackground(Color.red);
+            txtFieldTglMasukKerja.setBackground(Color.red);
         }
         }
                 
@@ -448,31 +443,43 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 System.out.println(e);
             }
         }
-    }//GEN-LAST:event_btnDaftarMouseClicked
+    }//GEN-LAST:event_btnSimpanMouseClicked
 
-    private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
-       int baris = tableUser.getSelectedRow();
-            txtFieldIDUser.setText(tableUser.getValueAt(baris, 0).toString());
-            txtFieldEmail.setText(tableUser.getValueAt(baris, 1).toString());
-            txtFieldPassword.setText(tableUser.getValueAt(baris, 2).toString());
-             if (tableUser.getValueAt(baris,3).toString().equals("Produksi")){
-                 RBProduksi.setSelected(true);
+    private void tablePenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePenjualanMouseClicked
+       int baris = tablePenjualan.getSelectedRow();
+            txtFieldKodePegawai.setText(tablePenjualan.getValueAt(baris, 0).toString());
+            txtFieldTglMasukKerja.setText(tablePenjualan.getValueAt(baris, 1).toString());
+            txtFieldHargaJual.setText(tablePenjualan.getValueAt(baris, 2).toString());
+             if (tablePenjualan.getValueAt(baris,3).toString().equals("Produksi")){
+                 RBPria.setSelected(true);
              } else {
-                 RBMarketing.setSelected(true);
+                 RBWanita.setSelected(true);
              }
              
-    }//GEN-LAST:event_tableUserMouseClicked
+    }//GEN-LAST:event_tablePenjualanMouseClicked
+
+    private void txtFieldNamaPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNamaPegawaiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldNamaPegawaiActionPerformed
+
+    private void txtFieldCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCariActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldCariActionPerformed
 
     private void txtFieldCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldCariKeyReleased
-       tampilDataUser();
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldCariKeyReleased
 
+    private void txtFieldTglMasukKerja1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldTglMasukKerja1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldTglMasukKerja1ActionPerformed
+
     private void btnBackMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseEntered
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png")));
+       btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png")));
     }//GEN-LAST:event_btnBackMouseEntered
 
     private void btnBackMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseExited
-        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
+       btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
     }//GEN-LAST:event_btnBackMouseExited
 
     /**
@@ -492,14 +499,62 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FUser21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FUser21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FUser21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FUser21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -520,35 +575,39 @@ public class FUser21552011235 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FUser21552011235().setVisible(true);
+                new FPenjualan2155201123511().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton RBMarketing;
-    private javax.swing.JRadioButton RBProduksi;
     private javax.swing.JLabel btnBack;
-    private javax.swing.JLabel btnDaftar;
-    private javax.swing.JLabel btnKembali;
+    private javax.swing.JLabel btnBatal;
+    private javax.swing.JLabel btnSimpan;
+    private javax.swing.JLabel btnTambahDataPegawai;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> comboBoxNamaAlat;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableUser;
+    private javax.swing.JTable tablePenjualan;
     private javax.swing.JTextField txtFieldCari;
-    private javax.swing.JTextField txtFieldEmail;
-    private javax.swing.JTextField txtFieldIDUser;
-    private javax.swing.JTextField txtFieldPassword;
+    private javax.swing.JTextField txtFieldHargaJual;
+    private javax.swing.JTextField txtFieldKodePegawai;
+    private javax.swing.JTextField txtFieldNamaPegawai;
+    private javax.swing.JTextField txtFieldTglMasukKerja1;
     // End of variables declaration//GEN-END:variables
 }

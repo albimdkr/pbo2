@@ -109,15 +109,15 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        titlePassword = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtFieldEmail = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtFieldPassword = new javax.swing.JPasswordField();
-        jLabel8 = new javax.swing.JLabel();
+        titleEmail = new javax.swing.JLabel();
         btnKembali = new javax.swing.JLabel();
         txtFieldConfirmPassword = new javax.swing.JPasswordField();
-        jLabel6 = new javax.swing.JLabel();
+        titleConfirmPassword = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         btnDaftar = new javax.swing.JLabel();
         RBProduksi = new javax.swing.JRadioButton();
@@ -141,8 +141,8 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         jLabel4.setText("DAFTAR FORM");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
-        jLabel5.setText("Password");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
+        titlePassword.setText("Password");
+        jPanel1.add(titlePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setForeground(new java.awt.Color(153, 153, 153));
@@ -166,8 +166,8 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         txtFieldPassword.setBorder(null);
         jPanel1.add(txtFieldPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 330, 40));
 
-        jLabel8.setText("Email");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
+        titleEmail.setText("Email");
+        jPanel1.add(titleEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png"))); // NOI18N
         btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -192,8 +192,8 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         });
         jPanel1.add(txtFieldConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 330, 40));
 
-        jLabel6.setText("Konfirmasi Password");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
+        titleConfirmPassword.setText("Konfirmasi Password");
+        jPanel1.add(titleConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
         jLabel11.setForeground(new java.awt.Color(153, 153, 153));
@@ -304,30 +304,31 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
 
     private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
         if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty() || txtFieldConfirmPassword.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
         } else if (!txtFieldConfirmPassword.getText().equals(txtFieldPassword.getText())) {
             JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan password!");
-            txtFieldConfirmPassword.setBackground(Color.red);
+            JOptionPane.showMessageDialog(rootPane, "Pastikan Konfirmasi Password sesuai. Ulangi kembali!", "KONFIRMASI PASSWORD TIDAK SESUAI !", JOptionPane.WARNING_MESSAGE);
+            titleConfirmPassword.setForeground (Color.red);
         }else{
             try {
              // cek email
-            if (checkEmailIsReady(txtFieldEmail.getText())) { 
-               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
-               txtFieldEmail.setBackground(Color.red);
+            if (checkEmailIsReady(txtFieldEmail.getText())) {
+               JOptionPane.showMessageDialog(rootPane, "Pastikan Email yang digunakan belum terdaftar, lakukan daftar kembali!. Ulangi kembali!", "EMAIL TELAH ADA !", JOptionPane.WARNING_MESSAGE);
+               titleEmail.setForeground (Color.red);
             }  else {
                   if (checkValidateEmaill(txtFieldEmail.getText())) {
                       JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      txtFieldEmail.setBackground(Color.green);
+                      titleEmail.setForeground (Color.black);
                       JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      txtFieldEmail.setBackground(Color.green); 
+                      titleEmail.setForeground (Color.black);
                       
                       String password = txtFieldPassword.getText().toString();
                       if (checkValidatePassword(password)) { 
                       JOptionPane.showMessageDialog(null, "Password telah benar!");
 //                    txtKodeUser.setBackground(Color.green);
 //                    txtUsernameEmail.setBackground(Color.green);
-                     txtFieldPassword.setBackground(Color.green);
-                     txtFieldConfirmPassword.setBackground(Color.green);
+                      titlePassword.setForeground (Color.black);
+                      titleConfirmPassword.setForeground (Color.black);
                       sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
                       ps = conn.prepareStatement(sql);
                       ps.setString(1, txtFieldIDUser.getText());
@@ -347,11 +348,11 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
                       fl.setVisible(true);
                       ps.close();
                       } else { 
-                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
-                          txtFieldPassword.setBackground(Color.red);
+                          JOptionPane.showMessageDialog(rootPane, "Pastikan isi password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!", "PASSWORD LEMAH !", JOptionPane.WARNING_MESSAGE);
+                          titlePassword.setForeground (Color.red);
                       }                                
         } else {
-            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
+            JOptionPane.showMessageDialog(rootPane, "Pastikan isi format email dengan benar!", "FORMAT EMAIL SALAH !", JOptionPane.WARNING_MESSAGE);
             txtFieldEmail.setBackground(Color.red);
         }
         }
@@ -415,12 +416,12 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel titleConfirmPassword;
+    private javax.swing.JLabel titleEmail;
+    private javax.swing.JLabel titlePassword;
     private javax.swing.JPasswordField txtFieldConfirmPassword;
     private javax.swing.JTextField txtFieldEmail;
     private javax.swing.JTextField txtFieldIDUser;

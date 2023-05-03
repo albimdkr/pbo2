@@ -7,6 +7,7 @@ package uts_pbo2_21552011235;
 
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -61,6 +62,12 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
+        menuItemDataUser = new javax.swing.JMenuItem();
+        menuItemDataPegawai = new javax.swing.JMenuItem();
+        menuItemDataDivisi = new javax.swing.JMenuItem();
+        menuItemDataAlat = new javax.swing.JMenuItem();
+        menuItemDataPenjualanProduksi = new javax.swing.JMenuItem();
+        menuItemDataPenjualanMarketing = new javax.swing.JMenuItem();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -84,6 +91,13 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
                 btnAdminMouseExited(evt);
             }
         });
+
+        menuItemDataUser.setText("Data User");
+        btnAdmin.add(menuItemDataUser);
+
+        menuItemDataPegawai.setText("DataPegawai");
+        btnAdmin.add(menuItemDataPegawai);
+
         jMenuBar1.add(btnAdmin);
 
         btnProduksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-product-24.png"))); // NOI18N
@@ -97,6 +111,16 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
                 btnProduksiMouseExited(evt);
             }
         });
+
+        menuItemDataDivisi.setText("Data Divisi");
+        btnProduksi.add(menuItemDataDivisi);
+
+        menuItemDataAlat.setText("Data Alat");
+        btnProduksi.add(menuItemDataAlat);
+
+        menuItemDataPenjualanProduksi.setText("Data Penjualan");
+        btnProduksi.add(menuItemDataPenjualanProduksi);
+
         jMenuBar1.add(btnProduksi);
 
         btnMarketing.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-stocks-growth-24.png"))); // NOI18N
@@ -110,6 +134,10 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
                 btnMarketingMouseExited(evt);
             }
         });
+
+        menuItemDataPenjualanMarketing.setText("Data Penjualan");
+        btnMarketing.add(menuItemDataPenjualanMarketing);
+
         jMenuBar1.add(btnMarketing);
 
         btnUbahPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-password-24.png"))); // NOI18N
@@ -220,8 +248,14 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutMouseExited
 
     private void btnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseClicked
-        new uts_pbo2_21552011235.Flogin21552011235().setVisible(true);
-        dispose();
+        int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
+            + "Logout Dari Aplikasi?","Konfirmasi Logout", JOptionPane.YES_NO_OPTION);
+        if (ok==0){
+                new uts_pbo2_21552011235.Flogin21552011235().setVisible(true);
+                dispose();
+   
+                JOptionPane.showMessageDialog(null , "Anda Berhasil Logout, Silahkan Login kembali!");
+        }
     }//GEN-LAST:event_btnLogoutMouseClicked
 
     /**
@@ -333,5 +367,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem menuItemDataAlat;
+    private javax.swing.JMenuItem menuItemDataDivisi;
+    private javax.swing.JMenuItem menuItemDataPegawai;
+    private javax.swing.JMenuItem menuItemDataPenjualanMarketing;
+    private javax.swing.JMenuItem menuItemDataPenjualanProduksi;
+    private javax.swing.JMenuItem menuItemDataUser;
     // End of variables declaration//GEN-END:variables
 }
