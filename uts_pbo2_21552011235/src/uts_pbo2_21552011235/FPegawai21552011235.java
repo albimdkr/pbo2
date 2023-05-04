@@ -451,7 +451,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
         if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan data Gaji Pokok atau Tunjangan telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
         } else {
             int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
             + "Mengedit Data ?","Konfirmasi Edit Data Pegawai", JOptionPane.YES_NO_OPTION);
@@ -459,18 +459,19 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 
             if (ok==0){
                 try {
-                sql = "UPDATE tblpegawai SET jk=?, alamat=?, idUser=? WHERE nama=?";
+                sql = "UPDATE tblpegawai SET nama=?, jk=?, alamat=?, idUser=? WHERE kodePegawai=?";
                 ps = conn.prepareStatement(sql);
-                
+                ps.setString(1, txtFieldNamaPegawai.getText());
                 if (RBPria.isSelected()) {
                       jk = "Pria";
                   }else{
                       jk = "Wanita";
                   }
-                ps.setString(1, jk);
-                ps.setString(2, txtFieldAlamat.getText());
-                ps.setString(3, (String) comboBoxIDUser.getSelectedItem());
-                ps.setString(4, txtFieldNamaPegawai.getText());
+                ps.setString(2, jk);
+                ps.setString(3, txtFieldAlamat.getText());
+                ps.setString(4, (String) comboBoxIDUser.getSelectedItem());
+                ps.setString(5, txtFieldKodePegawai.getText());
+                
               
                 ps.executeUpdate();
                 tampilDataPegawai();
