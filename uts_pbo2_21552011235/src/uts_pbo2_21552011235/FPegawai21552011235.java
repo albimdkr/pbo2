@@ -31,14 +31,14 @@ import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
  *
  * @author albin
  */
-public class FPegawai215520112351 extends javax.swing.JFrame {
+public class FPegawai21552011235 extends javax.swing.JFrame {
     Connection conn = CKoneksi21552011235.getKoneksi();
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
     String sql, jk, kode, kosong ;
     
-    public FPegawai215520112351() {
+    public FPegawai21552011235() {
         initComponents();
         tampilDataPegawai ();
         updateComboidUser();
@@ -56,7 +56,6 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     private void kodePegawaiOtomatis(){
        
         String divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
-        
         SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
         String tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
 
@@ -137,7 +136,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
   
 
     private void updateComboidDivisi(){
-      sql = "select * from tbldivisi WHERE idDivisi";
+      sql = "select * from tbldivisi";
       try {
           st = conn.prepareStatement(sql);
           rs = st.executeQuery(sql);
@@ -483,7 +482,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                 tglMsk = new SimpleDateFormat("yyyy-MM-dd").parse((String)tablePegawai.getValueAt(baris,3).toString());
             }catch(ParseException e){  
                 System.out.println(e);
-                Logger.getLogger(FPegawai215520112351.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FPegawai21552011235.class.getName()).log(Level.SEVERE, null, ex);
             }
             dateTglMasukKerja.setDate(tglMsk);
 
@@ -523,7 +522,9 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
         }else{
             try {
-                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
+                  kodePegawaiOtomatis();
+//                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
+                  sql = "INSERT INTO tblpegawai (kodePegawai, nama, jk, tglMasuk, alamat, idUser, idDivisi) VALUES (?, ?, ?, ?, ?, ?, (SELECT idDivisi FROM tbldivisi WHERE namaDivisi = ?))";
                   ps = conn.prepareStatement(sql);
                   ps.setString(1, txtFieldKodePegawai.getText());
                   ps.setString(2, txtFieldNamaPegawai.getText());
@@ -538,10 +539,19 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                   ps.setString( 4, date);
                   ps.setString(5, txtFieldAlamat.getText());
                   ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
-                  ps.setString(7, (String)comboBoxNamaDivisi.getSelectedItem());
-                  
-                  kodePegawaiOtomatis();
+                  ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
+//                  ps.setString(7, (String) comboBoxNamaDivisi.getSelectedItem());        
+//                  String selectedValue = comboBoxNamaDivisi.getSelectedItem().toString(); // get the selected item from the JComboBox as a string
+//                  int id = Integer.parseInt(selectedValue); // convert the selected value to an integer
+//                  ps.setInt(7, id);
+
                   ps.executeUpdate();
+                  
+                  
+                  FPegawai21552011235 fp = new FPegawai21552011235();
+                  this.dispose();
+                  fp.setVisible(true);
+                  ps.close();
                   JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
                   } catch (SQLException e) {
                 System.out.println(e);
@@ -566,14 +576,46 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FPegawai215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPegawai21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FPegawai215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPegawai21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FPegawai215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPegawai21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FPegawai215520112351.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPegawai21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -610,7 +652,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FPegawai215520112351().setVisible(true);
+                new FPegawai21552011235().setVisible(true);
             }
         });
     }
