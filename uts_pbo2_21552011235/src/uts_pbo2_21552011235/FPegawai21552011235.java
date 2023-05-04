@@ -430,9 +430,11 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
-        Flogin21552011235 fL = new Flogin21552011235();
-        fL.setVisible(true);
-        this.dispose();
+        txtFieldKodePegawai.setText(null);
+        txtFieldNamaPegawai.setText(null);
+        buttonGroup1.clearSelection();
+        txtFieldAlamat.setText(null);
+        dateTglMasukKerja.setCalendar(null);      
     }//GEN-LAST:event_btnBatalMouseClicked
 
     private void txtFieldAlamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldAlamatActionPerformed
@@ -448,7 +450,36 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_RBWanitaActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
+        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data Gaji Pokok atau Tunjangan telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
+            + "Mengedit Data ?","Konfirmasi Edit Data Pegawai", JOptionPane.YES_NO_OPTION);
 
+
+            if (ok==0){
+                try {
+                sql = "UPDATE tblpegawai SET jk=?, alamat=?, idUser=? WHERE nama=?";
+                ps = conn.prepareStatement(sql);
+                
+                if (RBPria.isSelected()) {
+                      jk = "Pria";
+                  }else{
+                      jk = "Wanita";
+                  }
+                ps.setString(1, jk);
+                ps.setString(2, txtFieldAlamat.getText());
+                ps.setString(3, (String) comboBoxIDUser.getSelectedItem());
+                ps.setString(4, txtFieldNamaPegawai.getText());
+              
+                ps.executeUpdate();
+                tampilDataPegawai();
+                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
+                }
+            }
+        }
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePegawaiMouseClicked
@@ -546,12 +577,13 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 //                  ps.setInt(7, id);
 
                   ps.executeUpdate();
+                  tampilDataPegawai();
                   
                   
-                  FPegawai21552011235 fp = new FPegawai21552011235();
-                  this.dispose();
-                  fp.setVisible(true);
-                  ps.close();
+//                  FPegawai21552011235 fp = new FPegawai21552011235();
+//                  this.dispose();
+//                  fp.setVisible(true);
+//                  ps.close();
                   JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
                   } catch (SQLException e) {
                 System.out.println(e);

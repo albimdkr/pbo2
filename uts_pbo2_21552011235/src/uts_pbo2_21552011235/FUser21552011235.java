@@ -148,7 +148,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         btnKembali = new javax.swing.JLabel();
-        btnDaftar = new javax.swing.JLabel();
+        btnTambahDataUser = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtFieldEmail = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -208,21 +208,21 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 btnKembaliMouseExited(evt);
             }
         });
-        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, -1, 40));
+        jPanel1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, -1, 40));
 
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
-        btnDaftar.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnTambahDataUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataUser.png"))); // NOI18N
+        btnTambahDataUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseClicked(evt);
+                btnTambahDataUserMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseEntered(evt);
+                btnTambahDataUserMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnDaftarMouseExited(evt);
+                btnTambahDataUserMouseExited(evt);
             }
         });
-        jPanel1.add(btnDaftar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, -1, 40));
+        jPanel1.add(btnTambahDataUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, -1, 40));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
@@ -360,13 +360,13 @@ public class FUser21552011235 extends javax.swing.JFrame {
         btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
     }//GEN-LAST:event_btnKembaliMouseExited
 
-    private void btnDaftarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseEntered
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
-    }//GEN-LAST:event_btnDaftarMouseEntered
+    private void btnTambahDataUserMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataUserMouseEntered
+        btnTambahDataUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataUser.png")));
+    }//GEN-LAST:event_btnTambahDataUserMouseEntered
 
-    private void btnDaftarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseExited
-        btnDaftar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
-    }//GEN-LAST:event_btnDaftarMouseExited
+    private void btnTambahDataUserMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataUserMouseExited
+        btnTambahDataUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataUser-hover.png")));
+    }//GEN-LAST:event_btnTambahDataUserMouseExited
 
     private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
         Flogin21552011235 fL = new Flogin21552011235();
@@ -394,7 +394,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldCariActionPerformed
 
-    private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
+    private void btnTambahDataUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataUserMouseClicked
         if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
         }else{
@@ -448,7 +448,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
                 System.out.println(e);
             }
         }
-    }//GEN-LAST:event_btnDaftarMouseClicked
+    }//GEN-LAST:event_btnTambahDataUserMouseClicked
 
     private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
        int baris = tableUser.getSelectedRow();
@@ -529,8 +529,8 @@ public class FUser21552011235 extends javax.swing.JFrame {
     private javax.swing.JRadioButton RBMarketing;
     private javax.swing.JRadioButton RBProduksi;
     private javax.swing.JLabel btnBack;
-    private javax.swing.JLabel btnDaftar;
     private javax.swing.JLabel btnKembali;
+    private javax.swing.JLabel btnTambahDataUser;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
