@@ -7,6 +7,7 @@ package uts_pbo2_21552011235;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -31,12 +34,13 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, idUser, level, id, kosong;
+    String sql, kodeAlat, namaAlat, level, kode, kosong;
+    private Map<String, Integer> kdalat = new HashMap<>();
     
     public FAlat2155201123511() {
         initComponents();
-//        idUserOtomatis();
-        tampilDataDivisi();
+        kodeAlatOtomatis();
+        tampilDataAlat();
     }
 
     /**
@@ -46,32 +50,28 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
+    private int getNomorUrut() {
+        // Kode untuk mendapatkan nomor urut dari database atau file
+        return 1;
+    }
     
-//    private void idUserOtomatis(){
-//            try {
-//                    st = conn.createStatement();
-//                    sql = "SELECT * FROM tbluser order by idUser DESC";
-//                    rs = st.executeQuery(sql);
-//                      if (rs.next()) {
-//                           idUser = rs.getString("idUser").substring(4);
-//                           id = "" + (Integer.parseInt(idUser) + 1);
-//                           kosong = "";
-//                      if (id.length() == 1){
-//                           kosong = "00";    
-//                      } else if (id.length() == 2){
-//                           kosong = "0";
-//                      } else {
-//                          kosong = "";
-//                      }
-//                      txtFieldTunjangan.setText("USER" + kosong + id);
-//                      } else {
-//                   txtFieldTunjangan.setText("USER001");
-//                  }
-//                  rs.close();
-//                  st.close();
-//            } catch (NumberFormatException | SQLException e) {
-//        }
-//}
+    private String kodeAlatOtomatis() {
+        String[] words = namaAlat.split(" ");
+        String kode = "";
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() > 0) {
+                kode += words[i].substring(0, 1);
+            }
+        }
+        if (kode.length() < 3) {
+            kode = namaAlat.substring(0, 3);
+        }
+ 
+        kode += String.format("%03d", getNomorUrut());
+        return kode.toUpperCase();
+    }
+  
+   
 // public static boolean checkEmailIsReady(String email) {
 //        try {
 //            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
@@ -107,29 +107,35 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
 //    return matcher.matches();
 //}
 // 
-  private void tampilDataDivisi (){
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID Divisi");
-        model.addColumn("Nama Divisi");
-        model.addColumn("Gaji Pokok");
-        model.addColumn("Tunjangan");
-         try {
-             sql = "SELECT * FROM tbldivisi ORDER BY idDivisi ASC";
-             st = conn.createStatement();
-             rs = st.executeQuery(sql);
-             while (rs.next()){
-                 Object[] row = new Object[4];
-                 row[0] = rs.getString("idDivisi");
-                 row[1] = rs.getString("namaDivisi");
-                 row[2] = rs.getString("gapok");
-                 row[3] = rs.getString("tunjangan");
-                 model.addRow(row);
-             }
-         tableAlat.setModel(model);
-         }catch (Exception e){
-             System.out.print(e);
-             e.printStackTrace();
-         }
+  private void tampilDataAlat (){
+        try {
+            if (txtFieldCari.getText().isEmpty()) {
+                sql = "select * from tblalat";
+            }else{
+                sql = "SELECT * FROM tblalat WHERE "
+                + "`kodeAlat` LIKE '%"+txtFieldCari.getText()+"%' OR"
+                + "`namaAlat`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`biayaProduksi` LIKE '%"+txtFieldCari.getText()+"%' OR"
+                + "`hargaJual` LIKE '%"+txtFieldCari.getText()+"%'";
+            }
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            DefaultTableModel model = new DefaultTableModel();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+               model.addColumn(metaData.getColumnName(i));
+            }
+            while (rs.next()) {
+               Object[] row = new Object[columnCount];
+               for (int i = 1; i <= columnCount; i++) {
+                  row[i - 1] = rs.getObject(i);
+               }
+               model.addRow(row);
+            }
+            tableAlat.setModel(model);
+        } catch (Exception e) {
+        }
     }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -142,23 +148,23 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
         txtFieldCari = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btnBatal = new javax.swing.JLabel();
-        btnUbah = new javax.swing.JLabel();
+        btnSimpan = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtFieldKodeAlat = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtFieldBiayaProduksi = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
+        titleBiayaProduksi = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableAlat = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txtFieldNamaAlat = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        btnTambahDataAlat = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtFieldHargaJual1 = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
+        txtFieldHargaJual = new javax.swing.JTextField();
+        titleHargaJual = new javax.swing.JLabel();
         btnBack = new javax.swing.JLabel();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -182,7 +188,7 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
                 txtFieldCariActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 190, 40));
+        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 370, 180, 30));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
@@ -203,19 +209,19 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
         });
         jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, -1, 40));
 
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
-        btnUbah.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
+        btnSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUbahMouseClicked(evt);
+                btnSimpanMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnUbahMouseEntered(evt);
+                btnSimpanMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnUbahMouseExited(evt);
+                btnSimpanMouseExited(evt);
             }
         });
-        jPanel1.add(btnUbah, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 130, 40));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 130, 40));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
@@ -244,10 +250,15 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
                 txtFieldBiayaProduksiActionPerformed(evt);
             }
         });
+        txtFieldBiayaProduksi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFieldBiayaProduksiKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtFieldBiayaProduksi, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 190, 40));
 
-        jLabel15.setText("Biaya Produksi");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
+        titleBiayaProduksi.setText("Biaya Produksi");
+        jPanel1.add(titleBiayaProduksi, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
 
         tableAlat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -288,24 +299,37 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
         jLabel17.setText("Nama Alat");
         jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, -1, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataAlat.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 200, 40));
+        btnTambahDataAlat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataAlat.png"))); // NOI18N
+        btnTambahDataAlat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnTambahDataAlatMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnTambahDataAlatMouseExited(evt);
+            }
+        });
+        jPanel1.add(btnTambahDataAlat, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 200, 40));
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
         jLabel11.setForeground(new java.awt.Color(153, 153, 153));
         jLabel11.setText("_______________________________");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 260, 30));
 
-        txtFieldHargaJual1.setBorder(null);
-        txtFieldHargaJual1.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldHargaJual.setBorder(null);
+        txtFieldHargaJual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldHargaJual1ActionPerformed(evt);
+                txtFieldHargaJualActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldHargaJual1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 190, 40));
+        txtFieldHargaJual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFieldHargaJualKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 190, 40));
 
-        jLabel18.setText("Harga Jual");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, -1, -1));
+        titleHargaJual.setText("Harga Jual");
+        jPanel1.add(titleHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, -1, -1));
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -347,13 +371,13 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
         btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal-hover.png")));
     }//GEN-LAST:event_btnBatalMouseExited
 
-    private void btnUbahMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseEntered
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbah.png")));
-    }//GEN-LAST:event_btnUbahMouseEntered
+    private void btnSimpanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseEntered
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png")));
+    }//GEN-LAST:event_btnSimpanMouseEntered
 
-    private void btnUbahMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseExited
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbah-hover.png")));
-    }//GEN-LAST:event_btnUbahMouseExited
+    private void btnSimpanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseExited
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan-hover.png")));
+    }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
         txtFieldKodeAlat.setText(null);
@@ -369,19 +393,20 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldBiayaProduksiActionPerformed
 
-    private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
+    private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
         int i = tableAlat.getSelectedRow();
         int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
-        + "Mengedit Data ?","Konfirmasi Edit Data Divisi", JOptionPane.YES_NO_OPTION);
+        + "Mengedit Data ?","Konfirmasi Edit Data Alat", JOptionPane.YES_NO_OPTION);
         
-        String gapok = txtFieldBiayaProduksi.getText();
-        String tunjangan = txtFieldCari.getText();
+        String namaAlat = txtFieldNamaAlat.getText();
+        String biayaProduksi = txtFieldBiayaProduksi.getText();
+        String hargaJual = txtFieldHargaJual.getText();
         
         if (ok==0){
             String idDivisi = tableAlat.getValueAt(i, 0).toString();
             java.sql.Connection connect = CKoneksi21552011235.getKoneksi();
-            sql = "UPDATE `tbldivisi` SET `gapok` = '"+gapok+"',`tunjangan` = '"+tunjangan+"'"
-                + "WHERE `tbldivisi`.`idDivisi` = '"+idDivisi+"';";
+            sql = "UPDATE `tblalat` SET `namaAlat` = '"+namaAlat+"',`biayaProduksi` = '"+biayaProduksi+"',`hargaJual` = '"+hargaJual+"'"
+                + "WHERE `tblalat`.`kodeAlat` = '"+idDivisi+"';";
             
             try {
                 PreparedStatement ps = (PreparedStatement) connect.prepareStatement(sql);
@@ -390,26 +415,26 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
             }finally{
-                tampilDataDivisi();
+                tampilDataAlat();
             }
         }
-    }//GEN-LAST:event_btnUbahMouseClicked
+    }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tableAlatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAlatMouseClicked
        int baris = tableAlat.getSelectedRow();
-            txtFieldNamaAlat.setText(tableAlat.getValueAt(baris, 0).toString());
-            txtFieldKodeAlat.setText(tableAlat.getValueAt(baris, 1).toString());
+            txtFieldKodeAlat.setText(tableAlat.getValueAt(baris, 0).toString());
+            txtFieldNamaAlat.setText(tableAlat.getValueAt(baris, 1).toString());
             txtFieldBiayaProduksi.setText(tableAlat.getValueAt(baris, 2).toString());
-            txtFieldCari.setText(tableAlat.getValueAt(baris, 3).toString());
+            txtFieldHargaJual.setText(tableAlat.getValueAt(baris, 3).toString());
     }//GEN-LAST:event_tableAlatMouseClicked
 
     private void txtFieldNamaAlatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNamaAlatActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldNamaAlatActionPerformed
 
-    private void txtFieldHargaJual1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldHargaJual1ActionPerformed
+    private void txtFieldHargaJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldHargaJualActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldHargaJual1ActionPerformed
+    }//GEN-LAST:event_txtFieldHargaJualActionPerformed
 
     private void btnBackMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseEntered
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png")));
@@ -418,6 +443,34 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
     private void btnBackMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseExited
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
     }//GEN-LAST:event_btnBackMouseExited
+
+    private void btnTambahDataAlatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataAlatMouseEntered
+        btnTambahDataAlat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataAlat.png")));
+    }//GEN-LAST:event_btnTambahDataAlatMouseEntered
+
+    private void btnTambahDataAlatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataAlatMouseExited
+        btnTambahDataAlat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataAlat-hover.png")));
+    }//GEN-LAST:event_btnTambahDataAlatMouseExited
+
+    private void txtFieldBiayaProduksiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldBiayaProduksiKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)){
+            evt.consume();
+            titleBiayaProduksi.setForeground (Color.red);
+        } else {
+            titleBiayaProduksi.setForeground (Color.black);
+        }
+    }//GEN-LAST:event_txtFieldBiayaProduksiKeyTyped
+
+    private void txtFieldHargaJualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldHargaJualKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)){
+            evt.consume();
+            titleHargaJual.setForeground (Color.red);
+        } else {
+            titleHargaJual.setForeground (Color.black);
+        }
+    }//GEN-LAST:event_txtFieldHargaJualKeyTyped
 
     /**
      * @param args the command line arguments
@@ -520,27 +573,27 @@ public class FAlat2155201123511 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnBack;
     private javax.swing.JLabel btnBatal;
-    private javax.swing.JLabel btnUbah;
+    private javax.swing.JLabel btnSimpan;
+    private javax.swing.JLabel btnTambahDataAlat;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableAlat;
+    private javax.swing.JLabel titleBiayaProduksi;
+    private javax.swing.JLabel titleHargaJual;
     private javax.swing.JTextField txtFieldBiayaProduksi;
     private javax.swing.JTextField txtFieldCari;
-    private javax.swing.JTextField txtFieldHargaJual1;
+    private javax.swing.JTextField txtFieldHargaJual;
     private javax.swing.JTextField txtFieldKodeAlat;
     private javax.swing.JTextField txtFieldNamaAlat;
     // End of variables declaration//GEN-END:variables

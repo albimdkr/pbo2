@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
 import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
@@ -35,12 +36,13 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, kodePegawai, jk, tglMasuk, kode, kosong ;
+    String sql, jk, kode, kosong ;
     
     public FPegawai215520112351() {
         initComponents();
-        kodePegawaiOtomatis();
         tampilDataPegawai ();
+        updateComboidUser();
+        updateComboidDivisi();
     }
 
     /**
@@ -52,34 +54,41 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     
     private void kodePegawaiOtomatis(){
-            try {
-                    st = conn.createStatement();
-                    sql = "SELECT * FROM tblpegawai order by kodePegawai DESC";
-                    rs = st.executeQuery(sql);
-                      if (rs.next()) {
-                           kodePegawai = rs.getString("kodePegawai").substring(2);
-                           kode = "" + (Integer.parseInt(kodePegawai) + 1);
-                           kosong = "";
-                      if (kode.length() == 1){
-                           kosong = "00";    
-                      } else if (kode.length() == 2){
-                           kosong = "0";
-                      } else {
-                          kosong = "";
-                      }
-                      txtFieldKodePegawai.setText("USER" + kosong + kode);
-                      } else {
-                   txtFieldKodePegawai.setText("USER001");
-                  }
-                  rs.close();
-                  st.close();
-            } catch (NumberFormatException | SQLException e) {
-        }
+       
+        String divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+        String tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
+
+        try {
+            String sql = "SELECT MAX(kodePegawai) AS kodePegawai FROM tblpegawai";
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Object[] obj = new Object[1];
+                obj[0] = rs.getString("kodePegawai");
+                if (obj[0] == null) {
+                    // Jika data tidak ada, eksekusi 3 digit terakhir dengan nilai 001
+                    String kodePegawai = divisi + tglMasukKerja + "001";
+                    txtFieldKodePegawai.setText(kodePegawai);
+                } else {
+                    // Jika data ada, ekstrak nilai 3 digit terakhir dan tambahkan 1
+                    String str_kd = (String) obj[0];
+                    String kd = str_kd.substring(str_kd.length() - 3);
+                    int int_code = Integer.parseInt(kd);
+                    int_code++;
+                    String a = String.format("%03d", int_code);
+                    String kodePegawai = divisi + tglMasukKerja + a;
+                    txtFieldKodePegawai.setText(kodePegawai);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+    }
 }
-  
   
  
   private void tampilDataPegawai (){
+
         try {
             if (txtFieldCari.getText().isEmpty())  {
                 sql = "select * from tblpegawai";
@@ -109,9 +118,35 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                model.addRow(row);
             }
             tablePegawai.setModel(model);
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
     }
+  
+  
+  private void updateComboidUser(){
+      sql = "select * from tbluser";
+      try {
+          st = conn.prepareStatement(sql);
+          rs = st.executeQuery(sql);
+          while (rs.next()){
+              comboBoxIDUser.addItem(rs.getString("idUser"));
+          }
+      } catch(Exception e) {
+      }
+  }
+  
+
+    private void updateComboidDivisi(){
+      sql = "select * from tbldivisi WHERE idDivisi";
+      try {
+          st = conn.prepareStatement(sql);
+          rs = st.executeQuery(sql);
+          while (rs.next()){
+              comboBoxNamaDivisi.addItem(rs.getString("namaDivisi"));
+          }
+      } catch(SQLException e) {
+      }
+  }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -358,7 +393,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
         jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 30, 50));
 
         dateTglMasukKerja.setDateFormatString("yyyy-MM-dd");
-        jPanel1.add(dateTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 170, 190, -1));
+        jPanel1.add(dateTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 160, 190, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -484,7 +519,7 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTambahDataPegawaiMouseExited
 
     private void btnTambahDataPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseClicked
-               if (txtFieldKodePegawai.getText().isEmpty() || txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
+        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
         }else{
             try {
@@ -499,10 +534,13 @@ public class FPegawai215520112351 extends javax.swing.JFrame {
                   }
                   ps.setString(3, jk);
                   SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
-                  String tglMasuk = tglMsk.format(dateTglMasukKerja.getDate());
-                  ps.setString(4, tglMasuk);
+                  String date = tglMsk.format(dateTglMasukKerja.getDate());
+                  ps.setString( 4, date);
                   ps.setString(5, txtFieldAlamat.getText());
-
+                  ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
+                  ps.setString(7, (String)comboBoxNamaDivisi.getSelectedItem());
+                  
+                  kodePegawaiOtomatis();
                   ps.executeUpdate();
                   JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
                   } catch (SQLException e) {

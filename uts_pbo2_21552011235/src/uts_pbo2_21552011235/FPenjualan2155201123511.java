@@ -35,7 +35,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     public FPenjualan2155201123511() {
         initComponents();
         idUserOtomatis();
-        tampilDataUser ();
+        tampilDataPenjualan ();
     }
 
     /**
@@ -62,9 +62,9 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                       } else {
                           kosong = "";
                       }
-                      txtFieldKodePegawai.setText("USER" + kosong + id);
+                      txtFieldKodePenjualan.setText("USER" + kosong + id);
                       } else {
-                   txtFieldKodePegawai.setText("USER001");
+                   txtFieldKodePenjualan.setText("USER001");
                   }
                   rs.close();
                   st.close();
@@ -106,16 +106,17 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     return matcher.matches();
 }
  
-  private void tampilDataUser (){
+  private void tampilDataPenjualan (){
         try {
-            if (txtFieldIDUser.getText().isEmpty()) {
-                sql = "select * from tbluser";
+            if (txtFieldKodePenjualan.getText().isEmpty()) {
+                sql = "select * from tblpenjualan";
             }else{
-                sql = "SELECT * FROM tbluser WHERE "
-                + "`idUser` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`email`  LIKE '%"+txtFieldIDUser.getText()+"%' OR "
-                + "`password` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`level` LIKE '%"+txtFieldIDUser.getText()+"%'";
+                sql = "SELECT * FROM tblpenjualan WHERE "
+                + "`kodeJual` LIKE '%"+txtFieldCari.getText()+"%' OR"
+                + "`kodeAlat`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`kodePegawai`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`tglJual`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+                + "`jumlah` LIKE '%"+txtFieldCari.getText()+"%'";
             }
             st = conn.createStatement();
             rs = st.executeQuery(sql);
@@ -144,7 +145,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtFieldKodePegawai = new javax.swing.JTextField();
+        txtFieldKodePenjualan = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btnBatal = new javax.swing.JLabel();
         btnSimpan = new javax.swing.JLabel();
@@ -162,12 +163,15 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         txtFieldCari = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        btnTambahDataPegawai = new javax.swing.JLabel();
+        btnTambahDataPenjualan = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         comboBoxNamaAlat = new javax.swing.JComboBox<>();
         jLabel23 = new javax.swing.JLabel();
-        txtFieldTglMasukKerja1 = new javax.swing.JTextField();
         btnBack = new javax.swing.JLabel();
+        dateTglPenjualan = new com.toedter.calendar.JDateChooser();
+        jLabel16 = new javax.swing.JLabel();
+        txtFieldJumlah = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -184,13 +188,13 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jLabel4.setText("Form Penjualan");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, 30));
 
-        txtFieldKodePegawai.setBorder(null);
-        txtFieldKodePegawai.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldKodePenjualan.setBorder(null);
+        txtFieldKodePenjualan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldKodePegawaiActionPerformed(evt);
+                txtFieldKodePenjualanActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldKodePegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 180, 40));
+        jPanel1.add(txtFieldKodePenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 180, 40));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
@@ -228,15 +232,15 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
         jLabel12.setText("_______________________________");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 240, 30));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 240, 30));
 
         jLabel13.setText("Tanggal Penjualan");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
 
         jLabel14.setBackground(new java.awt.Color(255, 255, 255));
         jLabel14.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel14.setText("__________________________________________________________________________________");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 580, 30));
+        jLabel14.setText("_______________________________");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 340, 30));
 
         txtFieldHargaJual.setBorder(null);
         txtFieldHargaJual.addActionListener(new java.awt.event.ActionListener() {
@@ -244,10 +248,10 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 txtFieldHargaJualActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 490, 40));
+        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 250, 40));
 
         jLabel15.setText("Harga Jual");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 140, -1, -1));
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, -1, -1));
 
         tablePenjualan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -274,7 +278,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
         jLabel11.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel11.setText("__________________________________________");
+        jLabel11.setText("______________________________________");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, 280, 30));
 
         txtFieldNamaPegawai.setBorder(null);
@@ -283,7 +287,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 txtFieldNamaPegawaiActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldNamaPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 280, 40));
+        jPanel1.add(txtFieldNamaPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 230, 40));
 
         jLabel18.setText("Nama Pegawai");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, -1, -1));
@@ -304,13 +308,13 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 txtFieldCariKeyReleased(evt);
             }
         });
-        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 240, 40));
+        jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 300, 230, 30));
 
         jLabel20.setText("Masukan Kata Kunci");
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 320, -1, 10));
 
-        btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan.png"))); // NOI18N
-        jPanel1.add(btnTambahDataPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 230, 50));
+        btnTambahDataPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan.png"))); // NOI18N
+        jPanel1.add(btnTambahDataPenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 230, 50));
 
         jLabel21.setBackground(new java.awt.Color(255, 255, 255));
         jLabel21.setForeground(new java.awt.Color(153, 153, 153));
@@ -323,14 +327,6 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jLabel23.setText("Nama Alat");
         jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, 10));
 
-        txtFieldTglMasukKerja1.setBorder(null);
-        txtFieldTglMasukKerja1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldTglMasukKerja1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFieldTglMasukKerja1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 180, 40));
-
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -341,6 +337,23 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 30, 30));
+        jPanel1.add(dateTglPenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 190, 30));
+
+        jLabel16.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel16.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel16.setText("______________________________________");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, 270, 30));
+
+        txtFieldJumlah.setBorder(null);
+        txtFieldJumlah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldJumlahActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFieldJumlah, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 170, 250, 40));
+
+        jLabel17.setText("Jumlah");
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 150, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -359,9 +372,9 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFieldKodePegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldKodePegawaiActionPerformed
+    private void txtFieldKodePenjualanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldKodePenjualanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldKodePegawaiActionPerformed
+    }//GEN-LAST:event_txtFieldKodePenjualanActionPerformed
 
     private void btnBatalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseEntered
         btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
@@ -390,71 +403,31 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldHargaJualActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
-        if (txtFieldTglMasukKerja.getText().isEmpty() || txtFieldHargaJual.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-        }else{
-            try {
-             // cek email
-            if (checkEmailIsReady(txtFieldTglMasukKerja.getText())) { 
-               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
-               txtFieldTglMasukKerja.setBackground(Color.red);
-            }  else {
-                  if (checkValidateEmaill(txtFieldTglMasukKerja.getText())) {
-                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      txtFieldTglMasukKerja.setBackground(Color.green);
-                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      txtFieldTglMasukKerja.setBackground(Color.green); 
-                      
-                      String password = txtFieldHargaJual.getText().toString();
-                      if (checkValidatePassword(password)) { 
-                      JOptionPane.showMessageDialog(null, "Password telah benar!");
-//                    txtKodeUser.setBackground(Color.green);
-//                    txtUsernameEmail.setBackground(Color.green);
-                     txtFieldHargaJual.setBackground(Color.green);
-                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
-                      ps = conn.prepareStatement(sql);
-                      ps.setString(1, txtFieldKodePegawai.getText());
-                      ps.setString(2, txtFieldTglMasukKerja.getText());
-                      ps.setString(3, txtFieldHargaJual.getText());
-                      if (RBPria.isSelected()) {
-                            level = "Produksi";
-                      }else{
-                            level = "Marketing";
-                      }
-                      ps.setString(4, level);
-                      ps.executeUpdate();
-                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-
-                      FPenjualan2155201123511 fu = new FPenjualan2155201123511();
-                      this.dispose();
-                      fu.setVisible(true);
-                      ps.close();
-                      } else { 
-                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
-                          txtFieldHargaJual.setBackground(Color.red);
-                      }                                
+        if (txtFieldJumlah.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data jumlah telah terisi. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
-            txtFieldTglMasukKerja.setBackground(Color.red);
-        }
-        }
+            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
+            + "Mengedit Data ?","Konfirmasi Edit Data Divisi", JOptionPane.YES_NO_OPTION);
+
+
+            if (ok==0){
+                try {
+                sql = "UPDATE tblPenjualan SET jumlah=? WHERE kodeJual=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, txtFieldJumlah.getText());
                 
-            } catch (SQLException e) {
-                System.out.println(e);
+                ps.executeUpdate();
+                tampilDataPenjualan();
+                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
+                }
             }
+        
         }
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePenjualanMouseClicked
-       int baris = tablePenjualan.getSelectedRow();
-            txtFieldKodePegawai.setText(tablePenjualan.getValueAt(baris, 0).toString());
-            txtFieldTglMasukKerja.setText(tablePenjualan.getValueAt(baris, 1).toString());
-            txtFieldHargaJual.setText(tablePenjualan.getValueAt(baris, 2).toString());
-             if (tablePenjualan.getValueAt(baris,3).toString().equals("Produksi")){
-                 RBPria.setSelected(true);
-             } else {
-                 RBWanita.setSelected(true);
-             }
              
     }//GEN-LAST:event_tablePenjualanMouseClicked
 
@@ -470,10 +443,6 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldCariKeyReleased
 
-    private void txtFieldTglMasukKerja1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldTglMasukKerja1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldTglMasukKerja1ActionPerformed
-
     private void btnBackMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseEntered
        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png")));
     }//GEN-LAST:event_btnBackMouseEntered
@@ -481,6 +450,10 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     private void btnBackMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseExited
        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
     }//GEN-LAST:event_btnBackMouseExited
+
+    private void txtFieldJumlahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldJumlahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldJumlahActionPerformed
 
     /**
      * @param args the command line arguments
@@ -584,15 +557,18 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     private javax.swing.JLabel btnBack;
     private javax.swing.JLabel btnBatal;
     private javax.swing.JLabel btnSimpan;
-    private javax.swing.JLabel btnTambahDataPegawai;
+    private javax.swing.JLabel btnTambahDataPenjualan;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> comboBoxNamaAlat;
+    private com.toedter.calendar.JDateChooser dateTglPenjualan;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
@@ -606,8 +582,8 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     private javax.swing.JTable tablePenjualan;
     private javax.swing.JTextField txtFieldCari;
     private javax.swing.JTextField txtFieldHargaJual;
-    private javax.swing.JTextField txtFieldKodePegawai;
+    private javax.swing.JTextField txtFieldJumlah;
+    private javax.swing.JTextField txtFieldKodePenjualan;
     private javax.swing.JTextField txtFieldNamaPegawai;
-    private javax.swing.JTextField txtFieldTglMasukKerja1;
     // End of variables declaration//GEN-END:variables
 }
