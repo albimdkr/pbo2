@@ -6,6 +6,7 @@
 package uts_pbo2_21552011235;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,11 +17,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +43,9 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, jk, kode, kosong ;
+    String sql, jk, kodePegawai, divisi, tglMasukKerja, a;
+//    private Object stmt;
+    Boolean simpan;
     
     public FPegawai21552011235() {
         initComponents();
@@ -52,42 +61,88 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
+//    public void connect() throws SQLException {
+//       Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
+//    }
     
-    private void kodePegawaiOtomatis(){
+//    public List<String> getUsedIdUser() throws SQLException {
+//        List<String> usedIdUserList = new ArrayList<String>();
+//        PreparedStatement stmt = conn.prepareStatement("SELECT idUser FROM tblpegawai");
+//        rs = stmt.executeQuery();
+//        while (rs.next()) {
+//            usedIdUserList.add(rs.getString("idUser"));
+//        }
+//        return usedIdUserList;
+//    }
+    
+//    public void addItemWithRedColor(JComboBox<String> comboBox) throws SQLException {
+//        // Mendapatkan daftar idUser yang sudah digunakan
+//        List<String> usedIdUserList = getUsedIdUser();
+//        
+//        // Menghapus semua item pada JComboBox
+//        comboBox.removeAllItems();
+//        
+//        // Menambahkan item pada JComboBox dan menetapkan warna hijau atau merah
+//        PreparedStatement stmt = conn.prepareStatement("SELECT idUser FROM tbluser");
+//        rs = stmt.executeQuery();
+//        while (rs.next()) {
+//            String idUser = rs.getString("idUser");
+//            if (usedIdUserList.contains(idUser)) {
+//                comboBoxIDUser.addItem(idUser);
+//                comboBoxIDUser.setForeground(Color.RED);
+//            } else {
+//                comboBoxIDUser.addItem(idUser);
+//                comboBoxIDUser.setForeground(Color.GREEN);
+//            }
+//        }
+//    }
        
-        String divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-        String tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
-
+    private void updateComboidUser(){
         try {
-            String sql = "SELECT MAX(kodePegawai) AS kodePegawai FROM tblpegawai";
+            sql = "select * from tbluser";
+            st = conn.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                Object[] obj = new Object[1];
-                obj[0] = rs.getString("kodePegawai");
-                if (obj[0] == null) {
-                    // Jika data tidak ada, eksekusi 3 digit terakhir dengan nilai 001
-                    String kodePegawai = divisi + tglMasukKerja + "001";
-                    txtFieldKodePegawai.setText(kodePegawai);
-                } else {
-                    // Jika data ada, ekstrak nilai 3 digit terakhir dan tambahkan 1
-                    String str_kd = (String) obj[0];
-                    String kd = str_kd.substring(str_kd.length() - 3);
-                    int int_code = Integer.parseInt(kd);
-                    int_code++;
-                    String a = String.format("%03d", int_code);
-                    String kodePegawai = divisi + tglMasukKerja + a;
-                    txtFieldKodePegawai.setText(kodePegawai);
-                }
+                comboBoxIDUser.addItem(rs.getString("idUser"));
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-    }
-}
+        } catch (Exception e) {
+        }
+        //      sql = "select * from tbluser";
+//      try {
+//          st = conn.prepareStatement(sql);
+//          rs = st.executeQuery(sql);
+//          while (rs.next()){
+//              comboBoxIDUser.addItem(rs.getString("idUser"));
+////              String idUser = rs.getString("idUser");
+////              boolean isUsed = isIdUserUsed(idUser); //cek apakah idUser sudah digunakan di tblpegawai
+////              if (isUsed) {
+////                    comboBoxIDUser.addItem(idUser);
+////                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.RED)); //set warna item jadi merah
+////                } else {
+////                    comboBoxIDUser.addItem(idUser);
+////                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.GREEN)); //set warna item jadi hijau
+////                }
+//          }
+//      } catch(Exception e) {
+//      }
+  }
+  
+
+    public void updateComboidDivisi(){
+       try {
+            sql = "select * from tbldivisi";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                comboBoxNamaDivisi.addItem(rs.getString("namaDivisi"));
+            }
+        } catch (Exception e) {
+        }
+  }
+    
   
  
   private void tampilDataPegawai (){
-
         try {
             if (txtFieldCari.getText().isEmpty())  {
                 sql = "select * from tblpegawai";
@@ -122,31 +177,132 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     }
   
   
-  private void updateComboidUser(){
-      sql = "select * from tbluser";
-      try {
-          st = conn.prepareStatement(sql);
-          rs = st.executeQuery(sql);
-          while (rs.next()){
-              comboBoxIDUser.addItem(rs.getString("idUser"));
-          }
-      } catch(Exception e) {
-      }
-  }
+  private void kodePegawaiOtomatis(){
+//        divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
+//        
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+//        tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
+//        try {
+//            st = conn.createStatement();
+//            sql = "SELECT MAX(kodePegawai)AS kodePegawai FROM tblpegawai";
+//            rs = st.executeQuery(sql);
+//            while (rs.next()) {
+//                Object[] obj = new Object[3];
+//                obj[0] = rs.getString("kodePegawai");
+//                if (obj[0] == null) {
+//                    kodePegawai = divisi + tglMasukKerja + "001";
+//                    txtFieldKodePegawai.setText(kodePegawai);
+//                } else {
+//                    String str_kd = (String) obj[0];
+//                    String kd = str_kd.substring(str_kd.length() - 3);
+//                    int int_code = Integer.parseInt(kd);
+//                    int_code++;
+//                    a = String.format("%03d",int_code);
+//                    kodePegawai = divisi + tglMasukKerja + a;
+//                    txtFieldKodePegawai.setText(kodePegawai);
+//                }
+//            }
+//        } catch (SQLException ex) {
+//    }
+    divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+    tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
+    try {
+        st = conn.createStatement();
+        sql = "SELECT MAX(kodePegawai)AS kodePegawai FROM tblpegawai";
+        rs = st.executeQuery(sql);
+        if (rs.next()) {
+            String str_kd = rs.getString("kodePegawai");
+            if (rs.wasNull()) {
+                kodePegawai = divisi + tglMasukKerja + "001";
+                txtFieldKodePegawai.setText(kodePegawai);
+            } else {
+                String kd = str_kd.substring(str_kd.length() - 3);
+                int int_code = Integer.parseInt(kd);
+                int_code++;
+                a = String.format("%03d", int_code);
+                kodePegawai = divisi + tglMasukKerja + a;
+                txtFieldKodePegawai.setText(kodePegawai);
+            }
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+ }
+  
   
 
-    private void updateComboidDivisi(){
-      sql = "select * from tbldivisi";
-      try {
-          st = conn.prepareStatement(sql);
-          rs = st.executeQuery(sql);
-          while (rs.next()){
-              comboBoxNamaDivisi.addItem(rs.getString("namaDivisi"));
-          }
-      } catch(SQLException e) {
-      }
-  }
+    
+    //fungsi untuk menambahkan item ke JComboBox dengan warna hijau atau merah
+//    public void addItemWithColor(JComboBox<String> comboBox) {
+//        try {
+//            //koneksi ke database
+//            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
+//            PreparedStatement pst = conn.prepareStatement(sql);
+//            ResultSet rs = pst.executeQuery();
+//
+//            //tampilkan data di JComboBox dengan warna hijau atau merah
+//            while (rs.next()) {
+//                String idUser = rs.getString("idUser");
+//                boolean isUsed = isIdUserUsed(idUser); //cek apakah idUser sudah digunakan di tblpegawai
+//                if (isUsed) {
+////                    comboBoxIDUser.addItem(idUser);
+//                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.RED)); //set warna item jadi merah
+//                } else {
+////                    comboBoxIDUser.addItem(idUser);
+//                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.GREEN)); //set warna item jadi hijau
+//                }
+//            }
+//
+//            //tutup koneksi
+//            conn.close();
+//
+//        } catch (SQLException e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+//    }   
+    
+//    private boolean isIdUserUsed(String idUser) {
+//        boolean result = false;
+//        try {
+//            //koneksi ke database
+//            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
+//
+//            //cek apakah idUser sudah digunakan di tblpegawai
+//            String sql = "SELECT COUNT(*) FROM tblpegawai WHERE idUser = ?";
+//            PreparedStatement pst = conn.prepareStatement(sql);
+//            pst.setString(1, idUser);
+//            ResultSet rs = pst.executeQuery();
+//            if (rs.next()) {
+//                int count = rs.getInt(1);
+//                result = (count > 0);
+//            }
+//
+//            //tutup koneksi
+//            conn.close();
+//
+//        } catch (SQLException e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+//        return result;
+//    }
+    
+
  
+//    class CustomComboBoxRenderer extends DefaultListCellRenderer {
+//        private Color backgroundColor;
+//
+//        public CustomComboBoxRenderer(Color backgroundColor) {
+//            this.backgroundColor = backgroundColor;
+//        }
+//
+//        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//            label.setBackground(backgroundColor);
+//            return label;
+//        }
+//    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -354,6 +510,12 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         jLabel20.setText("Masukan Kata Kunci");
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, -1, 10));
 
+        comboBoxIDUser.setBorder(null);
+        comboBoxIDUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxIDUserActionPerformed(evt);
+            }
+        });
         jPanel1.add(comboBoxIDUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 190, -1));
 
         Divisi.setText("Nama Divisi");
@@ -367,6 +529,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, 240, 30));
 
         btnTambahDataPegawai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPegawai.png"))); // NOI18N
+        btnTambahDataPegawai.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnTambahDataPegawai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnTambahDataPegawaiMouseClicked(evt);
@@ -390,9 +553,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 30, 50));
-
-        dateTglMasukKerja.setDateFormatString("yyyy-MM-dd");
-        jPanel1.add(dateTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 160, 190, 40));
+        jPanel1.add(dateTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 190, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -451,14 +612,52 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
         if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        } else {
-            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
-            + "Mengedit Data ?","Konfirmasi Edit Data Pegawai", JOptionPane.YES_NO_OPTION);
-
-
-            if (ok==0){
-                try {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        }else{
+//
+//            if (ok==0){
+//                try {
+//                sql = "UPDATE tblpegawai SET nama=?, jk=?, alamat=?, idUser=? WHERE kodePegawai=?";
+//                ps = conn.prepareStatement(sql);
+//                ps.setString(1, txtFieldNamaPegawai.getText());
+//                if (RBPria.isSelected()) {
+//                      jk = "Pria";
+//                  }else{
+//                      jk = "Wanita";
+//                  }
+//                ps.setString(2, jk);
+//                ps.setString(3, txtFieldAlamat.getText());
+//                ps.setString(4, (String) comboBoxIDUser.getSelectedItem());
+//                ps.setString(5, txtFieldKodePegawai.getText());
+//                
+//              
+//                ps.executeUpdate();
+//                tampilDataPegawai();
+//                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
+//                } catch (SQLException e) {
+//                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
+//                }
+//            }
+//        }
+        SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
+        String date = tglMsk.format(dateTglMasukKerja.getDate());
+        try {
+            if (simpan == true) {
+                sql = "insert into tblpegawai values (?,?,?,?,?,?,?)";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, txtFieldKodePegawai.getText());
+                ps.setString(2, txtFieldNamaPegawai.getText());
+                if (RBPria.isSelected()) {
+                      jk = "Pria";
+                }else{
+                      jk = "Wanita";
+                }
+                ps.setString(3, jk);
+                ps.setString(4, date);
+                ps.setString(5, txtFieldAlamat.getText());
+                ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
+                ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
+            }else{
                 sql = "UPDATE tblpegawai SET nama=?, jk=?, alamat=?, idUser=? WHERE kodePegawai=?";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, txtFieldNamaPegawai.getText());
@@ -471,16 +670,12 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
                 ps.setString(3, txtFieldAlamat.getText());
                 ps.setString(4, (String) comboBoxIDUser.getSelectedItem());
                 ps.setString(5, txtFieldKodePegawai.getText());
-                
-              
-                ps.executeUpdate();
-                tampilDataPegawai();
-                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
-                }
             }
+            ps.executeUpdate();
+            tampilDataPegawai();
+        } catch (Exception e) {
         }
+      }
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePegawaiMouseClicked
@@ -550,52 +745,73 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTambahDataPegawaiMouseExited
 
     private void btnTambahDataPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseClicked
-        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-        }else{
-            try {
-                  kodePegawaiOtomatis();
-//                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
-                  sql = "INSERT INTO tblpegawai (kodePegawai, nama, jk, tglMasuk, alamat, idUser, idDivisi) VALUES (?, ?, ?, ?, ?, ?, (SELECT idDivisi FROM tbldivisi WHERE namaDivisi = ?))";
-                  ps = conn.prepareStatement(sql);
-                  ps.setString(1, txtFieldKodePegawai.getText());
-                  ps.setString(2, txtFieldNamaPegawai.getText());
-                  if (RBPria.isSelected()) {
-                      jk = "Pria";
-                  }else{
-                      jk = "Wanita";
-                  }
-                  ps.setString(3, jk);
-                  SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
-                  String date = tglMsk.format(dateTglMasukKerja.getDate());
-                  ps.setString( 4, date);
-                  ps.setString(5, txtFieldAlamat.getText());
-                  ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
-                  ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
-//                  ps.setString(7, (String) comboBoxNamaDivisi.getSelectedItem());        
-//                  String selectedValue = comboBoxNamaDivisi.getSelectedItem().toString(); // get the selected item from the JComboBox as a string
-//                  int id = Integer.parseInt(selectedValue); // convert the selected value to an integer
-//                  ps.setInt(7, id);
-
-                  ps.executeUpdate();
-                  tampilDataPegawai();
-                  
-                  
-//                  FPegawai21552011235 fp = new FPegawai21552011235();
-//                  this.dispose();
-//                  fp.setVisible(true);
-//                  ps.close();
-                  JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-                  } catch (SQLException e) {
-                System.out.println(e);
-            }
-        }
+//        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
+//            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+//        }else{
+//            try {
+//                  kodePegawaiOtomatis();
+////                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
+//                  sql = "INSERT INTO tblpegawai (kodePegawai, nama, jk, tglMasuk, alamat, idUser, idDivisi) VALUES (?, ?, ?, ?, ?, ?, (SELECT idDivisi FROM tbldivisi WHERE namaDivisi = ?))";
+//                  ps = conn.prepareStatement(sql);
+//                  ps.setString(1, txtFieldKodePegawai.getText());
+//                  ps.setString(2, txtFieldNamaPegawai.getText());
+//                  if (RBPria.isSelected()) {
+//                      jk = "Pria";
+//                  }else{
+//                      jk = "Wanita";
+//                  }
+//                  ps.setString(3, jk);
+//                  SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
+//                  String date = tglMsk.format(dateTglMasukKerja.getDate());
+//                  ps.setString( 4, date);
+//                  ps.setString(5, txtFieldAlamat.getText());
+//                  ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
+//                  ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
+//                  
+//                  ps.executeUpdate();
+//                  tampilDataPegawai();
+//                  
+////                  ps.setString(7, (String) comboBoxNamaDivisi.getSelectedItem());        
+////                  String selectedValue = comboBoxNamaDivisi.getSelectedItem().toString(); // get the selected item from the JComboBox as a string
+////                  int id = Integer.parseInt(selectedValue); // convert the selected value to an integer
+////                  ps.setInt(7, id);               
+////                  FPegawai21552011235 fp = new FPegawai21552011235();
+////                  this.dispose();
+////                  fp.setVisible(true);
+////                  ps.close();
+//                  JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+//                  } catch (SQLException e) {
+//                System.out.println(e);
+//            }
+//        }
+//        btnSimpan.setText("simpan");
+        simpan = true;
+        kodePegawaiOtomatis();
+        
     }//GEN-LAST:event_btnTambahDataPegawaiMouseClicked
+
+    private void comboBoxIDUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxIDUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxIDUserActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+//        FPegawai21552011235 app = new FPegawai21552011235();
+//        try {
+//            app.connect();
+//            
+//            JComboBox<String> comboBoxIDUser = new JComboBox<String>();
+//            app.addItemWithRedColor(comboBoxIDUser);
+//            
+//            // Menampilkan JComboBox pada frame atau dialog lainnya
+//            // ...
+//            
+////            app.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
