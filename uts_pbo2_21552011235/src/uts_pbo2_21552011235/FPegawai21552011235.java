@@ -8,6 +8,8 @@ package uts_pbo2_21552011235;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -47,12 +49,15 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     ResultSet rs;
     String sql, jk, kodePegawai, divisi, tglMasukKerja, a;
     Boolean simpan = false;
+    private List<String> idUserDipakai = new ArrayList<>();
     
     public FPegawai21552011235() {
         initComponents();
         tampilDataPegawai ();
-        updateComboidUser();
+//        updateComboidUser();
+        isiComboBoxIdUser();
         updateComboidDivisi();
+        validasiIdUser();
     }
 
     /**
@@ -98,37 +103,208 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 //        }
 //    }
        
-    private void updateComboidUser(){
+//    private void isiComboBoxIdUser(){
+//     try {
+//        st = conn.createStatement();
+//        sql = "SELECT idUser FROM tbluser";
+//        rs = st.executeQuery(sql);
+//
+//        // buat list untuk menampung idUser yang sudah dipakai
+//        List<String> idUserDipakai = new ArrayList<>();
+//
+//        // cek apakah idUser sudah dipakai oleh pegawai
+//        while (rs.next()) {
+//            String idUser = rs.getString("idUser");
+//            if (isIdUserDipakai(idUser)) {
+//                // tambahkan idUser yang sudah dipakai ke dalam list
+//                idUserDipakai.add(idUser);
+//            }
+//        }
+//
+//        // reset JComboBox idUser
+//        comboBoxIDUser.removeAllItems();
+//
+//        // isi JComboBox idUser
+//        st = conn.createStatement();
+//        sql = "SELECT idUser FROM tbluser";
+//        rs = st.executeQuery(sql);
+//        while (rs.next()) {
+//            String idUser = rs.getString("idUser");
+//            // set warna item JComboBox sesuai dengan ketentuan
+//            if (idUserDipakai.contains(idUser)) {
+//                comboBoxIDUser.addItem(getColoredText(idUser, Color.RED));
+////                JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+//            } else {
+//               comboBoxIDUser.addItem(getColoredText(idUser, Color.GREEN));
+////               JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+//            }
+//        }
+//         // tambahkan ActionListener pada JComboBox
+//        comboBoxIDUser.addActionListener((ActionEvent e) -> {
+//            String idUser = (String) comboBoxIDUser.getSelectedItem();
+//            if (idUserDipakai.contains(idUser)) {
+//                JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+//            }
+//        });
+//
+//    } catch (SQLException ex) {
+//        ex.printStackTrace();
+//    }
+//  }
+    
+//    private void isiComboBoxIdUser(){
+//    try {
+//        st = conn.createStatement();
+//        sql = "SELECT idUser FROM tbluser";
+//        rs = st.executeQuery(sql);
+//
+//        // buat list untuk menampung idUser yang sudah dipakai
+//        List<String> idUserDipakai = new ArrayList<>();
+//
+//        // cek apakah idUser sudah dipakai oleh pegawai
+//        while (rs.next()) {
+//            String idUser = rs.getString("idUser");
+//            if (isIdUserDipakai(idUser)) {
+//                // tambahkan idUser yang sudah dipakai ke dalam list
+//                idUserDipakai.add(idUser);
+//            }
+//        }
+//
+//        // reset JComboBox idUser
+//        comboBoxIDUser.removeAllItems();
+//
+//        // isi JComboBox idUser
+//        st = conn.createStatement();
+//        sql = "SELECT idUser FROM tbluser";
+//        rs = st.executeQuery(sql);
+//        while (rs.next()) {
+//            String idUser = rs.getString("idUser");
+//            // set warna item JComboBox sesuai dengan ketentuan
+//            if (idUserDipakai.contains(idUser)) {
+//                comboBoxIDUser.addItem(getColoredText(idUser, Color.RED));
+//            } else {
+//                comboBoxIDUser.addItem(getColoredText(idUser, Color.GREEN));
+//            }
+//        }
+//
+//    } catch (SQLException ex) {
+//        ex.printStackTrace();
+//    }
+//
+////    comboBoxIDUser.addActionListener((ActionEvent e) -> {
+////        String idUser = (String) comboBoxIDUser.getSelectedItem();
+////        if (idUserDipakai.contains(idUser)) {
+////            JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+////        } else {
+////            JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+////        }
+////    });
+//        comboBoxIDUser.addActionListener((ActionEvent e) -> {
+//            String idUser = (String) comboBoxIDUser.getSelectedItem();
+//            if (isIdUserDipakai(idUser)) {
+//                JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+//            }
+//        });
+//}
+//    private boolean isIdUserDipakai(String idUser) {
+//        try {
+//            st = conn.createStatement();
+//            sql = "SELECT COUNT(*) AS jumlah FROM tblpegawai WHERE idUser=\"" + idUser + "\"";
+//            rs = st.executeQuery(sql);
+//            if (rs.next()) {
+//                int jumlah = rs.getInt("jumlah");
+//                if (jumlah > 0) {
+//                    JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+//                    return true;
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+//                    return false;
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return false;
+//    }
+    
+     private void isiComboBoxIdUser() {
         try {
-            sql = "select * from tbluser";
             st = conn.createStatement();
+            sql = "SELECT idUser FROM tbluser";
+            rs = st.executeQuery(sql);
+
+            // buat list untuk menampung idUser yang sudah dipakai
+            List<String> idUserDipakai = new ArrayList<>();
+
+            // cek apakah idUser sudah dipakai oleh pegawai
+            while (rs.next()) {
+                String idUser = rs.getString("idUser");
+                if (isIdUserDipakai(idUser)) {
+                    // tambahkan idUser yang sudah dipakai ke dalam list
+                    idUserDipakai.add(idUser);
+                }
+            }
+
+            // reset JComboBox idUser
+            comboBoxIDUser.removeAllItems();
+
+            // isi JComboBox idUser
+            st = conn.createStatement();
+            sql = "SELECT idUser FROM tbluser";
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                comboBoxIDUser.addItem(rs.getString("idUser"));
+                String idUser = rs.getString("idUser");
+                // set warna item JComboBox sesuai dengan ketentuan
+                if (idUserDipakai.contains(idUser)) {
+                    comboBoxIDUser.addItem(getColoredText(idUser, Color.RED));
+                } else {
+                    comboBoxIDUser.addItem(getColoredText(idUser, Color.GREEN));
+                }
             }
-        } catch (Exception e) {
-        }
-        //      sql = "select * from tbluser";
-//      try {
-//          st = conn.prepareStatement(sql);
-//          rs = st.executeQuery(sql);
-//          while (rs.next()){
-//              comboBoxIDUser.addItem(rs.getString("idUser"));
-////              String idUser = rs.getString("idUser");
-////              boolean isUsed = isIdUserUsed(idUser); //cek apakah idUser sudah digunakan di tblpegawai
-////              if (isUsed) {
-////                    comboBoxIDUser.addItem(idUser);
-////                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.RED)); //set warna item jadi merah
-////                } else {
-////                    comboBoxIDUser.addItem(idUser);
-////                    comboBoxIDUser.setRenderer(new CustomComboBoxRenderer(Color.GREEN)); //set warna item jadi hijau
-////                }
-//          }
-//      } catch(Exception e) {
-//      }
-  }
-  
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        comboBoxIDUser.addActionListener((ActionEvent e) -> {
+        String idUser = (String) comboBoxIDUser.getSelectedItem();
+        if (isIdUserDipakai(idUser)) {
+            JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
+        }
+    });
+    }
+    
+    private boolean isIdUserDipakai(String idUser) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM tblpegawai WHERE idUser = ?");
+            ps.setString(1, idUser);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
+
+    
+    
+  
+    private String getColoredText(String text, Color color) {
+        return "<html><font color='" + getColorHex(color) + "'>" + text + "</font></html>";
+    }
+
+    private String getColorHex(Color color) {
+        return "#" + Integer.toHexString(color.getRGB()).substring(2);
+    }
+    
     public void updateComboidDivisi(){
        try {
             sql = "select * from tbldivisi";
@@ -177,8 +353,12 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         }
     }
   
-  
+private void validasiIdUser() {
+
+}
+
   private void kodePegawaiOtomatis(){
+    
     String divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
     SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
     String tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
@@ -193,6 +373,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
             String kodePegawai = divisi + tglMasukKerja + a;
             txtFieldKodePegawai.setText(kodePegawai);
         }
+        validasiIdUser();
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
