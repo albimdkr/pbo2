@@ -15,11 +15,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -178,53 +180,19 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
   
   
   private void kodePegawaiOtomatis(){
-//        divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
-//        
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-//        tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
-//        try {
-//            st = conn.createStatement();
-//            sql = "SELECT MAX(kodePegawai)AS kodePegawai FROM tblpegawai";
-//            rs = st.executeQuery(sql);
-//            while (rs.next()) {
-//                Object[] obj = new Object[3];
-//                obj[0] = rs.getString("kodePegawai");
-//                if (obj[0] == null) {
-//                    kodePegawai = divisi + tglMasukKerja + "001";
-//                    txtFieldKodePegawai.setText(kodePegawai);
-//                } else {
-//                    String str_kd = (String) obj[0];
-//                    String kd = str_kd.substring(str_kd.length() - 3);
-//                    int int_code = Integer.parseInt(kd);
-//                    int_code++;
-//                    a = String.format("%03d",int_code);
-//                    kodePegawai = divisi + tglMasukKerja + a;
-//                    txtFieldKodePegawai.setText(kodePegawai);
-//                }
-//            }
-//        } catch (SQLException ex) {
-//    }
-    divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
-
+    String divisi = ((String) comboBoxNamaDivisi.getSelectedItem()).substring(0, 3).toUpperCase();
     SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-    tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
+    String tglMasukKerja = dateFormat.format(dateTglMasukKerja.getDate());
+
     try {
         st = conn.createStatement();
-        sql = "SELECT MAX(kodePegawai)AS kodePegawai FROM tblpegawai";
+        sql = "SELECT COUNT(*) AS jumlah FROM tblpegawai";
         rs = st.executeQuery(sql);
         if (rs.next()) {
-            String str_kd = rs.getString("kodePegawai");
-            if (rs.wasNull()) {
-                kodePegawai = divisi + tglMasukKerja + "001";
-                txtFieldKodePegawai.setText(kodePegawai);
-            } else {
-                String kd = str_kd.substring(str_kd.length() - 3);
-                int int_code = Integer.parseInt(kd);
-                int_code++;
-                a = String.format("%03d", int_code);
-                kodePegawai = divisi + tglMasukKerja + a;
-                txtFieldKodePegawai.setText(kodePegawai);
-            }
+            int jumlah = rs.getInt("jumlah");
+            String a = String.format("%03d", jumlah + 1);
+            String kodePegawai = divisi + tglMasukKerja + a;
+            txtFieldKodePegawai.setText(kodePegawai);
         }
     } catch (SQLException ex) {
         ex.printStackTrace();
@@ -611,71 +579,60 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_RBWanitaActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
-        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        }else{
-//
-//            if (ok==0){
-//                try {
-//                sql = "UPDATE tblpegawai SET nama=?, jk=?, alamat=?, idUser=? WHERE kodePegawai=?";
-//                ps = conn.prepareStatement(sql);
-//                ps.setString(1, txtFieldNamaPegawai.getText());
-//                if (RBPria.isSelected()) {
-//                      jk = "Pria";
-//                  }else{
-//                      jk = "Wanita";
-//                  }
-//                ps.setString(2, jk);
-//                ps.setString(3, txtFieldAlamat.getText());
-//                ps.setString(4, (String) comboBoxIDUser.getSelectedItem());
-//                ps.setString(5, txtFieldKodePegawai.getText());
-//                
-//              
-//                ps.executeUpdate();
-//                tampilDataPegawai();
-//                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
-//                } catch (SQLException e) {
-//                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
-//                }
-//            }
-//        }
-        SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
-        String date = tglMsk.format(dateTglMasukKerja.getDate());
         try {
-            if (simpan == true) {
-                sql = "insert into tblpegawai values (?,?,?,?,?,?,?)";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldKodePegawai.getText());
-                ps.setString(2, txtFieldNamaPegawai.getText());
-                if (RBPria.isSelected()) {
-                      jk = "Pria";
-                }else{
-                      jk = "Wanita";
-                }
-                ps.setString(3, jk);
-                ps.setString(4, date);
-                ps.setString(5, txtFieldAlamat.getText());
-                ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
-                ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
-            }else{
-                sql = "UPDATE tblpegawai SET nama=?, jk=?, alamat=?, idUser=? WHERE kodePegawai=?";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldNamaPegawai.getText());
-                if (RBPria.isSelected()) {
-                      jk = "Pria";
-                  }else{
-                      jk = "Wanita";
-                  }
-                ps.setString(2, jk);
-                ps.setString(3, txtFieldAlamat.getText());
-                ps.setString(4, (String) comboBoxIDUser.getSelectedItem());
-                ps.setString(5, txtFieldKodePegawai.getText());
+            String kodePeg = txtFieldKodePegawai.getText();
+            String nama = txtFieldNamaPegawai.getText();
+            String jk = "";
+            if (RBPria.isSelected()) {
+                jk = "pria";
+            } else if (RBWanita.isSelected()) {
+                jk = "wanita";
             }
-            ps.executeUpdate();
-            tampilDataPegawai();
-        } catch (Exception e) {
-        }
-      }
+            String tglMasuk = ((JTextField) dateTglMasukKerja.getDateEditor().getUiComponent()).getText();
+            DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+            Date date = format.parse(tglMasuk);
+            format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            String tglMasukFormatted = format.format(date);
+            String alamat = txtFieldAlamat.getText();
+            String idUser = comboBoxIDUser.getSelectedItem().toString();
+            String idDivisi = comboBoxNamaDivisi.getSelectedItem().toString();
+
+            if (kodePeg.isEmpty() || nama.isEmpty() || jk.isEmpty() || tglMasuk.isEmpty() || alamat.isEmpty() || idUser.isEmpty() || idDivisi.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+            } else {
+                if (simpan == true) {
+//                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    sql = "INSERT INTO tblpegawai (kodePegawai, nama, jk, tglMasuk, alamat, idUser, idDivisi) VALUES (?, ?, ?, ?, ?, ?, (SELECT idDivisi FROM tbldivisi WHERE namaDivisi = ?))";
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, kodePeg);
+                    ps.setString(2, nama);
+                    ps.setString(3, jk);
+                    ps.setString(4, tglMasukFormatted);
+                    ps.setString(5, alamat);
+                    ps.setString(6, idUser);
+                    ps.setString(7, idDivisi);
+                    JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+                } else {
+                    sql = "UPDATE tblpegawai SET kodePegawai=?, nama=?, jk=?, tglmasuk=?, alamat=?, idUser=?, idDivisi=? WHERE kodePegawai=?";
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, kodePeg);
+                    ps.setString(2, nama);
+                    ps.setString(3, jk);
+                    ps.setString(4, tglMasukFormatted);
+                    ps.setString(5, alamat);
+                    ps.setString(6, idUser);
+                    ps.setString(7, idDivisi);
+                    ps.setString(8, kodePeg); // tambahkan variabel kodePegawai sebagai parameter ke-8
+                    JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
+
+                }
+                ps.executeUpdate();
+                tampilDataPegawai ();
+
+            }
+        } catch (SQLException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+     }
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePegawaiMouseClicked
