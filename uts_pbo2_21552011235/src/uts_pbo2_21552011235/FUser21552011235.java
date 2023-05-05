@@ -320,6 +320,9 @@ public class FUser21552011235 extends javax.swing.JFrame {
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnBackMouseEntered(evt);
             }
@@ -369,8 +372,8 @@ public class FUser21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTambahDataUserMouseExited
 
     private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
-        Flogin21552011235 fL = new Flogin21552011235();
-        fL.setVisible(true);
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnKembaliMouseClicked
 
@@ -474,6 +477,12 @@ public class FUser21552011235 extends javax.swing.JFrame {
     private void btnBackMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseExited
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png")));
     }//GEN-LAST:event_btnBackMouseExited
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBackMouseClicked
 
     /**
      * @param args the command line arguments

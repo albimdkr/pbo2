@@ -5,8 +5,11 @@
  */
 package uts_pbo2_21552011235;
 
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,28 +17,33 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
 
 /**
  *
  * @author albin
  */
-public class FPenjualan2155201123511 extends javax.swing.JFrame {
+public class FPenjualan21552011235 extends javax.swing.JFrame {
     Connection conn = CKoneksi21552011235.getKoneksi();
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, idUser, level, id, kosong;
+    String sql, nama;
+    Boolean simpan;
+    private Object mapHargaJual;
+    private Object request;
     
-    public FPenjualan2155201123511() {
+    public FPenjualan21552011235() {
         initComponents();
-        idUserOtomatis();
+        dataComboBoxNamaAlat();
         tampilDataPenjualan ();
+//        setNamaPegawaiOtomatis();
     }
 
     /**
@@ -46,64 +54,133 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     
-    private void idUserOtomatis(){
-            try {
-                    st = conn.createStatement();
-                    sql = "SELECT * FROM tbluser order by idUser DESC";
-                    rs = st.executeQuery(sql);
-                      if (rs.next()) {
-                           idUser = rs.getString("idUser").substring(4);
-                           id = "" + (Integer.parseInt(idUser) + 1);
-                           kosong = "";
-                      if (id.length() == 1){
-                           kosong = "00";    
-                      } else if (id.length() == 2){
-                           kosong = "0";
-                      } else {
-                          kosong = "";
-                      }
-                      txtFieldKodePenjualan.setText("USER" + kosong + id);
-                      } else {
-                   txtFieldKodePenjualan.setText("USER001");
-                  }
-                  rs.close();
-                  st.close();
-            } catch (NumberFormatException | SQLException e) {
+//private void setNamaPegawaiOtomatis() {
+//    // Ambil objek HttpSession dari request
+//    HttpSession session = request.getSession();
+//
+//    // Ambil attribute "username" dari session
+//    String username = (String) request.getSession().getAttribute("username");
+//    try {
+//        st = conn.createStatement();
+//        sql = "SELECT tblpegawai.namaPegawai FROM tblpegawai INNER JOIN tbluser ON tblpegawai.idUser = tbluser.idUser WHERE tbluser.username = '"+username+"' AND tbluser.level = 'Marketing'";
+//        rs = st.executeQuery(sql);
+//        if (rs.next()) {
+//            String namaPegawai = rs.getString("namaPegawai");
+//            txtFieldNamaPegawai.setText(namaPegawai);
+//        }
+//    } catch (SQLException ex) {
+//        ex.printStackTrace();
+//    }
+//}
+
+
+    
+//private void dataComboBoxNamaAlat() {
+//    try {
+//        st = conn.createStatement();
+//        String sql = "SELECT namaAlat, hargaJual FROM tblalat";
+//        rs = st.executeQuery(sql);
+//
+//        // reset JComboBox
+//        comboBoxNamaAlat.removeAllItems();
+//
+//        // isi JComboBox
+//        while (rs.next()) {
+//            String namaAlat = rs.getString("namaAlat");
+//            double hargaJual = rs.getDouble("hargaJual");
+//
+//            // tambahkan namaAlat ke dalam JComboBox
+//            comboBoxNamaAlat.addItem(namaAlat);
+//
+//            // simpan hargaJual ke dalam map
+//            mapHargaJual.put(namaAlat, hargaJual);
+//        }
+//
+//        // tambahkan listener untuk trigger hargaJual
+//        comboBoxNamaAlat.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                String namaAlat = (String) comboBoxNamaAlat.getSelectedItem();
+//                double hargaJual = mapHargaJual.get(namaAlat);
+//                txtFieldHargaJual.setText(String.valueOf(hargaJual));
+//            }
+//        });
+//
+//    } catch (SQLException ex) {
+//        ex.printStackTrace();
+//    }
+//}
+    
+private void dataComboBoxNamaAlat() {
+    try {
+        st = conn.createStatement();
+        sql = "SELECT namaAlat, hargaJual FROM tblalat";
+        rs = st.executeQuery(sql);
+
+        // buat map untuk menampung nama alat dan harga jual
+        Map<String, Integer> hargaMap = new HashMap<>();
+        while (rs.next()) {
+            String namaAlat = rs.getString("namaAlat");
+            int hargaJual = rs.getInt("hargaJual");
+            hargaMap.put(namaAlat, hargaJual);
         }
-}
- public static boolean checkEmailIsReady(String email) {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
-            String query = "SELECT * FROM tbluser WHERE email=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return true;
+
+        // reset JComboBox namaAlat
+        comboBoxNamaAlat.removeAllItems();
+
+        // isi JComboBox namaAlat
+        st = conn.createStatement();
+        sql = "SELECT namaAlat FROM tblalat";
+        rs = st.executeQuery(sql);
+        while (rs.next()) {
+            String namaAlat = rs.getString("namaAlat");
+            comboBoxNamaAlat.addItem(namaAlat);
+        }
+
+        // tambahkan action listener pada JComboBox namaAlat
+        comboBoxNamaAlat.addActionListener((ActionEvent e) -> {
+            String namaAlat = (String) comboBoxNamaAlat.getSelectedItem();
+            if (hargaMap.containsKey(namaAlat)) {
+                int hargaJual = hargaMap.get(namaAlat);
+                txtFieldHargaJual.setText(String.valueOf(hargaJual));
+            } else {
+                txtFieldHargaJual.setText("");
             }
-            
-            // Tutup koneksi dan statement
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+        });
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+}
+    
+private void kodePenjualanOtomatis() {
+    String namaAlat = comboBoxNamaAlat.getSelectedItem().toString().toUpperCase();
+    String[] kata = namaAlat.split(" ");
+    String kodeAlat = "";
+
+    if (kata.length == 1) {
+        kodeAlat = namaAlat.substring(0, 3);
+    } else {
+        for (String s : kata) {
+            kodeAlat += s.charAt(0);
         }
-        return false;
-  }
-  
- public static boolean checkValidateEmaill(String email) {
-        String regex = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";// Regular Expresion Email
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-  }
-  
- public boolean checkValidatePassword(String password) {
-    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
-    Pattern pattern = Pattern.compile(passwordRegex);
-    Matcher matcher = pattern.matcher(password);
-    return matcher.matches();
+    }
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+    String tglPenjualan = dateFormat.format(dateTglPenjualan.getDate());
+
+    try {
+        st = conn.createStatement();
+        sql = "SELECT COUNT(*) AS jumlah FROM tblpenjualan";
+        rs = st.executeQuery(sql);
+        if (rs.next()) {
+            int jumlah = rs.getInt("jumlah");
+            String a = String.format("%04d", jumlah + 1);
+            String kodePenjualan = kodeAlat + tglPenjualan + a;
+            txtFieldKodePenjualan.setText(kodePenjualan);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
 }
  
   private void tampilDataPenjualan (){
@@ -199,7 +276,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
         jLabel10.setText("_______________________________");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 240, 30));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 260, 30));
 
         btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal.png"))); // NOI18N
         btnBatal.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -213,7 +290,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 btnBatalMouseExited(evt);
             }
         });
-        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 230, -1, 50));
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 230, -1, 50));
 
         btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
         btnSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -248,7 +325,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 txtFieldHargaJualActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 250, 40));
+        jPanel1.add(txtFieldHargaJual, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 210, 40));
 
         jLabel15.setText("Harga Jual");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, -1, -1));
@@ -314,14 +391,24 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 320, -1, 10));
 
         btnTambahDataPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan.png"))); // NOI18N
+        btnTambahDataPenjualan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTambahDataPenjualanMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnTambahDataPenjualanMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnTambahDataPenjualanMouseExited(evt);
+            }
+        });
         jPanel1.add(btnTambahDataPenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 230, 50));
 
         jLabel21.setBackground(new java.awt.Color(255, 255, 255));
         jLabel21.setForeground(new java.awt.Color(153, 153, 153));
         jLabel21.setText("_______________________________");
-        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 210, 30));
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 270, 30));
 
-        comboBoxNamaAlat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(comboBoxNamaAlat, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 190, -1));
 
         jLabel23.setText("Nama Alat");
@@ -329,6 +416,9 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnBackMouseEntered(evt);
             }
@@ -377,19 +467,19 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldKodePenjualanActionPerformed
 
     private void btnBatalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseEntered
-        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal.png")));
     }//GEN-LAST:event_btnBatalMouseEntered
 
     private void btnBatalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseExited
-        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnBatal-hover.png")));
     }//GEN-LAST:event_btnBatalMouseExited
 
     private void btnSimpanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseEntered
-        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png")));
     }//GEN-LAST:event_btnSimpanMouseEntered
 
     private void btnSimpanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseExited
-        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan-hover.png")));
     }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
@@ -455,6 +545,26 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldJumlahActionPerformed
 
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    private void btnTambahDataPenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseClicked
+        simpan = true;
+        kodePenjualanOtomatis();
+        setNamaPegawai();
+    }//GEN-LAST:event_btnTambahDataPenjualanMouseClicked
+
+    private void btnTambahDataPenjualanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseEntered
+        btnTambahDataPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan.png")));
+    }//GEN-LAST:event_btnTambahDataPenjualanMouseEntered
+
+    private void btnTambahDataPenjualanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseExited
+        btnTambahDataPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan-hover.png")));
+    }//GEN-LAST:event_btnTambahDataPenjualanMouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -472,14 +582,78 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FPenjualan2155201123511.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FPenjualan21552011235.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -548,7 +722,7 @@ public class FPenjualan2155201123511 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FPenjualan2155201123511().setVisible(true);
+                new FPenjualan21552011235().setVisible(true);
             }
         });
     }

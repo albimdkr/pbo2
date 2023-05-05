@@ -55,9 +55,8 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         initComponents();
         tampilDataPegawai ();
 //        updateComboidUser();
-        isiComboBoxIdUser();
-        updateComboidDivisi();
-        validasiIdUser();
+        dataComboBoxIdUser();
+        dataComboidDivisi();
     }
 
     /**
@@ -231,7 +230,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
 //        return false;
 //    }
     
-     private void isiComboBoxIdUser() {
+     private void dataComboBoxIdUser() {
         try {
             st = conn.createStatement();
             sql = "SELECT idUser FROM tbluser";
@@ -293,10 +292,6 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         }
     }
     
-
-    
-    
-  
     private String getColoredText(String text, Color color) {
         return "<html><font color='" + getColorHex(color) + "'>" + text + "</font></html>";
     }
@@ -305,7 +300,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         return "#" + Integer.toHexString(color.getRGB()).substring(2);
     }
     
-    public void updateComboidDivisi(){
+    public void dataComboidDivisi(){
        try {
             sql = "select * from tbldivisi";
             st = conn.createStatement();
@@ -317,8 +312,6 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         }
   }
     
-  
- 
   private void tampilDataPegawai (){
         try {
             if (txtFieldCari.getText().isEmpty())  {
@@ -353,9 +346,9 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
         }
     }
   
-private void validasiIdUser() {
-
-}
+//private void validasiIdUser() {
+//
+//}
 
   private void kodePegawaiOtomatis(){
     
@@ -373,7 +366,7 @@ private void validasiIdUser() {
             String kodePegawai = divisi + tglMasukKerja + a;
             txtFieldKodePegawai.setText(kodePegawai);
         }
-        validasiIdUser();
+//        validasiIdUser();
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
@@ -693,6 +686,9 @@ private void validasiIdUser() {
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnBackMouseEntered(evt);
             }
@@ -883,46 +879,6 @@ private void validasiIdUser() {
     }//GEN-LAST:event_btnTambahDataPegawaiMouseExited
 
     private void btnTambahDataPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPegawaiMouseClicked
-//        if (txtFieldNamaPegawai.getText().isEmpty() || txtFieldAlamat.getText().isEmpty()) {
-//            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-//        }else{
-//            try {
-//                  kodePegawaiOtomatis();
-////                  sql = "INSERT INTO tblpegawai VALUES (?, ?, ?, ?, ?, ?, ?)";
-//                  sql = "INSERT INTO tblpegawai (kodePegawai, nama, jk, tglMasuk, alamat, idUser, idDivisi) VALUES (?, ?, ?, ?, ?, ?, (SELECT idDivisi FROM tbldivisi WHERE namaDivisi = ?))";
-//                  ps = conn.prepareStatement(sql);
-//                  ps.setString(1, txtFieldKodePegawai.getText());
-//                  ps.setString(2, txtFieldNamaPegawai.getText());
-//                  if (RBPria.isSelected()) {
-//                      jk = "Pria";
-//                  }else{
-//                      jk = "Wanita";
-//                  }
-//                  ps.setString(3, jk);
-//                  SimpleDateFormat tglMsk = new SimpleDateFormat("yyyy-MM-dd");
-//                  String date = tglMsk.format(dateTglMasukKerja.getDate());
-//                  ps.setString( 4, date);
-//                  ps.setString(5, txtFieldAlamat.getText());
-//                  ps.setString(6, (String) comboBoxIDUser.getSelectedItem());
-//                  ps.setString(7, comboBoxNamaDivisi.getSelectedItem().toString());
-//                  
-//                  ps.executeUpdate();
-//                  tampilDataPegawai();
-//                  
-////                  ps.setString(7, (String) comboBoxNamaDivisi.getSelectedItem());        
-////                  String selectedValue = comboBoxNamaDivisi.getSelectedItem().toString(); // get the selected item from the JComboBox as a string
-////                  int id = Integer.parseInt(selectedValue); // convert the selected value to an integer
-////                  ps.setInt(7, id);               
-////                  FPegawai21552011235 fp = new FPegawai21552011235();
-////                  this.dispose();
-////                  fp.setVisible(true);
-////                  ps.close();
-//                  JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-//                  } catch (SQLException e) {
-//                System.out.println(e);
-//            }
-//        }
-//        btnSimpan.setText("simpan");
         simpan = true;
         kodePegawaiOtomatis();
         
@@ -931,6 +887,12 @@ private void validasiIdUser() {
     private void comboBoxIDUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxIDUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxIDUserActionPerformed
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBackMouseClicked
 
     /**
      * @param args the command line arguments

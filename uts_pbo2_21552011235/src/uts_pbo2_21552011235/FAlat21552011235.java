@@ -406,6 +406,9 @@ public class FAlat21552011235 extends javax.swing.JFrame {
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-back-to-24-hover.png"))); // NOI18N
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnBackMouseEntered(evt);
             }
@@ -550,6 +553,12 @@ public class FAlat21552011235 extends javax.swing.JFrame {
         simpan = true;
         kodeAlatOtomatis();
     }//GEN-LAST:event_btnTambahDataAlatMouseClicked
+
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBackMouseClicked
 
     /**
      * @param args the command line arguments

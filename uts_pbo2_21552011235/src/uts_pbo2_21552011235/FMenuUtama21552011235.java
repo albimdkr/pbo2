@@ -93,9 +93,19 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         });
 
         menuItemDataUser.setText("Data User");
+        menuItemDataUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataUserActionPerformed(evt);
+            }
+        });
         btnAdmin.add(menuItemDataUser);
 
         menuItemDataPegawai.setText("DataPegawai");
+        menuItemDataPegawai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataPegawaiActionPerformed(evt);
+            }
+        });
         btnAdmin.add(menuItemDataPegawai);
 
         jMenuBar1.add(btnAdmin);
@@ -113,12 +123,27 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         });
 
         menuItemDataDivisi.setText("Data Divisi");
+        menuItemDataDivisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataDivisiActionPerformed(evt);
+            }
+        });
         btnProduksi.add(menuItemDataDivisi);
 
         menuItemDataAlat.setText("Data Alat");
+        menuItemDataAlat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataAlatActionPerformed(evt);
+            }
+        });
         btnProduksi.add(menuItemDataAlat);
 
         menuItemDataPenjualanProduksi.setText("Data Penjualan");
+        menuItemDataPenjualanProduksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataPenjualanProduksiActionPerformed(evt);
+            }
+        });
         btnProduksi.add(menuItemDataPenjualanProduksi);
 
         jMenuBar1.add(btnProduksi);
@@ -136,6 +161,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         });
 
         menuItemDataPenjualanMarketing.setText("Data Penjualan");
+        menuItemDataPenjualanMarketing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDataPenjualanMarketingActionPerformed(evt);
+            }
+        });
         btnMarketing.add(menuItemDataPenjualanMarketing);
 
         jMenuBar1.add(btnMarketing);
@@ -144,6 +174,9 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         btnUbahPassword.setText("Ubah Password");
         btnUbahPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnUbahPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUbahPasswordMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnUbahPasswordMouseEntered(evt);
             }
@@ -164,6 +197,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
                 btnProfilMouseExited(evt);
             }
         });
+        btnProfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProfilActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(btnProfil);
 
         btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-logout-rounded-24.png"))); // NOI18N
@@ -178,6 +216,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnLogoutMouseExited(evt);
+            }
+        });
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
             }
         });
         jMenuBar1.add(btnLogout);
@@ -257,6 +300,60 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null , "Anda Berhasil Logout, Silahkan Login kembali!");
         }
     }//GEN-LAST:event_btnLogoutMouseClicked
+
+    private void menuItemDataUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataUserActionPerformed
+        FUser21552011235 fu = new FUser21552011235();
+        fu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataUserActionPerformed
+
+    private void menuItemDataPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataPegawaiActionPerformed
+        FPegawai21552011235 fp = new FPegawai21552011235();
+        fp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataPegawaiActionPerformed
+
+    private void menuItemDataDivisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataDivisiActionPerformed
+        FDivisi21552011235 fd = new FDivisi21552011235();
+        fd.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataDivisiActionPerformed
+
+    private void menuItemDataAlatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataAlatActionPerformed
+        FAlat21552011235 fl = new FAlat21552011235();
+        fl.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataAlatActionPerformed
+
+    private void menuItemDataPenjualanProduksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataPenjualanProduksiActionPerformed
+        FPenjualan21552011235 fp = new FPenjualan21552011235();
+        fp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataPenjualanProduksiActionPerformed
+
+    private void menuItemDataPenjualanMarketingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDataPenjualanMarketingActionPerformed
+        FPenjualan21552011235 fp = new FPenjualan21552011235();
+        fp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_menuItemDataPenjualanMarketingActionPerformed
+
+    private void btnUbahPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahPasswordMouseClicked
+        FUbahPassword21552011235 fu = new FUbahPassword21552011235();
+        fu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnUbahPasswordMouseClicked
+
+    private void btnProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfilActionPerformed
+        FProfil21552011235 fp = new FProfil21552011235();
+        fp.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnProfilActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        Flogin21552011235 fl = new Flogin21552011235();
+        fl.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments

@@ -23,8 +23,6 @@ import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
  * @author albin
  */
 public class FUbahPassword21552011235 extends javax.swing.JFrame {
-    String level;
-    String email;
     /**
      * Creates new form Flogin21552011235
      */
@@ -41,62 +39,7 @@ public class FUbahPassword21552011235 extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     
     
-   private void login (){
-        if (txtFieldEmail.getText().isEmpty() || txtFieldPasswordLama.getText().isEmpty())
-                JOptionPane.showMessageDialog(null, "Username atau Password belum terisi");
-        else {
-                try{
-                    Connection con = CKoneksi21552011235.getKoneksi();
-                    Statement st = con.createStatement();
-                    // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
-                    String sql = "SELECT * FROM tbluser JOIN tblpegawai ON " + "tbluser.idUser = tblpegawai.idUser WHERE tbluser.email = '"+txtFieldEmail.getText()+"' AND tbluser.password = '"+txtFieldPasswordLama.getText()+"'";
-                    ResultSet rs = st.executeQuery (sql);
-                        if (rs.next()) {
-                        level = rs.getString("level");
-                        email = rs.getString("email");
-                            if (level.equals("Admin")){
-                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
-                                    btnAdmin.setEnabled(true);
-                                    btnUbahPassword.setEnabled(true);
-                                    btnProfil.setEnabled(true);
-                                    btnLogout.setEnabled(true);
-                                    btnProduksi.setEnabled(false);
-                                    btnMarketing.setEnabled(false);
-//                                  lblUsername.setText(nama);
-                                    fm.setVisible(true);
-                                    } else if (level.equals("Produksi")){
-                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
-                                    btnAdmin.setEnabled(false);
-                                    btnUbahPassword.setEnabled(true);
-                                    btnProfil.setEnabled(true);
-                                    btnLogout.setEnabled(true);
-                                    btnProduksi.setEnabled(true);
-                                    btnMarketing.setEnabled(false);
-                                    fm.setVisible(true);
-                                    } else if (level.equals("Marketing")){
-                                    JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
-                                    btnAdmin.setEnabled(false);
-                                    btnUbahPassword.setEnabled(true);
-                                    btnProfil.setEnabled(true);
-                                    btnLogout.setEnabled(true);
-                                    btnProduksi.setEnabled(false);
-                                    btnMarketing.setEnabled(true);
-                                    fm.setVisible(true);
-                                    }
-                                    rs.close();
-                                    st.close();
-                                    this.dispose();
-                            }else  {
-                                JOptionPane.showMessageDialog(null, "Username atau password salah !!!");
-                                }
-                        } catch (HeadlessException | SQLException e) {
-                            System.out.println("Error: " +e);
-                    }
-            }
-   }
+   
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -201,28 +144,28 @@ public class FUbahPassword21552011235 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUbahMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseEntered
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin.png")));
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbah.png")));
     }//GEN-LAST:event_btnUbahMouseEntered
 
     private void btnUbahMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseExited
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnLogin-hover.png")));
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbahhover.png")));
     }//GEN-LAST:event_btnUbahMouseExited
 
     private void btnKembaliMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseEntered
-        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar.png")));
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar.png")));
     }//GEN-LAST:event_btnKembaliMouseEntered
 
     private void btnKembaliMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseExited
-        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnDaftar-hover.png")));
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnKembaliDaftar-hover.png")));
     }//GEN-LAST:event_btnKembaliMouseExited
 
     private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
-        login();
+
     }//GEN-LAST:event_btnUbahMouseClicked
 
     private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
-        FDaftar21552011235 fd = new FDaftar21552011235();
-        fd.setVisible(true);
+        FMenuUtama21552011235 fm = new FMenuUtama21552011235();
+        fm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnKembaliMouseClicked
 
