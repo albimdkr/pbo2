@@ -46,8 +46,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     String sql, jk, kodePegawai, divisi, tglMasukKerja, a;
-//    private Object stmt;
-    Boolean simpan;
+    Boolean simpan = false;
     
     public FPegawai21552011235() {
         initComponents();
@@ -612,8 +611,9 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
                     ps.setString(6, idUser);
                     ps.setString(7, idDivisi);
                     JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
-                } else {
-                    sql = "UPDATE tblpegawai SET kodePegawai=?, nama=?, jk=?, tglmasuk=?, alamat=?, idUser=?, idDivisi=? WHERE kodePegawai=?";
+                } else if (simpan == false) {
+//                  sql = "UPDATE tblpegawai SET kodePegawai=?, nama=?, jk=?, tglmasuk=?, alamat=?, idUser=?, idDivisi=? WHERE kodePegawai=?";
+                    sql = "UPDATE tblpegawai SET kodePegawai=?, nama=?, jk=?, tglmasuk=?, alamat=?, idUser=?, idDivisi=(SELECT idDivisi FROM tbldivisi WHERE namaDivisi=?) WHERE kodePegawai=?";
                     ps = conn.prepareStatement(sql);
                     ps.setString(1, kodePeg);
                     ps.setString(2, nama);
@@ -622,7 +622,7 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
                     ps.setString(5, alamat);
                     ps.setString(6, idUser);
                     ps.setString(7, idDivisi);
-                    ps.setString(8, kodePeg); // tambahkan variabel kodePegawai sebagai parameter ke-8
+                    ps.setString(8, kodePeg);
                     JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
 
                 }
