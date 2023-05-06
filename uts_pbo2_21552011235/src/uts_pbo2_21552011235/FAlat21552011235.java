@@ -15,12 +15,17 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
 import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
@@ -50,107 +55,7 @@ public class FAlat21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
-//    private int getNomorUrut() {
-//        // Kode untuk mendapatkan nomor urut dari database atau file
-//        return 1;
-//    }
    private void kodeAlatOtomatis() {
-//    String namaAlat = txtFieldNamaAlat.getText();
-//    String[] kata = namaAlat.split(" ");
-//    String kode = "";
-//    if (kata.length == 1) {
-//        kode = kata[0].substring(0, 3).toUpperCase();
-//    } else {
-//        for (int i = 0; i < kata.length; i++) {
-//            kode += kata[i].substring(0, 1).toUpperCase();
-//        }
-//    }
-//    try {
-//        st = conn.createStatement();
-//        String prefix = kode;
-//        sql = "SELECT MAX(kodeAlat) AS kodeAlat FROM tblalat WHERE kodeAlat LIKE '" + prefix + "%'";
-//        rs = st.executeQuery(sql);
-//        if (rs.next()) {
-//            String str_kd = rs.getString("kodeAlat");
-//            if (rs.wasNull()) {
-//                kode += "001";
-//                txtFieldKodeAlat.setText(kode);
-//            } else {
-//                String kd = str_kd.substring(str_kd.length() - 3);
-//                int int_code = Integer.parseInt(kd);
-//                int_code++;
-//                String a = String.format("%03d", int_code);
-//                kode += a;
-//                txtFieldKodeAlat.setText(kode);
-//            }
-//        }
-//    } catch (SQLException ex) {
-//    }
-
-//    String namaAlat = txtFieldNamaAlat.getText();
-//    String[] kata = namaAlat.split(" ");
-//    String kode = "";
-//    if (kata.length == 1) {
-//        kode = kata[0].substring(0, 3).toUpperCase();
-//    } else {
-//        for (int i = 0; i < kata.length; i++) {
-//            kode += kata[i].substring(0, 1).toUpperCase();
-//        }
-//    }
-//    try {
-//        st = conn.createStatement();
-//        sql = "SELECT MAX(kodeAlat) AS kodeAlat FROM tblalat";
-//        rs = st.executeQuery(sql);
-//        if (rs.next()) {
-//            String str_kd = rs.getString("kodeAlat");
-//            if (str_kd == null) {
-//                kode += "001";
-//            } else {
-//                String kd = str_kd.substring(str_kd.length() - 3);
-//                int int_code = Integer.parseInt(kd);
-//                int_code++;
-//                String a = String.format("%03d", int_code);
-//                kode += a;
-//            }
-//            txtFieldKodeAlat.setText(kode);
-//        }
-//    } catch (SQLException ex) {
-//    }
-
-//    String namaAlat = txtFieldNamaAlat.getText();
-//    String[] kata = namaAlat.split(" ");
-//    String kode = "";
-//    if (kata.length == 1) {
-//        kode = kata[0].substring(0, 3).toUpperCase();
-//    } else {
-//        for (int i = 0; i < kata.length; i++) {
-//            kode += kata[i].substring(0, 1).toUpperCase();
-//        }
-//    }
-//    try {
-//        st = conn.createStatement();
-//        sql = "SELECT MAX(kodeAlat) AS kodeAlat FROM tblalat";
-//        rs = st.executeQuery(sql);
-//        if (rs.next()) {
-//            String str_kd = rs.getString("kodeAlat");
-//            if (str_kd == null) {
-//                kode += "001";
-//            } else {
-//                String kd = str_kd.substring(str_kd.length() - 3);
-//                int int_code = Integer.parseInt(kd);
-//                int_code++;
-//                if (int_code > 999) {
-//                    kode = "1" + kode;
-//                    int_code = 1;
-//                }
-//                String a = String.format("%03d", int_code);
-//                kode += a;
-//            }
-//            txtFieldKodeAlat.setText(kode);
-//        }
-//    } catch (SQLException ex) {
-//    }
-
     namaAlat = txtFieldNamaAlat.getText();
     String[] kata = namaAlat.split(" ");
     kode = "";
@@ -176,7 +81,6 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     }
 }
   
-
   private void tampilDataAlat (){
         try {
             if (txtFieldCari.getText().isEmpty()) {
@@ -207,6 +111,44 @@ public class FAlat21552011235 extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+  
+  private void btnSimpanDataAlat(){
+        String kodeAlat = txtFieldKodeAlat.getText();
+        String namaAlat = txtFieldNamaAlat.getText();
+        String biayaProduksi = txtFieldNamaAlat.getText();
+        String hargaJual = txtFieldHargaJual.getText();
+        
+        if (kodeAlat.isEmpty() || namaAlat.isEmpty() || biayaProduksi.isEmpty() || hargaJual.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        }else{
+        try {
+            if (simpan == true) {
+                sql = "insert into tblalat values (?,?,?,?)";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, kodeAlat);
+                ps.setString(2, namaAlat);
+                ps.setString(3, biayaProduksi);
+                ps.setString(4, hargaJual);
+            }else{
+                sql = "UPDATE tblalat SET biayaProduksi=?, hargaJual=?, WHERE namaAlat=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, biayaProduksi);
+                ps.setString(2, hargaJual);
+                ps.setString(3, namaAlat);
+            }
+            ps.executeUpdate();
+            tampilDataAlat();
+        } catch (Exception e) {
+        }
+      }
+  }
+  
+  private void btnBatal(){
+        txtFieldKodeAlat.setText(null);
+        txtFieldNamaAlat.setText(null);
+        txtFieldBiayaProduksi.setText(null);
+        txtFieldHargaJual.setText(null);
+  }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -456,10 +398,7 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
-        txtFieldKodeAlat.setText(null);
-        txtFieldNamaAlat.setText(null);
-        txtFieldBiayaProduksi.setText(null);
-        txtFieldHargaJual.setText(null);
+        btnBatal();
         
     }//GEN-LAST:event_btnBatalMouseClicked
 
@@ -472,29 +411,7 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldBiayaProduksiActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
-        if (txtFieldNamaAlat.getText().isEmpty()|| txtFieldBiayaProduksi.getText().isEmpty() || txtFieldHargaJual.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        }else{
-        try {
-            if (simpan == true) {
-                sql = "insert into tblalat values (?,?,?,?)";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldKodeAlat.getText());
-                ps.setString(2, txtFieldNamaAlat.getText());
-                ps.setString(3, txtFieldBiayaProduksi.getText());
-                ps.setString(4, txtFieldHargaJual.getText());
-            }else{
-                sql = "UPDATE tblalat SET biayaProduksi=?, hargaJual=?, WHERE namaAlat=?";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldBiayaProduksi.getText());
-                ps.setString(2, txtFieldHargaJual.getText());
-                ps.setString(3, txtFieldNamaAlat.getText());
-            }
-            ps.executeUpdate();
-            tampilDataAlat();
-        } catch (Exception e) {
-        }
-      }
+        btnSimpanDataAlat();
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tableAlatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAlatMouseClicked

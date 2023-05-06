@@ -45,6 +45,15 @@ public class FPenjualan21552011235 extends javax.swing.JFrame {
         tampilDataPenjualan ();
 //        setNamaPegawaiOtomatis();
     }
+    
+    public void setData(String Nama, String Level){
+        nama = Nama;
+        if(Level.equals("Admin")){
+            //Kondisi
+        }else{
+            //Kondisi
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -554,7 +563,7 @@ private void kodePenjualanOtomatis() {
     private void btnTambahDataPenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseClicked
         simpan = true;
         kodePenjualanOtomatis();
-        setNamaPegawai();
+//        setNamaPegawai();
     }//GEN-LAST:event_btnTambahDataPenjualanMouseClicked
 
     private void btnTambahDataPenjualanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseEntered

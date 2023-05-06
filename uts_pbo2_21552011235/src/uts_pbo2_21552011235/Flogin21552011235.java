@@ -23,8 +23,7 @@ import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
  * @author albin
  */
 public class Flogin21552011235 extends javax.swing.JFrame {
-    String level;
-    String email;
+    String nama,email,level;
     /**
      * Creates new form Flogin21552011235
      */
@@ -56,15 +55,17 @@ public class Flogin21552011235 extends javax.swing.JFrame {
                         email = rs.getString("email");
                             if (level.equals("Admin")){
                                     JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
-                                    FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
+                                    FMenuUtama21552011235 fmu  = new FMenuUtama21552011235();
                                     btnAdmin.setEnabled(true);
                                     btnUbahPassword.setEnabled(true);
                                     btnProfil.setEnabled(true);
                                     btnLogout.setEnabled(true);
                                     btnProduksi.setEnabled(false);
                                     btnMarketing.setEnabled(false);
-//                                  lblUsername.setText(nama);
-                                    fm.setVisible(true);
+                                    level = rs.getString("level");
+                                    fmu.setData(nama, level);
+                                    fmu.setVisible(true);
+                                    
                                     } else if (level.equals("Produksi")){
                                     JOptionPane.showMessageDialog(null,"Login Berhasil sebagai "+level);
                                     FMenuUtama21552011235 fm  = new FMenuUtama21552011235();
@@ -226,12 +227,14 @@ public class Flogin21552011235 extends javax.swing.JFrame {
 
     private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
         login();
+
     }//GEN-LAST:event_btnLoginMouseClicked
 
     private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
         FDaftar21552011235 fd = new FDaftar21552011235();
         fd.setVisible(true);
         this.dispose();
+
     }//GEN-LAST:event_btnDaftarMouseClicked
 
     /**

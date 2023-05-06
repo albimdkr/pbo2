@@ -69,6 +69,36 @@ public class FDivisi21552011235 extends javax.swing.JFrame {
         } catch (Exception e) {
       }
     }
+  
+  private void btnUbah(){
+        String gapok = txtFieldGajiPokok.getText();
+        String tunjangan = txtFieldTunjangan.getText();
+        String namaDiv = txtFieldNamaDivisi.getText();
+        
+        if (gapok.isEmpty() || tunjangan.isEmpty() || namaDiv.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data Gaji Pokok atau Tunjangan telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
+            + "Mengedit Data ?","Konfirmasi Edit Data Divisi", JOptionPane.YES_NO_OPTION);
+            
+            if (ok==0){
+                try {
+                sql = "UPDATE tbldivisi SET gapok=?, tunjangan=? WHERE namaDivisi=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, gapok);
+                ps.setString(2, tunjangan);
+                ps.setString(3, namaDiv);
+                
+                ps.executeUpdate();
+                tampilDataDivisi();
+                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
+                }
+            }
+        
+        }
+  }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -284,31 +314,7 @@ public class FDivisi21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldGajiPokokActionPerformed
 
     private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
-        if (txtFieldGajiPokok.getText().isEmpty() || txtFieldTunjangan.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan data Gaji Pokok atau Tunjangan telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        } else {
-            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
-            + "Mengedit Data ?","Konfirmasi Edit Data Divisi", JOptionPane.YES_NO_OPTION);
-
-
-            if (ok==0){
-                try {
-                sql = "UPDATE tbldivisi SET gapok=?, tunjangan=? WHERE namaDivisi=?";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldGajiPokok.getText());
-                ps.setString(2, txtFieldTunjangan.getText());
-                ps.setString(3, txtFieldNamaDivisi.getText());
-                
-                ps.executeUpdate();
-                tampilDataDivisi();
-                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
-                }
-            }
-        
-        }
-
+        btnUbah();
     }//GEN-LAST:event_btnUbahMouseClicked
 
     private void tableDivisiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDivisiMouseClicked

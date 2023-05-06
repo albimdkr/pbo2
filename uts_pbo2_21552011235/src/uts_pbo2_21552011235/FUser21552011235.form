@@ -188,7 +188,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel13">
+        <Component class="javax.swing.JLabel" name="titleEmail">
           <Properties>
             <Property name="text" type="java.lang.String" value="Email"/>
           </Properties>
@@ -229,7 +229,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel15">
+        <Component class="javax.swing.JLabel" name="titlePassword">
           <Properties>
             <Property name="text" type="java.lang.String" value="Password"/>
           </Properties>

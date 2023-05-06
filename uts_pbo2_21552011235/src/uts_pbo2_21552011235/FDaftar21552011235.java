@@ -94,13 +94,75 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
         return matcher.matches();
   }
   
- public boolean checkValidatePassword(String password) {
-    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
-    Pattern pattern = Pattern.compile(passwordRegex);
-    Matcher matcher = pattern.matcher(password);
-    return matcher.matches();
-}
+  public boolean checkValidatePassword(String password) {
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
+        Pattern pattern = Pattern.compile(passwordRegex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+  }
   
+  private void btnDaftar(){
+        String id = txtFieldIDUser.getText();
+        String email = txtFieldEmail.getText();
+        String pass = txtFieldPassword.getText();
+        String confirmPass = txtFieldConfirmPassword.getText();
+        String lvl = "";
+        if (RBProduksi.isSelected()) {
+            lvl = "Produksi";
+        } else if (RBMarketing.isSelected()) {
+            lvl = "Marketing";
+        }
+        String validatePass = txtFieldPassword.getText().toString();
+
+        if (id.isEmpty() || email.isEmpty() || pass.isEmpty() || lvl.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        } else if (!confirmPass.equals(pass)) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan Konfirmasi Password sesuai. Ulangi kembali!", "KONFIRMASI PASSWORD TIDAK SESUAI !", JOptionPane.WARNING_MESSAGE);
+            titleConfirmPassword.setForeground (Color.red);
+        }else{
+            try {
+            if (checkEmailIsReady(email)) {
+               JOptionPane.showMessageDialog(rootPane, "Pastikan Email yang digunakan belum terdaftar, lakukan daftar kembali!. Ulangi kembali!", "EMAIL TELAH TERDAFTAR !", JOptionPane.WARNING_MESSAGE);
+               titleEmail.setForeground (Color.red);
+            }  else {
+                  if (checkValidateEmaill(email)) {
+                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
+                      titleEmail.setForeground (Color.black);
+                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
+                      titleEmail.setForeground (Color.black);
+                      
+                      if (checkValidatePassword(validatePass)) { 
+                      JOptionPane.showMessageDialog(null, "Password telah benar!");
+                      titlePassword.setForeground (Color.black);
+                      titleConfirmPassword.setForeground (Color.black);
+                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
+                      ps = conn.prepareStatement(sql);
+                      ps.setString(1, id);
+                      ps.setString(2, email);
+                      ps.setString(3, pass);
+                      ps.setString(4, lvl);
+                      ps.executeUpdate();
+                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+
+                      Flogin21552011235 fl = new Flogin21552011235();
+                      this.dispose();
+                      fl.setVisible(true);
+                      ps.close();
+                      } else { 
+                          JOptionPane.showMessageDialog(rootPane, "Pastikan isi password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!", "PASSWORD LEMAH !", JOptionPane.WARNING_MESSAGE);
+                          titlePassword.setForeground (Color.red);
+                      }                                
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan isi format email dengan benar!", "FORMAT EMAIL SALAH !", JOptionPane.WARNING_MESSAGE);
+            titleEmail.setForeground (Color.red);
+        }
+        }
+                
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+  }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -303,64 +365,7 @@ public class FDaftar21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_RBMarketingActionPerformed
 
     private void btnDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDaftarMouseClicked
-        if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty() || txtFieldConfirmPassword.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        } else if (!txtFieldConfirmPassword.getText().equals(txtFieldPassword.getText())) {
-            JOptionPane.showMessageDialog(null, "Confirm Password harus sama dengan password!");
-            JOptionPane.showMessageDialog(rootPane, "Pastikan Konfirmasi Password sesuai. Ulangi kembali!", "KONFIRMASI PASSWORD TIDAK SESUAI !", JOptionPane.WARNING_MESSAGE);
-            titleConfirmPassword.setForeground (Color.red);
-        }else{
-            try {
-             // cek email
-            if (checkEmailIsReady(txtFieldEmail.getText())) {
-               JOptionPane.showMessageDialog(rootPane, "Pastikan Email yang digunakan belum terdaftar, lakukan daftar kembali!. Ulangi kembali!", "EMAIL TELAH ADA !", JOptionPane.WARNING_MESSAGE);
-               titleEmail.setForeground (Color.red);
-            }  else {
-                  if (checkValidateEmaill(txtFieldEmail.getText())) {
-                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      titleEmail.setForeground (Color.black);
-                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      titleEmail.setForeground (Color.black);
-                      
-                      String password = txtFieldPassword.getText().toString();
-                      if (checkValidatePassword(password)) { 
-                      JOptionPane.showMessageDialog(null, "Password telah benar!");
-//                    txtKodeUser.setBackground(Color.green);
-//                    txtUsernameEmail.setBackground(Color.green);
-                      titlePassword.setForeground (Color.black);
-                      titleConfirmPassword.setForeground (Color.black);
-                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
-                      ps = conn.prepareStatement(sql);
-                      ps.setString(1, txtFieldIDUser.getText());
-                      ps.setString(2, txtFieldEmail.getText());
-                      ps.setString(3, txtFieldPassword.getText());
-                      if (RBProduksi.isSelected()) {
-                            level = "Produksi";
-                      }else{
-                            level = "Marketing";
-                      }
-                      ps.setString(4, level);
-                      ps.executeUpdate();
-                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-
-                      Flogin21552011235 fl = new Flogin21552011235();
-                      this.dispose();
-                      fl.setVisible(true);
-                      ps.close();
-                      } else { 
-                          JOptionPane.showMessageDialog(rootPane, "Pastikan isi password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!", "PASSWORD LEMAH !", JOptionPane.WARNING_MESSAGE);
-                          titlePassword.setForeground (Color.red);
-                      }                                
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan isi format email dengan benar!", "FORMAT EMAIL SALAH !", JOptionPane.WARNING_MESSAGE);
-            txtFieldEmail.setBackground(Color.red);
-        }
-        }
-                
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
-        }
+        btnDaftar();
     }//GEN-LAST:event_btnDaftarMouseClicked
 
     private void txtFieldIDUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldIDUserActionPerformed

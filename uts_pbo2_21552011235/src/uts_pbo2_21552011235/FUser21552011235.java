@@ -136,6 +136,65 @@ public class FUser21552011235 extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+  
+  private void btnTambahUser(){
+        String id = txtFieldIDUser.getText();
+        String email = txtFieldEmail.getText();
+        String pass = txtFieldPassword.getText();
+        String lvl = "";
+        if (RBProduksi.isSelected()) {
+            lvl = "Produksi";
+        } else if (RBMarketing.isSelected()) {
+            lvl = "Marketing";
+        }
+        String validatePass = txtFieldPassword.getText().toString();
+        
+        if (id.isEmpty() || email.isEmpty() || pass.isEmpty() || lvl.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+        }else{
+            try {
+             // cek email
+            if (checkEmailIsReady(email)) { 
+               JOptionPane.showMessageDialog(rootPane, "Pastikan Email yang digunakan belum terdaftar, lakukan daftar kembali!. Ulangi kembali!", "EMAIL TELAH TERDAFTAR !", JOptionPane.WARNING_MESSAGE);
+               titleEmail.setForeground (Color.red);
+            }  else {
+                  if (checkValidateEmaill(email)) {
+                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
+                      titleEmail.setForeground (Color.black);
+                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
+                      titleEmail.setForeground (Color.black); 
+                      
+                      if (checkValidatePassword(validatePass)) { 
+                      JOptionPane.showMessageDialog(null, "Password telah benar!");
+                      titlePassword.setForeground (Color.black);
+                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
+                      ps = conn.prepareStatement(sql);
+                      ps.setString(1, id);
+                      ps.setString(2, email);
+                      ps.setString(3, pass);
+                      ps.setString(4, lvl);
+                      ps.executeUpdate();
+                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+
+                      FUser21552011235 fu = new FUser21552011235();
+                      this.dispose();
+                      fu.setVisible(true);
+                      ps.close();
+                      } else { 
+                          JOptionPane.showMessageDialog(rootPane, "Pastikan isi password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!", "PASSWORD LEMAH !", JOptionPane.WARNING_MESSAGE);
+                          titlePassword.setForeground (Color.red);
+                      }                                
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Pastikan isi format email dengan benar!", "FORMAT EMAIL SALAH !", JOptionPane.WARNING_MESSAGE);
+            titleEmail.setForeground (Color.red);
+        }
+        }
+                
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+  }
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -151,10 +210,10 @@ public class FUser21552011235 extends javax.swing.JFrame {
         btnTambahDataUser = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtFieldEmail = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
+        titleEmail = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtFieldPassword = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
+        titlePassword = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableUser = new javax.swing.JTable();
         RBMarketing = new javax.swing.JRadioButton();
@@ -237,8 +296,8 @@ public class FUser21552011235 extends javax.swing.JFrame {
         });
         jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 180, 40));
 
-        jLabel13.setText("Email");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
+        titleEmail.setText("Email");
+        jPanel1.add(titleEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
 
         jLabel14.setBackground(new java.awt.Color(255, 255, 255));
         jLabel14.setForeground(new java.awt.Color(153, 153, 153));
@@ -253,8 +312,8 @@ public class FUser21552011235 extends javax.swing.JFrame {
         });
         jPanel1.add(txtFieldPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 180, 40));
 
-        jLabel15.setText("Password");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, -1, -1));
+        titlePassword.setText("Password");
+        jPanel1.add(titlePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, -1, -1));
 
         tableUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -398,59 +457,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldCariActionPerformed
 
     private void btnTambahDataUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataUserMouseClicked
-        if (txtFieldEmail.getText().isEmpty() || txtFieldPassword.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Data harus diisi semua!");
-        }else{
-            try {
-             // cek email
-            if (checkEmailIsReady(txtFieldEmail.getText())) { 
-               JOptionPane.showMessageDialog(null, "Email telah terdaftar, lakukan registrasi kembali!");
-               txtFieldEmail.setBackground(Color.red);
-            }  else {
-                  if (checkValidateEmaill(txtFieldEmail.getText())) {
-                      JOptionPane.showMessageDialog(null, "Email siap digunakan!");
-                      txtFieldEmail.setBackground(Color.green);
-                      JOptionPane.showMessageDialog(null, "Format email sudah benar!");
-                      txtFieldEmail.setBackground(Color.green); 
-                      
-                      String password = txtFieldPassword.getText().toString();
-                      if (checkValidatePassword(password)) { 
-                      JOptionPane.showMessageDialog(null, "Password telah benar!");
-//                    txtKodeUser.setBackground(Color.green);
-//                    txtUsernameEmail.setBackground(Color.green);
-                     txtFieldPassword.setBackground(Color.green);
-                      sql = "INSERT INTO tbluser VALUES (?, ?, ?, ?)";
-                      ps = conn.prepareStatement(sql);
-                      ps.setString(1, txtFieldIDUser.getText());
-                      ps.setString(2, txtFieldEmail.getText());
-                      ps.setString(3, txtFieldPassword.getText());
-                      if (RBProduksi.isSelected()) {
-                            level = "Produksi";
-                      }else{
-                            level = "Marketing";
-                      }
-                      ps.setString(4, level);
-                      ps.executeUpdate();
-                      JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-
-                      FUser21552011235 fu = new FUser21552011235();
-                      this.dispose();
-                      fu.setVisible(true);
-                      ps.close();
-                      } else { 
-                          JOptionPane.showMessageDialog(null, "Password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!");
-                          txtFieldPassword.setBackground(Color.red);
-                      }                                
-        } else {
-            JOptionPane.showMessageDialog(null, "Format email salah, harap isi dengan benar!");
-            txtFieldEmail.setBackground(Color.red);
-        }
-        }
-                
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
-        }
+        btnTambahUser();
     }//GEN-LAST:event_btnTambahDataUserMouseClicked
 
     private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
@@ -543,9 +550,7 @@ public class FUser21552011235 extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel4;
@@ -555,6 +560,8 @@ public class FUser21552011235 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableUser;
+    private javax.swing.JLabel titleEmail;
+    private javax.swing.JLabel titlePassword;
     private javax.swing.JTextField txtFieldCari;
     private javax.swing.JTextField txtFieldEmail;
     private javax.swing.JTextField txtFieldIDUser;

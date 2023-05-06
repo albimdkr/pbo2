@@ -7,9 +7,12 @@ package uts_pbo2_21552011235;
 
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import static uts_pbo2_21552011235.FMenuUtama21552011235.btnAdmin;
 import static uts_pbo2_21552011235.FMenuUtama21552011235.btnLogout;
@@ -23,6 +26,11 @@ import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
  * @author albin
  */
 public class FUbahPassword21552011235 extends javax.swing.JFrame {
+    Connection conn = CKoneksi21552011235.getKoneksi();
+    PreparedStatement ps;
+    Statement st;
+    ResultSet rs;
+    String sql;
     /**
      * Creates new form Flogin21552011235
      */
@@ -37,6 +45,52 @@ public class FUbahPassword21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
+    
+  private void btnUbahPassword(){
+      try {
+            String oldPass = txtFieldPasswordLama.getText();
+            String newPass = txtFieldPasswordBaru.getText();
+            
+            sql = "SELECT * FROM tbluser WHERE password=?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, oldPass);
+            rs = ps.executeQuery();
+            boolean pass = false;
+            if(rs.next()){
+                pass = true;
+            }
+            
+            if(!pass){
+                JOptionPane.showMessageDialog(rootPane, "Password lama tidak sesuai!. Ulangi kembali!", "PASSWORD TIDAK SESUAI !", JOptionPane.WARNING_MESSAGE);
+            } else if (oldPass.equals(newPass)){
+                JOptionPane.showMessageDialog(rootPane, "Password baru tidak boleh sesuai dengan yang lama!. Ulangi kembali!", "PASSWORD MASIH SAMA !", JOptionPane.WARNING_MESSAGE);
+            } else {
+                sql = "UPDATE tbluser SET password=? WHERE password=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, newPass);
+                ps.setString(2, oldPass);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Password telah berhasil diubah!");
+            }
+            
+      } catch (SQLException e) {
+          System.err.println(e);
+      }
+  }  
+    
+  private void validatePass (){
+    String newPass = txtFieldPasswordBaru.getText();
+    String oldPass = txtFieldPasswordLama.getText();
+    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
+    if (oldPass.isEmpty() || newPass.isEmpty()){
+        JOptionPane.showMessageDialog(rootPane, "Pastikan data telah terisi semua. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+    } else if(!newPass.matches(passwordRegex)) {
+        JOptionPane.showMessageDialog(rootPane, "Pastikan isi password harus menggunakan gabungan huruf besar, huruf kecil  ,angka dan simbol. Ulangi kembali!", "PASSWORD LEMAH !", JOptionPane.WARNING_MESSAGE);
+    } else {
+        btnUbahPassword();
+    }
+  }  
+   
     
     
    
@@ -148,7 +202,7 @@ public class FUbahPassword21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUbahMouseEntered
 
     private void btnUbahMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseExited
-        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbahhover.png")));
+        btnUbah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnUbah-hover.png")));
     }//GEN-LAST:event_btnUbahMouseExited
 
     private void btnKembaliMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseEntered
@@ -160,7 +214,7 @@ public class FUbahPassword21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnKembaliMouseExited
 
     private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
-
+        btnUbahPassword();
     }//GEN-LAST:event_btnUbahMouseClicked
 
     private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
