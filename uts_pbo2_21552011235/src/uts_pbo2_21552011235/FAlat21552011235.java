@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -27,8 +28,6 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
 
 /**
  *
@@ -40,8 +39,7 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     String sql, kodeAlat, namaAlat, level, kode, a;
-    Boolean simpan;
-    private Map<String, Integer> kdalat = new HashMap<>();
+    boolean simpan = true;
     
     public FAlat21552011235() {
         initComponents();
@@ -113,16 +111,25 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     }
   
   private void btnSimpanDataAlat(){
-        String kodeAlat = txtFieldKodeAlat.getText();
-        String namaAlat = txtFieldNamaAlat.getText();
-        String biayaProduksi = txtFieldNamaAlat.getText();
-        String hargaJual = txtFieldHargaJual.getText();
+        String kodeAlat = txtFieldKodeAlat.getText().trim();
+        String namaAlat = txtFieldNamaAlat.getText().trim();
+        String biayaProduksi = txtFieldNamaAlat.getText().trim();
+        String hargaJual = txtFieldHargaJual.getText().trim();
         
         if (kodeAlat.isEmpty() || namaAlat.isEmpty() || biayaProduksi.isEmpty() || hargaJual.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        }else{
+        }
+        
         try {
-            if (simpan == true) {
+            int biayaPrdksi = Integer.parseInt(biayaProduksi);
+            int harga = Integer.parseInt(hargaJual);
+            if (harga <= biayaPrdksi) {
+            JOptionPane.showMessageDialog(this, "Harga jual harus lebih besar dari biaya produksi!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
+            String sql;
+            PreparedStatement ps;
+            if (simpan = true) {
                 sql = "insert into tblalat values (?,?,?,?)";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, kodeAlat);
@@ -136,11 +143,22 @@ public class FAlat21552011235 extends javax.swing.JFrame {
                 ps.setString(2, hargaJual);
                 ps.setString(3, namaAlat);
             }
+            
             ps.executeUpdate();
+            
+            String pesan;
+            if (simpan) {
+                pesan = "Data berhasil disimpan";
+            } else {
+                pesan = "Data berhasil diubah";
+            }
             tampilDataAlat();
-        } catch (Exception e) {
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Biaya produksi dan harga jual harus diisi hanya angka!", "ISI DATA SALAH !", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex){
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi sebuah kesalahan saat menyimpan data alat", "ISI DATA ERROR !", JOptionPane.ERROR_MESSAGE);
         }
-      }
   }
   
   private void btnBatal(){
@@ -198,6 +216,11 @@ public class FAlat21552011235 extends javax.swing.JFrame {
         txtFieldCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFieldCariActionPerformed(evt);
+            }
+        });
+        txtFieldCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFieldCariKeyReleased(evt);
             }
         });
         jPanel1.add(txtFieldCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 370, 180, 30));
@@ -420,6 +443,7 @@ public class FAlat21552011235 extends javax.swing.JFrame {
             txtFieldNamaAlat.setText(tableAlat.getValueAt(baris, 1).toString());
             txtFieldBiayaProduksi.setText(tableAlat.getValueAt(baris, 2).toString());
             txtFieldHargaJual.setText(tableAlat.getValueAt(baris, 3).toString());
+            simpan = false;
     }//GEN-LAST:event_tableAlatMouseClicked
 
     private void txtFieldNamaAlatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNamaAlatActionPerformed
@@ -447,28 +471,39 @@ public class FAlat21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTambahDataAlatMouseExited
 
     private void txtFieldBiayaProduksiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldBiayaProduksiKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isDigit(c)){
-            evt.consume();
-            titleBiayaProduksi.setForeground (Color.red);
-        } else {
-            titleBiayaProduksi.setForeground (Color.black);
-        }
+//        char c = evt.getKeyChar();
+//        if (!Character.isDigit(c)){
+//            evt.consume();
+//            titleBiayaProduksi.setForeground (Color.red);
+//        } else {
+//            titleBiayaProduksi.setForeground (Color.black);
+//        }
     }//GEN-LAST:event_txtFieldBiayaProduksiKeyTyped
 
     private void txtFieldHargaJualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldHargaJualKeyTyped
-        char c = evt.getKeyChar();
-        if (!Character.isDigit(c)){
-            evt.consume();
-            titleHargaJual.setForeground (Color.red);
-        } else {
-            titleHargaJual.setForeground (Color.black);
-        }
+//        char c = evt.getKeyChar();
+//        if (!Character.isDigit(c)){
+//            evt.consume();
+//            titleHargaJual.setForeground (Color.red);
+//        } else {
+//            titleHargaJual.setForeground (Color.black);
+//        }
     }//GEN-LAST:event_txtFieldHargaJualKeyTyped
 
     private void btnTambahDataAlatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataAlatMouseClicked
         simpan = true;
         kodeAlatOtomatis();
+        String nama = txtFieldNamaAlat.getText().trim();
+        String biaya = txtFieldBiayaProduksi.getText().trim();
+        String harga = txtFieldHargaJual.getText().trim();
+        if (nama.isEmpty() || biaya.isEmpty() || harga.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Data Belum terisi semua", "TAMBAH DATA ERROR !", JOptionPane.ERROR_MESSAGE);
+            try {
+            } catch (Exception e) {
+
+            }
+            return;
+        }
     }//GEN-LAST:event_btnTambahDataAlatMouseClicked
 
     private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
@@ -476,6 +511,10 @@ public class FAlat21552011235 extends javax.swing.JFrame {
         fm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackMouseClicked
+
+    private void txtFieldCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldCariKeyReleased
+        tampilDataAlat();
+    }//GEN-LAST:event_txtFieldCariKeyReleased
 
     /**
      * @param args the command line arguments

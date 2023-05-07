@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
@@ -18,8 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
+import koneksi.idDivSession;
+import koneksi.idSession;
+import koneksi.kodepeSession;
 
 /**
  *
@@ -31,11 +33,14 @@ public class FProfil21552011235 extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     String sql, idUser, level, id, kosong;
+
+
     
     public FProfil21552011235() {
         initComponents();
-        idUserOtomatis();
-        tampilDataUser ();
+        this.idUser = idUser;
+        this.conn = conn;
+        tampilkanProfil();
     }
 
     /**
@@ -45,98 +50,65 @@ public class FProfil21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
-    
-    private void idUserOtomatis(){
-            try {
-                    st = conn.createStatement();
-                    sql = "SELECT * FROM tbluser order by idUser DESC";
-                    rs = st.executeQuery(sql);
-                      if (rs.next()) {
-                           idUser = rs.getString("idUser").substring(4);
-                           id = "" + (Integer.parseInt(idUser) + 1);
-                           kosong = "";
-                      if (id.length() == 1){
-                           kosong = "00";    
-                      } else if (id.length() == 2){
-                           kosong = "0";
-                      } else {
-                          kosong = "";
-                      }
-                      txtFieldKodePegawai.setText("USER" + kosong + id);
-                      } else {
-                   txtFieldKodePegawai.setText("USER001");
-                  }
-                  rs.close();
-                  st.close();
-            } catch (NumberFormatException | SQLException e) {
-        }
-}
- public static boolean checkEmailIsReady(String email) {
+        public void tampilkanProfil() {
+        String kodepegawai = kodepeSession.getkodepegLogin();
+        String kodeuser = idSession.getidUSerLogin();
+        String kodeDiv = idDivSession.getidDivLogin();
+
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235", "root", "");
-            String query = "SELECT * FROM tbluser WHERE email=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-            
-            // Tutup koneksi dan statement
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return false;
-  }
-  
- public static boolean checkValidateEmaill(String email) {
-        String regex = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";// Regular Expresion Email
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-  }
-  
- public boolean checkValidatePassword(String password) {
-    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";  // Regular Expresion Password
-    Pattern pattern = Pattern.compile(passwordRegex);
-    Matcher matcher = pattern.matcher(password);
-    return matcher.matches();
-}
- 
-  private void tampilDataUser (){
-        try {
-            if (txtFieldIDUser.getText().isEmpty()) {
-                sql = "select * from tbluser";
-            }else{
-                sql = "SELECT * FROM tbluser WHERE "
-                + "`idUser` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`email`  LIKE '%"+txtFieldIDUser.getText()+"%' OR "
-                + "`password` LIKE '%"+txtFieldIDUser.getText()+"%' OR"
-                + "`level` LIKE '%"+txtFieldIDUser.getText()+"%'";
-            }
+            sql = "SELECT kodePegawai, nama, jk, tglmasuk, alamat, idUser FROM tblpegawai WHERE kodePegawai = '" + kodepegawai + "'";
             st = conn.createStatement();
             rs = st.executeQuery(sql);
-            DefaultTableModel model = new DefaultTableModel();
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-               model.addColumn(metaData.getColumnName(i));
+            if (rs.next()) {
+                String dd = rs.getString("kodePegawai");
+                String dd1 = rs.getString("nama");
+                String dd2 = rs.getString("jk");
+                String dd3 = rs.getString("tglmasuk");
+                String dd4 = rs.getString("alamat");
+
+                txtFieldKodePegawai.setText(dd);
+                txtFieldNamaPegawai.setText(dd1);
+                txtFieldJenisKelamin.setText(dd2);
+                txtFieldTglMasukKerja.setText(dd3);
+                txtFieldAlamat.setText(dd4);
             }
-            while (rs.next()) {
-               Object[] row = new Object[columnCount];
-               for (int i = 1; i <= columnCount; i++) {
-                  row[i - 1] = rs.getObject(i);
-               }
-               model.addRow(row);
-            }
-            tableUser.setModel(model);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            sql = "SELECT idUser, email FROM tbluser WHERE idUser = '" + kodeuser + "'";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            if (rs.next()) {
+                String dd1 = rs.getString("email");
+                txtFieldEmail.setText(dd1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            sql = "SELECT idDivisi, namaDivisi, gapok, tunjangan FROM tbldivisi WHERE idDivisi = '" + kodeDiv + "'";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            if (rs.next()) {
+                String dd1 = rs.getString("namaDivisi");
+                String dd2 = rs.getString("gapok");
+                String dd3 = rs.getString("tunjangan");
+
+                txtFieldNamaDivisi.setText(dd1);
+                txtFieldGajiPokok.setText(dd2);
+                txtFieldTunjangan.setText(dd3);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
- 
+    
+   
+
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -147,7 +119,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
         txtFieldKodePegawai = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        txtFieldJenisKelamin = new javax.swing.JTextField();
+        txtFieldTglMasukKerja = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtFieldAlamat = new javax.swing.JTextField();
@@ -171,6 +143,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
         txtFieldTunjangan = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         btnBack = new javax.swing.JLabel();
+        txtFieldJenisKelamin = new javax.swing.JTextField();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -205,13 +178,13 @@ public class FProfil21552011235 extends javax.swing.JFrame {
         jLabel12.setText("_______________________________");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 240, 30));
 
-        txtFieldJenisKelamin.setBorder(null);
-        txtFieldJenisKelamin.addActionListener(new java.awt.event.ActionListener() {
+        txtFieldTglMasukKerja.setBorder(null);
+        txtFieldTglMasukKerja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldJenisKelaminActionPerformed(evt);
+                txtFieldTglMasukKerjaActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldJenisKelamin, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 180, 40));
+        jPanel1.add(txtFieldTglMasukKerja, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 170, 180, 40));
 
         jLabel13.setText("Jenis Kelamin");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
@@ -246,7 +219,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
                 txtFieldNamaPegawaiActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldNamaPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 280, 40));
+        jPanel1.add(txtFieldNamaPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 240, 40));
 
         jLabel18.setText("Nama Pegawai");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
@@ -270,7 +243,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
                 txtFieldEmailActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, 280, 40));
+        jPanel1.add(txtFieldEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, 230, 40));
 
         jLabel23.setText("Email");
         jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 60, -1, -1));
@@ -302,7 +275,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
                 txtFieldGajiPokokActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldGajiPokok, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 350, 280, 40));
+        jPanel1.add(txtFieldGajiPokok, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 350, 230, 40));
 
         jLabel24.setText("Gaji Pokok");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 330, -1, -1));
@@ -318,7 +291,7 @@ public class FProfil21552011235 extends javax.swing.JFrame {
                 txtFieldTunjanganActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFieldTunjangan, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 350, 280, 40));
+        jPanel1.add(txtFieldTunjangan, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 350, 220, 40));
 
         jLabel26.setText("Tunjangan");
         jPanel1.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 330, -1, -1));
@@ -336,6 +309,14 @@ public class FProfil21552011235 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 30, 30));
+
+        txtFieldJenisKelamin.setBorder(null);
+        txtFieldJenisKelamin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldJenisKelaminActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFieldJenisKelamin, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 170, 180, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -360,9 +341,9 @@ public class FProfil21552011235 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldKodePegawaiActionPerformed
 
-    private void txtFieldJenisKelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldJenisKelaminActionPerformed
+    private void txtFieldTglMasukKerjaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldTglMasukKerjaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldJenisKelaminActionPerformed
+    }//GEN-LAST:event_txtFieldTglMasukKerjaActionPerformed
 
     private void txtFieldNamaPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNamaPegawaiActionPerformed
         // TODO add your handling code here:
@@ -401,6 +382,10 @@ public class FProfil21552011235 extends javax.swing.JFrame {
         fm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackMouseClicked
+
+    private void txtFieldJenisKelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldJenisKelaminActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldJenisKelaminActionPerformed
 
     /**
      * @param args the command line arguments
@@ -595,6 +580,9 @@ public class FProfil21552011235 extends javax.swing.JFrame {
     private javax.swing.JTextField txtFieldKodePegawai;
     private javax.swing.JTextField txtFieldNamaDivisi;
     private javax.swing.JTextField txtFieldNamaPegawai;
+    private javax.swing.JTextField txtFieldTglMasukKerja;
     private javax.swing.JTextField txtFieldTunjangan;
     // End of variables declaration//GEN-END:variables
+
+
 }

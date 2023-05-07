@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;

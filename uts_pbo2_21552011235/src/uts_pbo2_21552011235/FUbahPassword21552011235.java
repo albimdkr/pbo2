@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,12 +15,6 @@ import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnAdmin;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnLogout;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnMarketing;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnProduksi;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnProfil;
-import static uts_pbo2_21552011235.FMenuUtama21552011235.btnUbahPassword;
 
 /**
  *

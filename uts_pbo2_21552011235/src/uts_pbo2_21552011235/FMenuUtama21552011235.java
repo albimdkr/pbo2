@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,16 +13,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import koneksi.UserSession;
+import koneksi.idDivSession;
+import koneksi.idSession;
+import koneksi.kodepeSession;
+import koneksi.namaSession;
 
 /**
  *
  * @author albin
  */
 public class FMenuUtama21552011235 extends javax.swing.JFrame {
-    String nama,email,level;
+    Connection conn = CKoneksi21552011235.getKoneksi();
+    PreparedStatement ps;
+    Statement st;
+    ResultSet rs;
     
     public FMenuUtama21552011235() {
         initComponents();
+        hakakses();
+        hallo();
     }
 
     /**
@@ -34,35 +45,125 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     
-    public void setData(String Nama, String Level){
-        nama = Nama;
-        if(Level.equals("Admin")){
-            //Kondisi
-        }else{
-            //Kondisi
+     private void hallo() {
+        labelUsername.setText("Anda Sebagai : " + UserSession.getUserLogin());
+    }
+        private void hakakses() {
+        String kodeuser = idSession.getidUSerLogin();
+        String status = UserSession.getUserLogin();
+
+        String kodeDiv = idDivSession.getidDivLogin();
+        String user = labelUsername.getText();
+        if (status.equals("Admin")) {
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tblpegawai where idUser = '" + kodeuser + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+                    String namapegawai = rs.getString("nama");
+                    String kodepegawai = rs.getString("kodePegawai");
+                    String idDIVV = rs.getString("idDivisi");
+
+                    kodepeSession.setkodepegLogin(kodepegawai);
+                    idDivSession.setidDivLogin(idDIVV);
+                    namaSession.setnamaaLogin(namapegawai);
+                }
+                
+            } catch (Exception e) {
+            }
+
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tbldivisi where idDivisi = '" + kodeDiv + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+                
+
+                }
+            } catch (Exception e) {
+            }
+            btnProduksi.setEnabled(false);
+            btnMarketing.setEnabled(false);
+
+        } else if (status.equals("Produksi")) {
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tblpegawai where idUser = '" + kodeuser + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+                    String namapegawai = rs.getString("nama");
+                    String kodepegawai = rs.getString("kodePegawai");
+                    String idDIVV = rs.getString("idDivisi");
+
+                    kodepeSession.setkodepegLogin(kodepegawai);
+                    idDivSession.setidDivLogin(idDIVV);
+                    namaSession.setnamaaLogin(namapegawai);
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tbldivisi where idDivisi = '" + kodeDiv + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+         
+                }
+            } catch (Exception e) {
+            }
+            btnMarketing.setEnabled(false);
+            btnAdmin.setEnabled(false);
+
+        } else {
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tblpegawai where idUser = '" + kodeuser + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+                    String namapegawai = rs.getString("nama");
+                    String kodepegawai = rs.getString("kodePegawai");
+                    String idDIVV = rs.getString("idDivisi");
+
+                    kodepeSession.setkodepegLogin(kodepegawai);
+                    idDivSession.setidDivLogin(idDIVV);
+                    namaSession.setnamaaLogin(namapegawai);
+                }
+            } catch (Exception e) {
+            }
+
+            try {
+                Connection con = CKoneksi21552011235.getKoneksi();
+                Statement st = con.createStatement();
+                String sql = "Select * from tbldivisi where idDivisi = '" + kodeDiv + "'";
+                ResultSet rs = st.executeQuery(sql);
+                if (rs.next()) {
+                   
+                }
+            } catch (Exception e) {
+            }
+            btnProduksi.setEnabled(false);
+            btnAdmin.setEnabled(false);
+            //btnProfil.setEnabled(false);
+
         }
     }
-    
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {                                  
-//        lNama.setText("Selamat Datang, "+nama);
-//        if(level.equals("Admin")){
-//            btnAdmin.setEnabled(true);
-//            btnUbahPassword.setEnabled(true);
-//            btnProfil.setEnabled(true);
-//            btnLogout.setEnabled(true);
-//            btnProduksi.setEnabled(false);
-//            btnMarketing.setEnabled(false);
-//        }else if(level.equals("Produksi")){
-//            btnProduksi.setEnabled(true);
-//            btnProfil.setEnabled(true);
-//            btnLogout.setEnabled(true);
-//        } else if (level.equals("Marketing")){
-//            btnMarketing.setEnabled(true);
-//            btnProfil.setEnabled(true);
-//            btnLogout.setEnabled(true);
-//        }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                  
+
+    private void datausActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
     }
-    
     
  
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -71,13 +172,21 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        labelUsername = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
+        btnAdmin = new javax.swing.JMenu();
         menuItemDataUser = new javax.swing.JMenuItem();
         menuItemDataPegawai = new javax.swing.JMenuItem();
+        btnProduksi = new javax.swing.JMenu();
         menuItemDataDivisi = new javax.swing.JMenuItem();
         menuItemDataAlat = new javax.swing.JMenuItem();
         menuItemDataPenjualanProduksi = new javax.swing.JMenuItem();
+        btnMarketing = new javax.swing.JMenu();
         menuItemDataPenjualanMarketing = new javax.swing.JMenuItem();
+        btnUbahPassword = new javax.swing.JMenu();
+        btnProfil = new javax.swing.JMenu();
+        btnLogout = new javax.swing.JMenu();
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -89,6 +198,13 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        labelUsername.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        jPanel1.add(labelUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 430, 40));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-48.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 50, 40));
 
         btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-user-24.png"))); // NOI18N
         btnAdmin.setText("Admin");
@@ -110,7 +226,7 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         });
         btnAdmin.add(menuItemDataUser);
 
-        menuItemDataPegawai.setText("DataPegawai");
+        menuItemDataPegawai.setText("Data Pegawai");
         menuItemDataPegawai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemDataPegawaiActionPerformed(evt);
@@ -196,10 +312,13 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         });
         jMenuBar1.add(btnUbahPassword);
 
-        btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24.png"))); // NOI18N
+        btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-male-user-24.png"))); // NOI18N
         btnProfil.setText("Profil");
         btnProfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnProfil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnProfilMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnProfilMouseEntered(evt);
             }
@@ -285,11 +404,11 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUbahPasswordMouseExited
 
     private void btnProfilMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProfilMouseEntered
-       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24-hover.png")));
+       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-male-user-24-hover.png")));
     }//GEN-LAST:event_btnProfilMouseEntered
 
     private void btnProfilMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProfilMouseExited
-       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-test-account-24.png")));
+       btnProfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/icons8-male-user-24.png")));
     }//GEN-LAST:event_btnProfilMouseExited
 
     private void btnLogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseEntered
@@ -354,9 +473,9 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUbahPasswordMouseClicked
 
     private void btnProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfilActionPerformed
-        FProfil21552011235 fp = new FProfil21552011235();
-        fp.setVisible(true);
-        this.dispose();
+//        FProfil21552011235 fpf = new FProfil21552011235();
+//        fpf.setVisible(true);
+//        this.dispose();
     }//GEN-LAST:event_btnProfilActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -364,6 +483,12 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         fl.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnProfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProfilMouseClicked
+        FProfil21552011235 fpf = new FProfil21552011235();
+        fpf.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnProfilMouseClicked
 
     /**
      * @param args the command line arguments
@@ -464,16 +589,18 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static final javax.swing.JMenu btnAdmin = new javax.swing.JMenu();
-    public static final javax.swing.JMenu btnLogout = new javax.swing.JMenu();
-    public static final javax.swing.JMenu btnMarketing = new javax.swing.JMenu();
-    public static final javax.swing.JMenu btnProduksi = new javax.swing.JMenu();
-    public static final javax.swing.JMenu btnProfil = new javax.swing.JMenu();
-    public static final javax.swing.JMenu btnUbahPassword = new javax.swing.JMenu();
+    private javax.swing.JMenu btnAdmin;
+    private javax.swing.JMenu btnLogout;
+    private javax.swing.JMenu btnMarketing;
+    private javax.swing.JMenu btnProduksi;
+    private javax.swing.JMenu btnProfil;
+    private javax.swing.JMenu btnUbahPassword;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel labelUsername;
     private javax.swing.JMenuItem menuItemDataAlat;
     private javax.swing.JMenuItem menuItemDataDivisi;
     private javax.swing.JMenuItem menuItemDataPegawai;

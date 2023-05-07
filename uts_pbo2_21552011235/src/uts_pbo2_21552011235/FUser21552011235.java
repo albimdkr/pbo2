@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.sql.Connection;
@@ -18,8 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkEmailIsReady;
-import static uts_pbo2_21552011235.FDaftar21552011235.checkValidateEmaill;
 
 /**
  *

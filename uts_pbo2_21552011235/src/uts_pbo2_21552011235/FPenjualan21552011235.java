@@ -5,6 +5,7 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -17,13 +18,23 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import koneksi.UserSession;
+import koneksi.kodepeSession;
+import koneksi.namaSession;
 
 /**
  *
@@ -34,26 +45,46 @@ public class FPenjualan21552011235 extends javax.swing.JFrame {
     PreparedStatement ps;
     Statement st;
     ResultSet rs;
-    String sql, nama;
+    String sql, nama, email, level;
     Boolean simpan;
     private Object mapHargaJual;
     private Object request;
+    String dbURL ="jdbc:mysql://localhost:3306/db_uts_pbo2_21552011235";
+    String username = "root";
+    String password = "";
+    String ambil;
+
     
     public FPenjualan21552011235() {
         initComponents();
         dataComboBoxNamaAlat();
-        tampilDataPenjualan ();
-//        setNamaPegawaiOtomatis();
+        tampilDataPenjualan();
+        isikodePegawai();
+        hakakses();
     }
     
-    public void setData(String Nama, String Level){
-        nama = Nama;
-        if(Level.equals("Admin")){
-            //Kondisi
-        }else{
-            //Kondisi
-        }
-    }
+//    public void setData(String Nama, String Level) throws SQLException{
+//        nama = Nama;
+//        if(Level.equals("Admin")){
+//            //Kondisi
+//        }else if(Level.equals("Produksi")){
+//            JOptionPane.showMessageDialog(null,"Anda Masuk Ke Form Penjualan Sebagai "+level);
+//            FPenjualan21552011235 fp  = new FPenjualan21552011235();
+//            btnTambahDataPenjualan.setEnabled(false);
+//            btnSimpan.setEnabled(false);
+//            level = rs.getString("level");
+//            fp.setData(nama, level);
+//            fp.setVisible(true);
+//        }else if (Level.equals("Marketing")){
+//            JOptionPane.showMessageDialog(null,"Anda Masuk Ke Form Penjualan Sebagai "+level);
+//            FPenjualan21552011235 fp  = new FPenjualan21552011235();
+//            btnTambahDataPenjualan.setEnabled(true);
+//            btnSimpan.setEnabled(true);
+//            level = rs.getString("level");
+//            fp.setData(nama, level);
+//            fp.setVisible(true);
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,61 +94,71 @@ public class FPenjualan21552011235 extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     
-//private void setNamaPegawaiOtomatis() {
-//    // Ambil objek HttpSession dari request
-//    HttpSession session = request.getSession();
-//
-//    // Ambil attribute "username" dari session
-//    String username = (String) request.getSession().getAttribute("username");
-//    try {
-//        st = conn.createStatement();
-//        sql = "SELECT tblpegawai.namaPegawai FROM tblpegawai INNER JOIN tbluser ON tblpegawai.idUser = tbluser.idUser WHERE tbluser.username = '"+username+"' AND tbluser.level = 'Marketing'";
-//        rs = st.executeQuery(sql);
-//        if (rs.next()) {
-//            String namaPegawai = rs.getString("namaPegawai");
-//            txtFieldNamaPegawai.setText(namaPegawai);
-//        }
-//    } catch (SQLException ex) {
-//        ex.printStackTrace();
-//    }
-//}
-
-
+    private void idunamaLogin() {
+        txtFieldNamaPegawai.setText(namaSession.getnamaaLogin());
+    }
     
-//private void dataComboBoxNamaAlat() {
-//    try {
-//        st = conn.createStatement();
-//        String sql = "SELECT namaAlat, hargaJual FROM tblalat";
-//        rs = st.executeQuery(sql);
-//
-//        // reset JComboBox
-//        comboBoxNamaAlat.removeAllItems();
-//
-//        // isi JComboBox
-//        while (rs.next()) {
-//            String namaAlat = rs.getString("namaAlat");
-//            double hargaJual = rs.getDouble("hargaJual");
-//
-//            // tambahkan namaAlat ke dalam JComboBox
-//            comboBoxNamaAlat.addItem(namaAlat);
-//
-//            // simpan hargaJual ke dalam map
-//            mapHargaJual.put(namaAlat, hargaJual);
-//        }
-//
-//        // tambahkan listener untuk trigger hargaJual
-//        comboBoxNamaAlat.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                String namaAlat = (String) comboBoxNamaAlat.getSelectedItem();
-//                double hargaJual = mapHargaJual.get(namaAlat);
-//                txtFieldHargaJual.setText(String.valueOf(hargaJual));
-//            }
-//        });
-//
-//    } catch (SQLException ex) {
-//        ex.printStackTrace();
-//    }
-//}
+    private void hakakses() {
+        String user = UserSession.getUserLogin();
+
+        if (user.equals("Produksi")) {
+            dateTglPenjualan.setVisible(false);
+            txtFieldKodePenjualan.setEnabled(false);
+            txtFieldNamaPegawai.setEnabled(false);
+            txtFieldHargaJual.setEnabled(false);
+            txtFieldJumlah.setEnabled(false);
+            btnTambahDataPenjualan.setEnabled(false);
+            btnSimpan.setEnabled(false);
+            System.out.println("");
+
+        } else {
+            System.out.println("");
+        }
+    }
+    
+    private void isikodePegawai() {
+        try {
+            sql = "select kodePegawai from tblpegawai";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String dd = rs.getString("kodePegawai");
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+    
+    public void tampilDataPenjualan() {
+        DefaultTableModel model = new DefaultTableModel();
+
+        model.addColumn("Kode Jual");
+        model.addColumn("Kode Alat");
+        model.addColumn("Kode Pegawai");
+        model.addColumn("Tanggal Jual");
+        model.addColumn("Jumlah");
+
+        try {
+            int no = 1;
+            if (txtFieldCari.getText().isEmpty()) {
+                sql = "select * from tblpenjualan";
+            } else {
+                sql = "SELECT * FROM tblpenjualan WHERE kodeJual LIKE '%" + txtFieldCari.getText() + "%' OR kodeAlat LIKE '%" + txtFieldCari.getText() + "%'";
+
+            }
+            java.sql.Connection conn = (Connection) CKoneksi21552011235.getKoneksi();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+
+            while (res.next()) {
+                model.addRow(new Object[]{res.getString(1), res.getString(2), res.getString(3), res.getString(4), res.getInt(5)});
+
+            }
+           tablePenjualan.setModel(model);
+        } catch (SQLException e) {
+            System.out.println("error : " + e.getMessage());
+        }
+    }
     
 private void dataComboBoxNamaAlat() {
     try {
@@ -161,69 +202,226 @@ private void dataComboBoxNamaAlat() {
     }
 }
     
-private void kodePenjualanOtomatis() {
-    String namaAlat = comboBoxNamaAlat.getSelectedItem().toString().toUpperCase();
-    String[] kata = namaAlat.split(" ");
-    String kodeAlat = "";
-
-    if (kata.length == 1) {
-        kodeAlat = namaAlat.substring(0, 3);
-    } else {
-        for (String s : kata) {
-            kodeAlat += s.charAt(0);
+    public String generateKodePenjualan(String namaAlat, Date tanggalPenjualan, int nomorUrut) {
+        String[] words = namaAlat.split(" ");
+        String kode = "";
+        if (words.length == 1) {
+            kode = words[0].substring(0, 3).toUpperCase();
+        } else {
+            for (String word : words) {
+                kode += word.substring(0, 1).toUpperCase();
+            }
         }
-    }
+        DateFormat format = new SimpleDateFormat("ddMMyyyy");
+        String tgl = format.format(tanggalPenjualan);
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
-    String tglPenjualan = dateFormat.format(dateTglPenjualan.getDate());
-
-    try {
-        st = conn.createStatement();
-        sql = "SELECT COUNT(*) AS jumlah FROM tblpenjualan";
-        rs = st.executeQuery(sql);
-        if (rs.next()) {
-            int jumlah = rs.getInt("jumlah");
-            String a = String.format("%04d", jumlah + 1);
-            String kodePenjualan = kodeAlat + tglPenjualan + a;
-            txtFieldKodePenjualan.setText(kodePenjualan);
-        }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    }
-}
- 
-  private void tampilDataPenjualan (){
         try {
-            if (txtFieldKodePenjualan.getText().isEmpty()) {
-                sql = "select * from tblpenjualan";
-            }else{
-                sql = "SELECT * FROM tblpenjualan WHERE "
-                + "`kodeJual` LIKE '%"+txtFieldCari.getText()+"%' OR"
-                + "`kodeAlat`  LIKE '%"+txtFieldCari.getText()+"%' OR "
-                + "`kodePegawai`  LIKE '%"+txtFieldCari.getText()+"%' OR "
-                + "`tglJual`  LIKE '%"+txtFieldCari.getText()+"%' OR "
-                + "`jumlah` LIKE '%"+txtFieldCari.getText()+"%'";
+            Statement st = conn.createStatement();
+            String sql = "SELECT MAX(kodeJual) AS kodeJual FROM tblpenjualan";
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                // Jika ada data kode penjualan di tabel penjualan
+                String str_kd = rs.getString("kodeJual");
+                if (str_kd == null) {
+                    // Jika data tidak ada, eksekusi 4 digit terakhir dengan nilai 0001
+                    String kodePenjualan = kode + tgl + String.format("%04d", 1);
+                    return kodePenjualan;
+                } else {
+                    // Jika data ada, ekstrak nomor urut dan tambahkan 1
+                    String kd = str_kd.substring(str_kd.length() - 4);
+                    int int_code = Integer.parseInt(kd);
+                    int_code++;
+                    String a = String.format("%04d", int_code);
+                    String kodePenjualan = kode + tgl + a;
+                    return kodePenjualan;
+                }
+            } else {
+                // Jika query tidak menghasilkan data
+                throw new SQLException("Query MAX(kodeJual) AS kodeJual returned no data");
             }
-            st = conn.createStatement();
-            rs = st.executeQuery(sql);
-            DefaultTableModel model = new DefaultTableModel();
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-               model.addColumn(metaData.getColumnName(i));
-            }
-            while (rs.next()) {
-               Object[] row = new Object[columnCount];
-               for (int i = 1; i <= columnCount; i++) {
-                  row[i - 1] = rs.getObject(i);
-               }
-               model.addRow(row);
-            }
-            tablePenjualan.setModel(model);
-        } catch (Exception e) {
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Jika terjadi kesalahan, lempar kembali exception
+            throw new RuntimeException("Failed to generate kode penjualan", ex);
         }
     }
+    
+    public String getIdAlatByNama(String namaAlat) {
+        String id = null;
+        try (Connection conn = DriverManager.getConnection(dbURL, username, password);
+                PreparedStatement stmt = conn.prepareStatement("SELECT kodeAlat FROM tblalat WHERE namaAlat = ?")) {
+            stmt.setString(1, namaAlat);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getString("kodeAlat");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return id;
+    }
+    
+    
+    public String getKodePegawaiByNama(String kodePegawai) {
+        String id = null;
+        try (Connection conn = DriverManager.getConnection(dbURL, username, password);
+                PreparedStatement stmt = conn.prepareStatement("SELECT kodePegawai FROM tblpegawai WHERE kodePegawai= ?")) {
+            stmt.setString(1, kodePegawai);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getString("kodeAlat");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return id;
+    }
+    
+    private void namaAlatDanHarga(){
+        String namaAlat = comboBoxNamaAlat.getSelectedItem().toString();
+        try {
+            Connection conn = DriverManager.getConnection(dbURL, username, password);
+            PreparedStatement stmt = conn.prepareStatement("SELECT hargaJual FROM tblalat WHERE namaAlat = ?");
+            stmt.setString(1, namaAlat);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                txtFieldHargaJual.setText(rs.getString("hargaJual"));
+
+            }
+            conn.close();
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+//private void kodePenjualanOtomatis() throws ParseException {
+//    String tglJual = ((JTextField) dateTglPenjualan.getDateEditor().getUiComponent()).getText();
+//    DateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
+//    Date date = format.parse(tglJual);
+//    String namaAlat = comboBoxNamaAlat.getSelectedItem().toString().toUpperCase();
+//    String[] kata = namaAlat.split(" ");
+//    String kodeAlat = "";
+//
+//    if (kata.length == 1) {
+//        kodeAlat = namaAlat.substring(0, 3);
+//    } else {
+//        for (String s : kata) {
+//            kodeAlat += s.charAt(0);
+//        }
+//    }
+//
+//    try {
+//        st = conn.createStatement();
+//        sql = "SELECT COUNT(*) AS jumlah FROM tblpenjualan";
+//        rs = st.executeQuery(sql);
+//        if (rs.next()) {
+//            int jumlah = rs.getInt("jumlah");
+//            String a = String.format("%04d", jumlah + 1);
+//            String kodePenjualan = kodeAlat + tglJual + a;
+//            txtFieldKodePenjualan.setText(kodePenjualan);
+//        }
+//    } catch (SQLException ex) {
+//        ex.printStackTrace();
+//    }
+//}
+//
+
  
+//  private void tampilDataPenjualan (){
+//        try {
+//            if (txtFieldKodePenjualan.getText().isEmpty()) {
+//                sql = "select * from tblpenjualan";
+//            }else{
+//                sql = "SELECT * FROM tblpenjualan WHERE "
+//                + "`kodeJual` LIKE '%"+txtFieldCari.getText()+"%' OR"
+//                + "`kodeAlat`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+//                + "`kodePegawai`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+//                + "`tglJual`  LIKE '%"+txtFieldCari.getText()+"%' OR "
+//                + "`jumlah` LIKE '%"+txtFieldCari.getText()+"%'";
+//            }
+//            st = conn.createStatement();
+//            rs = st.executeQuery(sql);
+//            DefaultTableModel model = new DefaultTableModel();
+//            ResultSetMetaData metaData = rs.getMetaData();
+//            int columnCount = metaData.getColumnCount();
+//            for (int i = 1; i <= columnCount; i++) {
+//               model.addColumn(metaData.getColumnName(i));
+//            }
+//            while (rs.next()) {
+//               Object[] row = new Object[columnCount];
+//               for (int i = 1; i <= columnCount; i++) {
+//                  row[i - 1] = rs.getObject(i);
+//               }
+//               model.addRow(row);
+//            }
+//            tablePenjualan.setModel(model);
+//        } catch (Exception e) {
+//        }
+//    }
+  
+    private void btnSimpan(){
+            try {
+            String kodeJual = txtFieldKodePenjualan.getText();
+            String namaAlat = comboBoxNamaAlat.getSelectedItem().toString();
+            String kodeAlat = getIdAlatByNama(namaAlat);
+            String kodePeg = kodepeSession.getkodepegLogin();
+            //String namaPeg = txtFieldNamaPegawai.getText();
+            String tglpenjualan = ((JTextField) dateTglPenjualan.getDateEditor().getUiComponent()).getText();
+            DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+            Date date = format.parse(tglpenjualan);
+            format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            String tglMasukJual = format.format(date);
+            
+            String jumlah = txtFieldJumlah.getText();
+
+            if (kodeJual.isEmpty() || namaAlat.isEmpty() || kodePeg.isEmpty() || tglMasukJual.isEmpty() || jumlah.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Pastikan Data telah terisi semuanya. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
+            } else {
+                if (simpan == true) {
+//                    sql = "INSERT INTO tblpenjualan (kodeJual, kodeAlat, kodePegawai, tglJual, jumlah) VALUES (?, (SELECT kodeAlat FROM tblalat WHERE namaDivisi = ?), (SELECT kodePegawai FROM tblpegawai WHERE nama = ?), ?, ?)";
+                    sql = "INSERT INTO tblpenjualan VALUES (?, ?, ?, ?, ?)";
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, kodeJual);
+                    ps.setString(2, kodeAlat);
+                    ps.setString(3, kodePeg);
+                    ps.setString(4, tglMasukJual);
+                    ps.setString(5, jumlah);
+                    JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+                } else if (simpan == false) {
+//                    sql = "UPDATE tblpenjualan SET jumlah=? WHERE kodeJual=?";
+                    sql = "UPDATE tblpenjualan SET kodeJual=?, kodeAlat=?, kodePegawai=?, tglJual=?, jumlah=? WHERE kodeJual=?";
+                    ps = conn.prepareStatement(sql);
+                    ps.setString(1, jumlah);
+                    ps.setString(2, kodeJual);
+                    JOptionPane.showMessageDialog(null, "Data berhasil diubah!");
+
+                }
+                ps.executeUpdate();
+                tampilDataPenjualan ();
+
+            }
+        } catch (SQLException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+     }
+//                tampil();
+//                new FPenjualan_21552011097().setVisible(true);
+//                this.dispose();
+//            }
+//        } catch (SQLException | ParseException e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+  }
+  private void btnBatal(){
+        txtFieldKodePenjualan.setText(null);
+        buttonGroup1.clearSelection();
+        txtFieldHargaJual.setText(null);
+        txtFieldJumlah.setText(null);
+        dateTglPenjualan.setCalendar(null); 
+        //txtFieldNamaPegawai.setText(null);
+  }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -234,7 +432,6 @@ private void kodePenjualanOtomatis() {
         txtFieldKodePenjualan = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btnBatal = new javax.swing.JLabel();
-        btnSimpan = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -249,7 +446,6 @@ private void kodePenjualanOtomatis() {
         jLabel19 = new javax.swing.JLabel();
         txtFieldCari = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        btnTambahDataPenjualan = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         comboBoxNamaAlat = new javax.swing.JComboBox<>();
         jLabel23 = new javax.swing.JLabel();
@@ -299,7 +495,7 @@ private void kodePenjualanOtomatis() {
                 btnBatalMouseExited(evt);
             }
         });
-        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 230, -1, 50));
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 240, -1, 50));
 
         btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnSimpan.png"))); // NOI18N
         btnSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -313,7 +509,7 @@ private void kodePenjualanOtomatis() {
                 btnSimpanMouseExited(evt);
             }
         });
-        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, -1, 50));
+        jPanel1.add(btnSimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 240, -1, 50));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
         jLabel12.setForeground(new java.awt.Color(153, 153, 153));
@@ -411,13 +607,18 @@ private void kodePenjualanOtomatis() {
                 btnTambahDataPenjualanMouseExited(evt);
             }
         });
-        jPanel1.add(btnTambahDataPenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 230, 50));
+        jPanel1.add(btnTambahDataPenjualan, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 230, 50));
 
         jLabel21.setBackground(new java.awt.Color(255, 255, 255));
         jLabel21.setForeground(new java.awt.Color(153, 153, 153));
         jLabel21.setText("_______________________________");
         jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 270, 30));
 
+        comboBoxNamaAlat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxNamaAlatActionPerformed(evt);
+            }
+        });
         jPanel1.add(comboBoxNamaAlat, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 190, -1));
 
         jLabel23.setText("Nama Alat");
@@ -492,9 +693,7 @@ private void kodePenjualanOtomatis() {
     }//GEN-LAST:event_btnSimpanMouseExited
 
     private void btnBatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBatalMouseClicked
-        Flogin21552011235 fL = new Flogin21552011235();
-        fL.setVisible(true);
-        this.dispose();
+        btnBatal();
     }//GEN-LAST:event_btnBatalMouseClicked
 
     private void txtFieldHargaJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldHargaJualActionPerformed
@@ -502,32 +701,84 @@ private void kodePenjualanOtomatis() {
     }//GEN-LAST:event_txtFieldHargaJualActionPerformed
 
     private void btnSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSimpanMouseClicked
-        if (txtFieldJumlah.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Pastikan data jumlah telah terisi. Ulangi kembali!", "DATA BELUM TERISI !", JOptionPane.WARNING_MESSAGE);
-        } else {
-            int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
-            + "Mengedit Data ?","Konfirmasi Edit Data Divisi", JOptionPane.YES_NO_OPTION);
-
-
-            if (ok==0){
-                try {
-                sql = "UPDATE tblPenjualan SET jumlah=? WHERE kodeJual=?";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, txtFieldJumlah.getText());
-                
-                ps.executeUpdate();
-                tampilDataPenjualan();
-                JOptionPane.showMessageDialog(null , "Data Berhasil Di Edit");
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Data Gagal Di Edit!!!"+e);
-                }
-            }
-        
-        }
+        btnSimpan();
     }//GEN-LAST:event_btnSimpanMouseClicked
 
     private void tablePenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePenjualanMouseClicked
-             
+        try {
+            String name = namaSession.getnamaaLogin();
+            int rowa = tablePenjualan.getSelectedRow();
+            String kodePegawai2 = tablePenjualan.getValueAt(rowa, 2).toString();
+
+            sql = "select nama from tblpegawai where kodePegawai='" + kodePegawai2 + "'";
+            st = conn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String dd = rs.getString("nama");
+
+                
+                if (!dd.equals(name)) {
+                    JOptionPane.showMessageDialog(this, "Anda tidak memiliki akses untuk mengubah data pada baris ini", "Error", JOptionPane.ERROR_MESSAGE);
+                    tablePenjualan.clearSelection();
+                }
+                try {
+//                    btnSimpan.setText("Ubah");
+                    simpan = false;
+                    int row = tablePenjualan.getSelectedRow();
+                    
+                    String kodepenjualan = tablePenjualan.getValueAt(row, 0).toString();
+                    String kodeAlat = tablePenjualan.getValueAt(row, 1).toString();
+                    String kodePegawai = tablePenjualan.getValueAt(row, 2).toString();
+                    String tglJual = tablePenjualan.getValueAt(row, 3).toString();
+                    String jumlah = tablePenjualan.getValueAt(row, 4).toString();
+                    
+                    txtFieldKodePenjualan.setText(kodepenjualan);
+                    txtFieldJumlah.setText(jumlah);
+
+                    try {
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(tglJual);
+                        dateTglPenjualan.setDate(date);
+                    } catch (ParseException ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    }
+
+                    try {
+                        String sqlPegawai = "SELECT * FROM tblpegawai WHERE kodePegawai=?";
+                        PreparedStatement psPegawai = conn.prepareStatement(sqlPegawai);
+                        psPegawai.setString(1, kodePegawai);
+                        ResultSet rsPegawai = psPegawai.executeQuery();
+                        if (rsPegawai.next()) {
+                            String namaPegawai = rsPegawai.getString("nama");
+                            txtFieldNamaPegawai.setText(namaPegawai);
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                    }
+
+                    if (!kodeAlat.isEmpty()) {
+                        try {
+                            String sqlAlat = "SELECT * FROM tblalat WHERE kodeAlat=?";
+                            PreparedStatement psAlat = conn.prepareStatement(sqlAlat);
+                            psAlat.setString(1, kodeAlat);
+                            ResultSet rsAlat = psAlat.executeQuery();
+                            if (rsAlat.next()) {
+                                String namaAlat = rsAlat.getString("namaAlat");
+                                for (int i = 0; i < comboBoxNamaAlat.getItemCount(); i++) {
+                                    if (comboBoxNamaAlat.getItemAt(i).toString().equals(namaAlat)) {
+                                        comboBoxNamaAlat.setSelectedIndex(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        } catch (SQLException ex) {
+                            
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_tablePenjualanMouseClicked
 
     private void txtFieldNamaPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNamaPegawaiActionPerformed
@@ -539,7 +790,7 @@ private void kodePenjualanOtomatis() {
     }//GEN-LAST:event_txtFieldCariActionPerformed
 
     private void txtFieldCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFieldCariKeyReleased
-        // TODO add your handling code here:
+        tampilDataPenjualan();
     }//GEN-LAST:event_txtFieldCariKeyReleased
 
     private void btnBackMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseEntered
@@ -561,9 +812,14 @@ private void kodePenjualanOtomatis() {
     }//GEN-LAST:event_btnBackMouseClicked
 
     private void btnTambahDataPenjualanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseClicked
+        idunamaLogin();
         simpan = true;
-        kodePenjualanOtomatis();
-//        setNamaPegawai();
+        String namaAlat = comboBoxNamaAlat.getSelectedItem().toString();
+        Date tanggalPenjualan = dateTglPenjualan.getDate();
+        int nomorUrut = 1;
+        String kodePenjualan = generateKodePenjualan(namaAlat, tanggalPenjualan, nomorUrut);
+        txtFieldKodePenjualan.setText(kodePenjualan);
+
     }//GEN-LAST:event_btnTambahDataPenjualanMouseClicked
 
     private void btnTambahDataPenjualanMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseEntered
@@ -573,6 +829,10 @@ private void kodePenjualanOtomatis() {
     private void btnTambahDataPenjualanMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTambahDataPenjualanMouseExited
         btnTambahDataPenjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/btnTambahDataPenjualan-hover.png")));
     }//GEN-LAST:event_btnTambahDataPenjualanMouseExited
+
+    private void comboBoxNamaAlatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxNamaAlatActionPerformed
+        namaAlatDanHarga();  
+    }//GEN-LAST:event_comboBoxNamaAlatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -739,8 +999,8 @@ private void kodePenjualanOtomatis() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnBack;
     private javax.swing.JLabel btnBatal;
-    private javax.swing.JLabel btnSimpan;
-    private javax.swing.JLabel btnTambahDataPenjualan;
+    public static final javax.swing.JLabel btnSimpan = new javax.swing.JLabel();
+    public static final javax.swing.JLabel btnTambahDataPenjualan = new javax.swing.JLabel();
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> comboBoxNamaAlat;
     private com.toedter.calendar.JDateChooser dateTglPenjualan;
@@ -769,4 +1029,16 @@ private void kodePenjualanOtomatis() {
     private javax.swing.JTextField txtFieldKodePenjualan;
     private javax.swing.JTextField txtFieldNamaPegawai;
     // End of variables declaration//GEN-END:variables
+
+    /*    void setNamaPegawai(String nama) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }*/
+
+    Object btnTambahDataPenjualan() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    Object getBtnTambahData() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

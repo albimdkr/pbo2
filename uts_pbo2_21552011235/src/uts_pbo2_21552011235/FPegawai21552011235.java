@@ -5,11 +5,14 @@
  */
 package uts_pbo2_21552011235;
 
+import uts_pbo2_21552011235.CKoneksi21552011235;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -53,8 +56,8 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
     public FPegawai21552011235() {
         initComponents();
         tampilDataPegawai ();
-        dataComboBoxIdUser();
         dataComboBoxIdDivisi();
+        dataComboBoxIdUser();
     }
 
     /**
@@ -64,67 +67,106 @@ public class FPegawai21552011235 extends javax.swing.JFrame {
      */
     
     @SuppressWarnings("unchecked")
-     private void dataComboBoxIdUser() {
+        public void dataComboBoxIdUser() {
         try {
-            st = conn.createStatement();
-            sql = "SELECT idUser FROM tbluser";
-            rs = st.executeQuery(sql);
-
-            // buat list untuk menampung idUser yang sudah dipakai
-            List<String> idUserDipakai = new ArrayList<>();
-
-            // cek apakah idUser sudah dipakai oleh pegawai
+            String sql = "SELECT idUser FROM tbluser";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            boolean isUsed = false;
             while (rs.next()) {
-                String idUser = rs.getString("idUser");
-                if (isIdUserDipakai(idUser)) {
-                    // tambahkan idUser yang sudah dipakai ke dalam list
-                    idUserDipakai.add(idUser);
+                String selectedUserId = rs.getString("idUser");
+                try {
+                    String sqla = "SELECT COUNT(*) FROM tblpegawai WHERE idUser=?";
+                    PreparedStatement psa = conn.prepareStatement(sqla);
+                    psa.setString(1, selectedUserId);
+                    ResultSet rsa = psa.executeQuery();
+                    if (rsa.next()) {
+                        int count = rsa.getInt(1);
+                        if (count > 0) {
+                            comboBoxIDUser.addItem(selectedUserId);
+                            comboBoxIDUser.setRenderer(new DefaultListCellRenderer() {
+                                @Override
+                                public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                                    Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                    if (isDataUsed(value.toString())) {
+                                        renderer.setForeground(Color.RED);
+                                    } else {
+                                        renderer.setForeground(Color.BLACK);
+                                    }
+                                    return renderer;
+                                }
+                            });
+                            isUsed = true;
+                        } else {
+                            comboBoxIDUser.addItem(selectedUserId);
+                        }
+                    } else {
+                        comboBoxIDUser.addItem(selectedUserId);
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
-
-            // reset JComboBox idUser
-            comboBoxIDUser.removeAllItems();
-
-            // isi JComboBox idUser
-            st = conn.createStatement();
-            sql = "SELECT idUser FROM tbluser";
-            rs = st.executeQuery(sql);
-            while (rs.next()) {
-                String idUser = rs.getString("idUser");
-                // set warna item JComboBox sesuai dengan ketentuan
-                if (idUserDipakai.contains(idUser)) {
-                    comboBoxIDUser.addItem(getColoredText(idUser, Color.RED));
-                } else {
-                    comboBoxIDUser.addItem(getColoredText(idUser, Color.GREEN));
-                }
+            if (!isUsed) {
+                comboBoxIDUser.setForeground(Color.BLACK);
+                comboBoxIDUser.setSelectedIndex(0);
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        // ketika data iduser di click dia memunculkan notif id terpaki dan 
+        comboBoxIDUser.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    String selectedUserId = comboBoxIDUser.getSelectedItem().toString();
+                    try {
+                        String sqla = "SELECT COUNT(*) FROM tblpegawai WHERE idUser=?";
+                        PreparedStatement ps = conn.prepareStatement(sqla);
+                        ps.setString(1, selectedUserId);
+                        ResultSet rs = ps.executeQuery();
+                        if (rs.next()) {
+                            int count = rs.getInt(1);
+                            if (count > 0) {
+                                comboBoxIDUser.setForeground(Color.RED);
 
-        comboBoxIDUser.addActionListener((ActionEvent e) -> {
-        String idUser = (String) comboBoxIDUser.getSelectedItem();
-        if (isIdUserDipakai(idUser)) {
-            JOptionPane.showMessageDialog(null, "Id user telah terpakai!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Id user belum terpakai!");
-        }
-    });
+                                JOptionPane.showMessageDialog(null, "SUDAH TERPAKAI");
+                            } else {
+                                comboBoxIDUser.setForeground(Color.GREEN);
+
+                                JOptionPane.showMessageDialog(null, "BELUM TERPAKAI");
+                            }
+                        } else {
+                            comboBoxIDUser.setForeground(Color.BLACK);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+        
+    private boolean isDataUsed(String selectedUserId) {
+        return false;
     }
     
-    private boolean isIdUserDipakai(String idUser) {
-        try {        
-            ps = conn.prepareStatement("SELECT COUNT(*) FROM tblpegawai WHERE idUser = ?");
-            ps.setString(1, idUser);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            return rs.getInt(1) > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
+    
+//    private boolean isIdUserDipakai(String idUser) {
+//        try {        
+////            ps = conn.prepareStatement("SELECT COUNT(*) FROM tblpegawai WHERE idUser = ?");
+////            ps = conn.prepareStatement "SELECT FROM tblpegawai WHERE idUser = ?";
+//            sql = "SELECT idUser FROM tbluser";
+//            ps.setString(1, idUser);
+//            
+//            ResultSet rs = ps.executeQuery();
+//            rs.next();
+//            return rs.getInt(1) > 0;
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
     
     private String getColoredText(String text, Color color) {
         return "<html><font color='" + getColorHex(color) + "'>" + text + "</font></html>";
