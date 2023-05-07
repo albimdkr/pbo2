@@ -5,7 +5,6 @@
 
 package koneksi;
 
-import uts_pbo2_21552011235.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
