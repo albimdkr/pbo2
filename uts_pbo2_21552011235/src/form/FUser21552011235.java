@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FormAplikasi;
+package form;
 
 import koneksi.CKoneksi21552011235;
 import java.awt.Color;

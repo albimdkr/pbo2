@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FormAplikasi;
+package form;
 
 import koneksi.CKoneksi21552011235;
 import java.awt.Color;
@@ -38,8 +38,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import static FormAplikasi.FDaftar21552011235.checkEmailIsReady;
-import static FormAplikasi.FDaftar21552011235.checkValidateEmaill;
+import static form.FDaftar21552011235.checkEmailIsReady;
+import static form.FDaftar21552011235.checkValidateEmaill;
 
 /**
  *

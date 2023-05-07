@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FormAplikasi;
+package form;
 
 import koneksi.CKoneksi21552011235;
 import java.awt.HeadlessException;
@@ -423,7 +423,7 @@ public class FMenuUtama21552011235 extends javax.swing.JFrame {
         int ok = JOptionPane.showConfirmDialog (null," Apakah Anda Yakin Ingin "
             + "Logout Dari Aplikasi?","Konfirmasi Logout", JOptionPane.YES_NO_OPTION);
         if (ok==0){
-                new FormAplikasi.Flogin21552011235().setVisible(true);
+                new form.Flogin21552011235().setVisible(true);
                 dispose();
    
                 JOptionPane.showMessageDialog(null , "Anda Berhasil Logout, Silahkan Login kembali!");
