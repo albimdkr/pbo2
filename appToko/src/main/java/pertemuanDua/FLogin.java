@@ -162,7 +162,6 @@ public class FLogin extends javax.swing.JFrame {
                         try{
                                 Connection con = CKoneksi.getKoneksi();
                                 Statement st = con.createStatement();
-                               // String sql = "SELECT * FROM tb_user inner join tb_pegawai on "+ "tb_pegawai.kode_user = tb_user.kode_user WHERE username =? and password =?;";
                                 String sql = "SELECT * FROM tb_user JOIN tb_pegawai ON " + "tb_user.kode_user = tb_pegawai.kode_user WHERE tb_user.username = '"+txtUsernameEmail.getText()+"' AND tb_user.password = '"+txtPassword.getText()+"'";
                                 ResultSet rs = st.executeQuery (sql);
                                     if (rs.next()) {
